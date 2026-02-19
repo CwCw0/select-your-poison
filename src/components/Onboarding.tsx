@@ -143,6 +143,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '24px',
+          cursor: 'auto',
         }}
       >
         <motion.div

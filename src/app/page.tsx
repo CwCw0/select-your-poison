@@ -62,46 +62,22 @@ export default function Home() {
         </nav>
 
         {/* Right Side Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="flex items-center gap-3">
           {/* Theme Toggle */}
           <ThemeToggle size="sm" />
 
           {/* Desktop Buttons */}
           <Link
             href="/login"
-            className="hidden sm:flex hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '44px',
-              minWidth: '100px',
-              paddingLeft: '28px',
-              paddingRight: '28px',
-              border: '1px solid var(--border-default)',
-              borderRadius: '3px',
-              textDecoration: 'none',
-            }}
+            className="hidden sm:inline-flex items-center justify-center h-[44px] min-w-[100px] px-7 border border-[var(--border-default)] rounded-[3px] no-underline hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200"
           >
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '1.5px', color: 'var(--text-primary)', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>LOG IN</span>
+            <span className="text-[11px] font-semibold tracking-[1.5px] text-[var(--text-primary)] font-mono whitespace-nowrap">LOG IN</span>
           </Link>
           <Link
             href="/lobby/create"
-            className="hidden sm:flex hover:bg-[#E50000] hover:shadow-[0_0_20px_rgba(255,0,0,0.3)] transition-all duration-200"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '44px',
-              minWidth: '140px',
-              paddingLeft: '28px',
-              paddingRight: '28px',
-              backgroundColor: '#FF0000',
-              borderRadius: '3px',
-              textDecoration: 'none',
-            }}
+            className="hidden sm:inline-flex items-center justify-center h-[44px] min-w-[140px] px-7 bg-[#FF0000] rounded-[3px] no-underline hover:bg-[#E50000] hover:shadow-[0_0_20px_rgba(255,0,0,0.3)] transition-all duration-200"
           >
-            <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '1.5px', color: '#0C0C0C', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>CREATE LOBBY</span>
+            <span className="text-[11px] font-bold tracking-[1.5px] text-[#0C0C0C] font-mono whitespace-nowrap">CREATE LOBBY</span>
           </Link>
 
           {/* Mobile Menu Button */}
@@ -210,44 +186,19 @@ export default function Home() {
           </motion.p>
 
           {/* Hero CTAs */}
-          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center w-full sm:w-auto px-4 sm:px-0" style={{ gap: '16px', marginTop: '32px' }}>
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4 mt-8 px-4 sm:px-0">
             <Link
               href="/lobby/create"
-              className="group hover:bg-[#E50000] hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:scale-[1.02] transition-all duration-200 w-full sm:w-auto"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                height: '56px',
-                minWidth: '200px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                backgroundColor: '#FF0000',
-                borderRadius: '3px',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center justify-center gap-3.5 h-14 min-w-[200px] px-8 bg-[#FF0000] rounded-[3px] no-underline w-full sm:w-auto hover:bg-[#E50000] hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:scale-[1.02] transition-all duration-200"
             >
-              <Play style={{ width: '20px', height: '20px', color: '#0C0C0C', fill: '#0C0C0C' }} />
-              <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '2px', color: '#0C0C0C', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>START GAME</span>
+              <Play className="w-5 h-5 text-[#0C0C0C] fill-[#0C0C0C]" />
+              <span className="text-[13px] font-bold tracking-[2px] text-[#0C0C0C] font-mono whitespace-nowrap">START GAME</span>
             </Link>
             <Link
               href="#how"
-              className="hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200 w-full sm:w-auto"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '56px',
-                minWidth: '200px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                border: '1px solid var(--border-default)',
-                borderRadius: '3px',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center justify-center h-14 min-w-[200px] px-8 border border-[var(--border-default)] rounded-[3px] no-underline w-full sm:w-auto hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200"
             >
-              <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: 'var(--text-primary)', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>HOW IT WORKS</span>
+              <span className="text-[13px] font-semibold tracking-[2px] text-[var(--text-primary)] font-mono whitespace-nowrap">HOW IT WORKS</span>
             </Link>
           </motion.div>
         </motion.div>
@@ -461,23 +412,9 @@ export default function Home() {
             </p>
             <Link
               href="/lobby/create"
-              className="group hover:bg-[#E50000] hover:shadow-[0_0_40px_rgba(255,0,0,0.5)] hover:scale-[1.02] transition-all duration-200 w-full sm:w-auto"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                height: '56px',
-                minWidth: '220px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                backgroundColor: '#FF0000',
-                borderRadius: '3px',
-                marginTop: '16px',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center justify-center gap-3.5 h-14 min-w-[220px] px-8 bg-[#FF0000] rounded-[3px] no-underline mt-4 w-full sm:w-auto hover:bg-[#E50000] hover:shadow-[0_0_40px_rgba(255,0,0,0.5)] hover:scale-[1.02] transition-all duration-200"
             >
-              <Zap style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+              <Zap className="w-5 h-5 text-[#0C0C0C]" />
               <span className="text-[13px] sm:text-[14px] font-bold tracking-[2px] text-[#0C0C0C] font-mono whitespace-nowrap">CREATE LOBBY NOW</span>
             </Link>
           </motion.div>
