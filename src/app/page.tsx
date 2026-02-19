@@ -33,7 +33,8 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Navigation - height 72, padding [0, 64] */}
-      <header className="w-full h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-16 border-b border-[var(--border-default)]">
+      <header className="w-full h-[72px] border-b border-[var(--border-default)]">
+        <div className="max-w-[1400px] mx-auto h-full flex items-center justify-between px-4 sm:px-8 lg:px-16">
         {/* Logo with Easter Egg */}
         <button
           onClick={handleLogoClick}
@@ -93,6 +94,7 @@ export default function Home() {
             )}
           </button>
         </div>
+        </div>
       </header>
 
       {/* Mobile Menu Overlay */}
@@ -149,7 +151,8 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Hero Section - padding [120, 64], gap 32 */}
-      <section className="w-full min-h-[90vh] flex flex-col items-center justify-center px-4 sm:px-8 lg:px-16 py-16 sm:py-[120px]">
+      <section className="w-full min-h-[90vh] flex flex-col items-center justify-center py-16 sm:py-[120px]">
+        <div className="max-w-[1400px] mx-auto w-full flex flex-col items-center px-4 sm:px-8 lg:px-16">
         <motion.div
           className="flex flex-col items-center gap-6 sm:gap-8 text-center max-w-5xl"
           initial="initial"
@@ -202,11 +205,12 @@ export default function Home() {
             </Link>
           </motion.div>
         </motion.div>
+        </div>
       </section>
 
       {/* Game Modes Section */}
       <section id="modes" className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-primary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
           <motion.div
             className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
             initial={{ opacity: 0, y: 20 }}
@@ -254,7 +258,7 @@ export default function Home() {
 
       {/* How It Works Section */}
       <section id="how" className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-secondary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
           <motion.div
             className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
             initial={{ opacity: 0, y: 20 }}
@@ -292,7 +296,7 @@ export default function Home() {
 
       {/* Agent Rules Section */}
       <section id="agents" className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-primary)]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
           <motion.div
             className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
             initial={{ opacity: 0, y: 20 }}
@@ -346,7 +350,7 @@ export default function Home() {
 
       {/* Intensity Presets Section */}
       <section className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-secondary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
           <motion.div
             className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
             initial={{ opacity: 0, y: 20 }}
@@ -397,7 +401,7 @@ export default function Home() {
 
       {/* Final CTA Section */}
       <section className="py-24 sm:py-32 lg:py-48 bg-[var(--bg-primary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -423,7 +427,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-12 sm:py-16 lg:py-20 bg-[var(--bg-secondary)] border-t border-[var(--border-default)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
           <div className="flex flex-col gap-10 sm:gap-12 lg:gap-14">
             <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
               {/* footerBrand */}
