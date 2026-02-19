@@ -15,7 +15,7 @@ export default function ResponsiblePage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 48px',
+        padding: '0 clamp(16px, 4vw, 48px)',
         borderBottom: '1px solid #333333',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
@@ -56,7 +56,7 @@ export default function ResponsiblePage() {
 
       {/* Hero */}
       <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <span style={{
             fontSize: '11px',
             fontWeight: 600,
@@ -92,7 +92,7 @@ export default function ResponsiblePage() {
 
       {/* Safety Warning Banner */}
       <section style={{ padding: '0 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <div style={{
             padding: '32px',
             backgroundColor: 'rgba(255, 0, 0, 0.06)',
@@ -116,7 +116,7 @@ export default function ResponsiblePage() {
 
       {/* Guidelines */}
       <section style={{ padding: '80px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
             Guidelines for Safe Play
           </h2>
@@ -247,9 +247,9 @@ export default function ResponsiblePage() {
 
       {/* The Point */}
       <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <div style={{
-            padding: '48px',
+            padding: 'clamp(24px, 4vw, 48px)',
             backgroundColor: '#1A1A1A',
             border: '1px solid #333333',
             textAlign: 'center',
@@ -280,7 +280,7 @@ export default function ResponsiblePage() {
 
       {/* Resources */}
       <section style={{ padding: '80px 0 100px', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '16px' }}>
             Resources
           </h2>
@@ -365,7 +365,7 @@ export default function ResponsiblePage() {
 
       {/* Footer */}
       <footer style={{
-        padding: '40px 48px',
+        padding: '40px clamp(16px, 4vw, 48px)',
         borderTop: '1px solid #333333',
         backgroundColor: '#0C0C0C',
       }}>

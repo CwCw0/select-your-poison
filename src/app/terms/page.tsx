@@ -15,7 +15,7 @@ export default function TermsPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 48px',
+        padding: '0 clamp(16px, 4vw, 48px)',
         borderBottom: '1px solid #333333',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
@@ -56,7 +56,7 @@ export default function TermsPage() {
 
       {/* Hero */}
       <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <span style={{
             fontSize: '11px',
             fontWeight: 600,
@@ -82,7 +82,7 @@ export default function TermsPage() {
 
       {/* Content */}
       <section style={{ padding: '0 0 120px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '56px' }}>
 
             {/* 1. Acceptance of Terms */}
@@ -356,7 +356,7 @@ export default function TermsPage() {
 
       {/* Footer */}
       <footer style={{
-        padding: '40px 48px',
+        padding: '40px clamp(16px, 4vw, 48px)',
         borderTop: '1px solid #333333',
         backgroundColor: '#0A0A0A',
       }}>

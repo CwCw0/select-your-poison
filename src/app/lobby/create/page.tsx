@@ -1021,7 +1021,7 @@ export default function CreateLobbyPage() {
       </aside>
 
       {/* Main Content */}
-      <div style={{ flex: 1, padding: '40px 48px', overflowY: 'auto', paddingTop: '100px' }} className="lg:pt-[40px]">
+      <div style={{ flex: 1, padding: '40px clamp(16px, 4vw, 48px)', overflowY: 'auto', paddingTop: '100px' }} className="lg:pt-[40px]">
         {/* Header */}
         <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px', flexWrap: 'wrap', gap: '24px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

@@ -57,7 +57,7 @@ function JoinLobbyContent() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 48px',
+        padding: '0 clamp(16px, 4vw, 48px)',
         borderBottom: '1px solid #333333'
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
@@ -77,7 +77,7 @@ function JoinLobbyContent() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '60px 48px',
+        padding: '60px clamp(16px, 4vw, 48px)',
         overflowY: 'auto'
       }}>
         <motion.div

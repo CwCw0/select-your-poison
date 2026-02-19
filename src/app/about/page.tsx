@@ -28,7 +28,7 @@ export default function AboutPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 48px',
+        padding: '0 clamp(16px, 4vw, 48px)',
         borderBottom: '1px solid #333333'
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -47,7 +47,7 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,13 +65,13 @@ export default function AboutPage() {
 
       {/* Personal Message */}
       <section style={{ padding: '0 0 100px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             style={{
-              padding: '48px',
+              padding: 'clamp(24px, 4vw, 48px)',
               backgroundColor: '#1A1A1A',
               border: '1px solid #333333'
             }}
@@ -106,7 +106,7 @@ export default function AboutPage() {
 
       {/* The Vision Section */}
       <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ export default function AboutPage() {
 
       {/* Nimbus - Portfolio & Services Section */}
       <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -249,7 +249,7 @@ export default function AboutPage() {
 
       {/* Support Section */}
       <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -361,7 +361,7 @@ export default function AboutPage() {
 
       {/* Spread the Word */}
       <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -408,7 +408,7 @@ export default function AboutPage() {
 
       {/* Contact Section */}
       <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -499,7 +499,7 @@ export default function AboutPage() {
 
       {/* Footer */}
       <section style={{ padding: '80px 0', backgroundColor: '#0C0C0C', borderTop: '1px solid #333333' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)', textAlign: 'center' }}>
           <p style={{ fontSize: '14px', color: '#999999', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             Made with <Heart style={{ width: '16px', height: '16px', color: '#FF0000' }} /> and way too many late nights
           </p>

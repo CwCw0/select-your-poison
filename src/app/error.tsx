@@ -18,7 +18,7 @@ export default function Error({
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '48px',
+      padding: 'clamp(16px, 4vw, 48px)',
     }}>
       {/* Logo */}
       <Link
@@ -26,7 +26,7 @@ export default function Error({
         style={{
           position: 'absolute',
           top: '24px',
-          left: '48px',
+          left: 'clamp(16px, 4vw, 48px)',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',

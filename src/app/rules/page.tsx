@@ -84,7 +84,7 @@ export default function RulesPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 48px',
+        padding: '0 clamp(16px, 4vw, 48px)',
         borderBottom: '1px solid #333333'
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -103,7 +103,7 @@ export default function RulesPage() {
 
       {/* Hero Section */}
       <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -125,7 +125,7 @@ export default function RulesPage() {
 
       {/* Safety Warning */}
       <section style={{ padding: '0 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <div style={{
             padding: '32px',
             backgroundColor: 'rgba(245, 158, 11, 0.1)',
@@ -147,7 +147,7 @@ export default function RulesPage() {
 
       {/* Getting Started */}
       <section style={{ padding: '80px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
             Getting Started
           </h2>
@@ -184,7 +184,7 @@ export default function RulesPage() {
 
       {/* Game Modes */}
       <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
             Game Modes
           </h2>
@@ -238,7 +238,7 @@ export default function RulesPage() {
 
       {/* Intensity Levels */}
       <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '16px' }}>
             Intensity Levels
           </h2>
@@ -274,7 +274,7 @@ export default function RulesPage() {
 
       {/* CTA */}
       <section style={{ padding: '120px 0', backgroundColor: '#0C0C0C', borderTop: '1px solid #333333' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)', textAlign: 'center' }}>
           <h2 style={{ fontSize: '40px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-2px', marginBottom: '40px' }}>
             Ready to Play?
           </h2>
