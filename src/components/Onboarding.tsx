@@ -130,7 +130,10 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <AnimatePresence>
+      {/* Override the global cursor:none !important from CustomCursor */}
+      <style>{`.syp-onboarding, .syp-onboarding * { cursor: auto !important; }`}</style>
       <motion.div
+        className="syp-onboarding"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -143,7 +146,6 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '24px',
-          cursor: 'auto',
         }}
       >
         <motion.div
