@@ -240,6 +240,7 @@ export default function GamePage() {
   const [showHelp, setShowHelp] = useState(false);
   const [showAgentRules, setShowAgentRules] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [lastSeenStratId, setLastSeenStratId] = useState<string | null>(null);
 
   // On mount, if no lobbyCode in the store, try to recover state
   useEffect(() => {
@@ -257,12 +258,16 @@ export default function GamePage() {
     return () => clearInterval(interval);
   }, [fetchLobby]);
 
-  // Show strat modal when new strat is rolled
+  // Show strat modal when new strat is rolled (only if it's different from last seen)
   useEffect(() => {
-    if (game.currentStrat && hasStratRoulette) {
+    if (game.currentStrat && hasStratRoulette && game.currentStrat.id !== lastSeenStratId) {
       setShowStratModal(true);
+      setLastSeenStratId(game.currentStrat.id);
+    } else if (!game.currentStrat && lastSeenStratId) {
+      // Reset when strat is cleared/skipped
+      setLastSeenStratId(null);
     }
-  }, [game.round, hasStratRoulette, game.currentStrat]);
+  }, [game.currentStrat, hasStratRoulette, lastSeenStratId]);
 
   const handleCopyCode = async () => {
     await navigator.clipboard.writeText(lobbyId);
@@ -1050,6 +1055,196 @@ export default function GamePage() {
             );
           })}
         </div>
+
+        {/* Active Strat Banner - Prominent display when strat is active */}
+        {hasStratRoulette && game.currentStrat && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              width: '100%',
+              padding: '32px',
+              background: `linear-gradient(135deg, ${stratCategoryColors[game.currentStrat.category]}15 0%, ${stratCategoryColors[game.currentStrat.category]}08 100%)`,
+              border: `2px solid ${stratCategoryColors[game.currentStrat.category]}`,
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            {/* Animated background pulse */}
+            <motion.div
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.05, 1]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `radial-gradient(circle at 50% 50%, ${stratCategoryColors[game.currentStrat.category]}20 0%, transparent 70%)`,
+                pointerEvents: 'none'
+              }}
+            />
+
+            <div style={{
+              position: 'relative',
+              zIndex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px'
+            }}>
+              {/* Header */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeInOut'
+                    }}
+                  >
+                    <Target style={{ width: '28px', height: '28px', color: stratCategoryColors[game.currentStrat.category] }} />
+                  </motion.div>
+                  <span style={{
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    letterSpacing: '3px',
+                    color: stratCategoryColors[game.currentStrat.category],
+                    fontFamily: 'var(--font-space-mono), monospace'
+                  }}>
+                    ACTIVE STRAT
+                  </span>
+                </div>
+                <div
+                  style={{
+                    padding: '8px 20px',
+                    backgroundColor: stratCategoryColors[game.currentStrat.category]
+                  }}
+                >
+                  <span style={{
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '2px',
+                    color: '#0C0C0C',
+                    fontFamily: 'var(--font-space-mono), monospace'
+                  }}>
+                    {stratCategoryLabels[game.currentStrat.category]}
+                  </span>
+                </div>
+              </div>
+
+              {/* Strat Text */}
+              <h3 style={{
+                fontSize: '28px',
+                fontWeight: 800,
+                color: '#FFFFFF',
+                lineHeight: 1.3,
+                letterSpacing: '-1px',
+                margin: 0
+              }}>
+                &quot;{game.currentStrat.text}&quot;
+              </h3>
+
+              {/* Description */}
+              <p style={{
+                fontSize: '16px',
+                color: '#CCCCCC',
+                lineHeight: 1.6,
+                margin: 0,
+                maxWidth: '800px'
+              }}>
+                {game.currentStrat.description}
+              </p>
+
+              {/* Stats Row */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '24px',
+                flexWrap: 'wrap'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 16px',
+                  backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                  border: '1px solid #FF0000'
+                }}>
+                  <Beer style={{ width: '20px', height: '20px', color: '#FF0000' }} />
+                  <span style={{
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    color: '#FF0000',
+                    fontFamily: 'var(--font-space-mono), monospace'
+                  }}>
+                    +{game.currentStrat.penalty} DRINKS IF FAILED
+                  </span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <Clock style={{ width: '18px', height: '18px', color: '#999999' }} />
+                  <span style={{
+                    fontSize: '14px',
+                    color: '#CCCCCC',
+                    fontFamily: 'var(--font-space-mono), monospace'
+                  }}>
+                    {game.currentStrat.duration === 'round' ? 'THIS ROUND' : game.currentStrat.duration === 'half' ? 'THIS HALF' : 'ENTIRE GAME'}
+                  </span>
+                </div>
+                {isHost && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      rollStratOnServer();
+                      setShowStratModal(true);
+                    }}
+                    style={{
+                      marginLeft: 'auto',
+                      padding: '12px 20px',
+                      backgroundColor: '#2A2A2A',
+                      border: '2px solid #666666',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <Dices style={{ width: '16px', height: '16px', color: '#FFFFFF' }} />
+                    <span style={{
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      letterSpacing: '1px',
+                      color: '#FFFFFF',
+                      fontFamily: 'var(--font-space-mono), monospace'
+                    }}>
+                      NEW STRAT
+                    </span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Player Cards - Responsive Grid */}
         <div style={{

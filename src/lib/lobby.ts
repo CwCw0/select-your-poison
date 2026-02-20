@@ -480,7 +480,17 @@ export async function rollStrat(
     return { error: 'Lobby not found' };
   }
 
-  lobby.game.currentStrat = getRandomStrat();
+  // Get a different strat than the current one to avoid duplicates
+  let newStrat = getRandomStrat();
+  let attempts = 0;
+  const maxAttempts = 10;
+
+  while (lobby.game.currentStrat && newStrat.id === lobby.game.currentStrat.id && attempts < maxAttempts) {
+    newStrat = getRandomStrat();
+    attempts++;
+  }
+
+  lobby.game.currentStrat = newStrat;
   lobby.updatedAt = new Date();
 
   return { lobby };
@@ -499,7 +509,17 @@ export async function rerollStrat(
     return { error: 'No rerolls left' };
   }
 
-  lobby.game.currentStrat = getRandomStrat();
+  // Get a different strat than the current one to avoid duplicates
+  let newStrat = getRandomStrat();
+  let attempts = 0;
+  const maxAttempts = 10;
+
+  while (lobby.game.currentStrat && newStrat.id === lobby.game.currentStrat.id && attempts < maxAttempts) {
+    newStrat = getRandomStrat();
+    attempts++;
+  }
+
+  lobby.game.currentStrat = newStrat;
   lobby.game.rerollsLeft -= 1;
   lobby.updatedAt = new Date();
 
