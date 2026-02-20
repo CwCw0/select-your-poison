@@ -241,6 +241,7 @@ export default function GamePage() {
   const [showAgentRules, setShowAgentRules] = useState(false);
   const [copied, setCopied] = useState(false);
   const [lastSeenStratId, setLastSeenStratId] = useState<string | null>(null);
+  const [stratNotification, setStratNotification] = useState<{ type: 'success' | 'failure'; message: string } | null>(null);
 
   // On mount, if no lobbyCode in the store, try to recover state
   useEffect(() => {
@@ -289,6 +290,53 @@ export default function GamePage() {
   const handleSkipStrat = () => {
     skipStratOnServer();
     setShowStratModal(false);
+  };
+
+  const handleStratCompleted = () => {
+    // Show success notification
+    setStratNotification({
+      type: 'success',
+      message: "You're safe...for now..."
+    });
+
+    // Clear the notification after 3 seconds
+    setTimeout(() => setStratNotification(null), 3000);
+
+    // Skip current strat
+    skipStratOnServer();
+
+    // Auto-roll new strat after 2 seconds
+    setTimeout(() => {
+      rollStratOnServer();
+    }, 2000);
+  };
+
+  const handleStratFailed = async () => {
+    if (!game.currentStrat) return;
+
+    const penaltyDrinks = game.currentStrat.penalty;
+
+    // Show failure notification
+    setStratNotification({
+      type: 'failure',
+      message: `Drink ${penaltyDrinks} ${penaltyDrinks === 1 ? 'time' : 'times'}!`
+    });
+
+    // Auto-add drinks to all players
+    for (const player of players) {
+      await addDrinkOnServer(player.id, penaltyDrinks);
+    }
+
+    // Clear the notification after 4 seconds
+    setTimeout(() => setStratNotification(null), 4000);
+
+    // Skip current strat
+    skipStratOnServer();
+
+    // Auto-roll new strat after 3 seconds
+    setTimeout(() => {
+      rollStratOnServer();
+    }, 3000);
   };
 
   // Calculate totals
@@ -1219,7 +1267,7 @@ export default function GamePage() {
                 }}>
                   <button
                     type="button"
-                    onClick={() => skipStratOnServer()}
+                    onClick={handleStratCompleted}
                     style={{
                       padding: '12px 20px',
                       backgroundColor: '#22C55E',
@@ -1227,7 +1275,16 @@ export default function GamePage() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#16A34A';
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#22C55E';
+                      e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
                     <Check style={{ width: '16px', height: '16px', color: '#0C0C0C' }} />
@@ -1243,7 +1300,7 @@ export default function GamePage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => skipStratOnServer()}
+                    onClick={handleStratFailed}
                     style={{
                       padding: '12px 20px',
                       backgroundColor: 'rgba(239, 68, 68, 0.2)',
@@ -1251,7 +1308,16 @@ export default function GamePage() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.4)';
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                      e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
                     <X style={{ width: '16px', height: '16px', color: '#EF4444' }} />
@@ -1385,6 +1451,55 @@ export default function GamePage() {
             onReroll={handleReroll}
             onSkip={handleSkipStrat}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Strat Completion Notification */}
+      <AnimatePresence>
+        {stratNotification && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            style={{
+              position: 'fixed',
+              bottom: '40px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 100,
+              padding: '24px 40px',
+              backgroundColor: stratNotification.type === 'success' ? '#22C55E' : '#EF4444',
+              border: `3px solid ${stratNotification.type === 'success' ? '#16A34A' : '#DC2626'}`,
+              boxShadow: stratNotification.type === 'success'
+                ? '0 10px 40px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, 0.2)'
+                : '0 10px 40px rgba(239, 68, 68, 0.4), 0 0 60px rgba(239, 68, 68, 0.2)',
+              minWidth: '400px',
+              maxWidth: '90vw',
+              textAlign: 'center'
+            }}
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 0.5,
+                repeat: stratNotification.type === 'failure' ? 2 : 0,
+                ease: 'easeInOut'
+              }}
+            >
+              <span style={{
+                fontSize: '28px',
+                fontWeight: 800,
+                letterSpacing: '2px',
+                color: '#0C0C0C',
+                fontFamily: 'var(--font-space-mono), monospace',
+                textTransform: 'uppercase'
+              }}>
+                {stratNotification.message}
+              </span>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </main>
