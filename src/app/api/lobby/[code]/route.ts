@@ -62,9 +62,9 @@ export async function PATCH(
         return NextResponse.json({ error: 'Invalid or expired session' }, { status: 403 });
       }
 
-      // Actions that target a specific player: verify the authenticated user matches the playerId
-      const playerTargetedActions = ['add_death', 'add_drink', 'start_game', 'end_game', 'update_settings'];
-      if (playerTargetedActions.includes(action)) {
+      // Verify the authenticated user is in the lobby for lobby actions
+      const lobbyActions = ['add_death', 'add_drink', 'start_game', 'end_game', 'update_settings', 'roll_strat', 'reroll_strat', 'skip_strat'];
+      if (lobbyActions.includes(action)) {
         const isInLobby = lobby.players.some((p) => p.id === userId);
         if (!isInLobby) {
           return NextResponse.json({ error: 'You are not in this lobby' }, { status: 403 });
@@ -79,12 +79,8 @@ export async function PATCH(
         }
       }
 
-      // For add_death and add_drink, verify the user is modifying their own data
-      if (action === 'add_death' || action === 'add_drink') {
-        if (playerId && playerId !== userId) {
-          return NextResponse.json({ error: 'You can only modify your own player data' }, { status: 403 });
-        }
-      }
+      // Note: add_death and add_drink are intentionally allowed for any player in the lobby
+      // This allows players to track deaths/drinks for their teammates during gameplay
     }
 
     let result;

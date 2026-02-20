@@ -1211,36 +1211,90 @@ export default function GamePage() {
                     {game.currentStrat.duration === 'round' ? 'THIS ROUND' : game.currentStrat.duration === 'half' ? 'THIS HALF' : 'ENTIRE GAME'}
                   </span>
                 </div>
-                {isHost && (
+                <div style={{
+                  marginLeft: 'auto',
+                  display: 'flex',
+                  gap: '12px',
+                  flexWrap: 'wrap'
+                }}>
                   <button
                     type="button"
-                    onClick={() => {
-                      rollStratOnServer();
-                      setShowStratModal(true);
-                    }}
+                    onClick={() => skipStratOnServer()}
                     style={{
-                      marginLeft: 'auto',
                       padding: '12px 20px',
-                      backgroundColor: '#2A2A2A',
-                      border: '2px solid #666666',
+                      backgroundColor: '#22C55E',
+                      border: 'none',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
                       cursor: 'pointer'
                     }}
                   >
-                    <Dices style={{ width: '16px', height: '16px', color: '#FFFFFF' }} />
+                    <Check style={{ width: '16px', height: '16px', color: '#0C0C0C' }} />
                     <span style={{
                       fontSize: '12px',
                       fontWeight: 700,
                       letterSpacing: '1px',
-                      color: '#FFFFFF',
+                      color: '#0C0C0C',
                       fontFamily: 'var(--font-space-mono), monospace'
                     }}>
-                      NEW STRAT
+                      COMPLETED
                     </span>
                   </button>
-                )}
+                  <button
+                    type="button"
+                    onClick={() => skipStratOnServer()}
+                    style={{
+                      padding: '12px 20px',
+                      backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                      border: '2px solid #EF4444',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <X style={{ width: '16px', height: '16px', color: '#EF4444' }} />
+                    <span style={{
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      letterSpacing: '1px',
+                      color: '#EF4444',
+                      fontFamily: 'var(--font-space-mono), monospace'
+                    }}>
+                      FAILED
+                    </span>
+                  </button>
+                  {isHost && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        rollStratOnServer();
+                        setShowStratModal(true);
+                      }}
+                      style={{
+                        padding: '12px 20px',
+                        backgroundColor: '#2A2A2A',
+                        border: '2px solid #666666',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Dices style={{ width: '16px', height: '16px', color: '#FFFFFF' }} />
+                      <span style={{
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        letterSpacing: '1px',
+                        color: '#FFFFFF',
+                        fontFamily: 'var(--font-space-mono), monospace'
+                      }}>
+                        NEW STRAT
+                      </span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -1403,15 +1457,16 @@ function PlayerCard({
           position: 'relative',
         }}
       >
-        {/* You indicator */}
+        {/* You indicator - positioned on the left to avoid overlap */}
         {isCurrentPlayer && (
           <div style={{
             position: 'absolute',
             top: '8px',
-            right: '8px',
+            left: '8px',
             padding: '2px 8px',
             backgroundColor: headerTextColor,
             opacity: 0.9,
+            zIndex: 1,
           }}>
             <span style={{
               fontSize: '8px',
@@ -1430,6 +1485,7 @@ function PlayerCard({
             fontWeight: 800,
             letterSpacing: '2px',
             color: headerTextColor,
+            paddingTop: isCurrentPlayer ? '16px' : '0',
           }}
         >
           {player.name || 'PLAYER'}
