@@ -34,7 +34,7 @@ export default function Home() {
 
       {/* Navigation - height 72, padding [0, 64] */}
       <header className="w-full h-[72px] border-b border-[var(--border-default)]">
-        <div className="max-w-[1400px] mx-auto h-full flex items-center justify-between px-4 sm:px-8 lg:px-16">
+        <div className="w-full h-full flex items-center justify-between px-16">
         {/* Logo with Easter Egg */}
         <button
           onClick={handleLogoClick}
@@ -151,8 +151,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Hero Section - padding [120, 64], gap 32 */}
-      <section className="w-full min-h-[90vh] flex flex-col items-center justify-center py-16 sm:py-[120px]">
-        <div className="max-w-[1400px] mx-auto w-full flex flex-col items-center px-4 sm:px-8 lg:px-16">
+      <section className="w-full min-h-[90vh] flex flex-col items-center justify-center py-[120px] px-16">
         <motion.div
           className="flex flex-col items-center gap-6 sm:gap-8 text-center max-w-5xl"
           initial="initial"
@@ -205,14 +204,13 @@ export default function Home() {
             </Link>
           </motion.div>
         </motion.div>
-        </div>
       </section>
 
-      {/* Game Modes Section */}
-      <section id="modes" className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-primary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
+      {/* Game Modes Section - padding [80, 64] */}
+      <section id="modes" className="py-20 bg-[var(--bg-primary)] mt-16">
+        <div className="w-full px-16">
           <motion.div
-            className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
+            className="flex flex-col items-center text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -223,7 +221,7 @@ export default function Home() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[var(--text-primary)] mb-4 sm:mb-6" style={{ letterSpacing: '-2px' }}>
               CHOOSE YOUR CHAOS
             </h2>
-            <p className="text-sm sm:text-base text-[var(--text-muted)] font-mono leading-relaxed max-w-[600px] px-4">
+            <p className="text-sm sm:text-base text-[var(--text-muted)] font-mono leading-[1.6] max-w-[600px] px-4">
               Four ways to suffer. Pick your poison or combine them for maximum destruction.
             </p>
           </motion.div>
@@ -232,7 +230,7 @@ export default function Home() {
             {gameModes.map((mode, index) => (
               <motion.div
                 key={mode.id}
-                className="border border-[var(--border-default)] hover:border-[var(--border-hover)] p-6 sm:p-8 lg:p-10 flex flex-col gap-5 sm:gap-6 transition-colors duration-200"
+                className="border border-[var(--border-default)] hover:border-[var(--border-hover)] p-8 flex flex-col gap-6 transition-colors duration-200"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -247,7 +245,7 @@ export default function Home() {
                   </span>
                 </div>
                 <h3 className="text-lg sm:text-xl lg:text-[22px] font-bold text-[var(--text-primary)]" style={{ letterSpacing: '1px' }}>{mode.title}</h3>
-                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-relaxed">
+                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-[1.6]">
                   {mode.description}
                 </p>
               </motion.div>
@@ -256,11 +254,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how" className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-secondary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
+      {/* How It Works Section - padding [80, 64] */}
+      <section id="how" className="py-20 bg-[var(--bg-secondary)] mt-16">
+        <div className="w-full px-16">
           <motion.div
-            className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
+            className="flex flex-col items-center text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -277,7 +275,7 @@ export default function Home() {
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
-                className="flex flex-col gap-4 sm:gap-5"
+                className="flex flex-col gap-5"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -287,18 +285,18 @@ export default function Home() {
                   {step.number}
                 </span>
                 <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)]" style={{ letterSpacing: '1px' }}>{step.title}</h3>
-                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-relaxed">{step.description}</p>
+                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-[1.6]">{step.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Agent Rules Section */}
-      <section id="agents" className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-primary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
+      {/* Agent Rules Section - padding [80, 64] */}
+      <section id="agents" className="py-20 bg-[var(--bg-primary)] mt-16">
+        <div className="w-full px-16">
           <motion.div
-            className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
+            className="flex flex-col items-center text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -309,7 +307,7 @@ export default function Home() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[var(--text-primary)] mb-4 sm:mb-6" style={{ letterSpacing: '-2px' }}>
               EVERY AGENT HAS A PRICE
             </h2>
-            <p className="text-sm sm:text-base text-[var(--text-muted)] font-mono leading-relaxed max-w-[600px] px-4">
+            <p className="text-sm sm:text-base text-[var(--text-muted)] font-mono leading-[1.6] max-w-[600px] px-4">
               Your main determines your pain. Lock in your agent or roll a Poison Agent for chaos.
             </p>
           </motion.div>
@@ -333,12 +331,12 @@ export default function Home() {
                     {agent.role}
                   </span>
                 </div>
-                {/* Agent rules */}
-                <div className="p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 bg-[var(--bg-tertiary)]">
+                {/* Agent rules - padding 24px, gap 12px */}
+                <div className="p-6 flex flex-col gap-3 bg-[var(--bg-tertiary)]">
                   {agent.rules.map((rule, i) => (
                     <div key={i} className="flex items-start sm:items-center gap-3">
                       <div className="w-1 h-1 rounded-full flex-shrink-0 mt-2 sm:mt-0" style={{ backgroundColor: agent.color }} />
-                      <span className="text-[12px] sm:text-[13px] text-[var(--text-secondary)] font-mono leading-relaxed">{rule}</span>
+                      <span className="text-[12px] sm:text-[13px] text-[var(--text-secondary)] font-mono leading-[1.6]">{rule}</span>
                     </div>
                   ))}
                 </div>
@@ -348,11 +346,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Intensity Presets Section */}
-      <section className="py-20 sm:py-32 lg:py-40 bg-[var(--bg-secondary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
+      {/* Intensity Presets Section - padding [80, 64] */}
+      <section className="py-20 bg-[var(--bg-secondary)] mt-16">
+        <div className="w-full px-16">
           <motion.div
-            className="flex flex-col items-center text-center mb-12 sm:mb-16 lg:mb-20"
+            className="flex flex-col items-center text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -363,7 +361,7 @@ export default function Home() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[var(--text-primary)] mb-4 sm:mb-6" style={{ letterSpacing: '-2px' }}>
               PICK YOUR PAIN THRESHOLD
             </h2>
-            <p className="text-sm sm:text-base text-[var(--text-muted)] font-mono leading-relaxed max-w-[600px] px-4">
+            <p className="text-sm sm:text-base text-[var(--text-muted)] font-mono leading-[1.6] max-w-[600px] px-4">
               From casual night to absolute destruction. One click setup.
             </p>
           </motion.div>
@@ -372,7 +370,7 @@ export default function Home() {
             {presets.map((preset, index) => (
               <motion.div
                 key={preset.id}
-                className="p-6 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-5"
+                className="p-8 flex flex-col gap-4"
                 style={{
                   border: preset.isPopular ? '2px solid #FF0000' : '1px solid var(--border-default)',
                 }}
@@ -385,7 +383,7 @@ export default function Home() {
                   {preset.rank}
                 </span>
                 <h3 className="text-lg sm:text-xl lg:text-[22px] font-bold text-[var(--text-primary)]" style={{ letterSpacing: '1px' }}>{preset.title}</h3>
-                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-relaxed">{preset.description}</p>
+                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-[1.6]">{preset.description}</p>
                 {preset.isPopular && (
                   <div className="mt-auto pt-4 sm:pt-6">
                     <span className="inline-block px-4 py-2 sm:px-5 sm:py-2.5 bg-[#FF0000] text-[10px] sm:text-[11px] font-bold text-[#0C0C0C] font-mono tracking-[1px]">
@@ -399,9 +397,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="py-24 sm:py-32 lg:py-48 bg-[var(--bg-primary)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
+      {/* Final CTA Section - padding [120, 64] */}
+      <section className="py-30 bg-[var(--bg-primary)] mt-16">
+        <div className="w-full px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -411,7 +409,7 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-[var(--text-primary)]" style={{ letterSpacing: '-2px' }}>
               READY TO SUFFER?
             </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-[var(--text-muted)] font-mono leading-relaxed max-w-[500px] px-4">
+            <p className="text-base sm:text-lg lg:text-xl text-[var(--text-muted)] font-mono leading-[1.6] max-w-[500px] px-4">
               Create a lobby. Invite your squad. No mercy.
             </p>
             <Link
@@ -426,8 +424,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 sm:py-16 lg:py-20 bg-[var(--bg-secondary)] border-t border-[var(--border-default)]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-16">
+      <footer className="py-12 bg-[var(--bg-secondary)] border-t border-[var(--border-default)] mt-16">
+        <div className="w-full px-16">
           <div className="flex flex-col gap-10 sm:gap-12 lg:gap-14">
             <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
               {/* footerBrand */}
@@ -440,7 +438,7 @@ export default function Home() {
                     SELECT YOUR POISON
                   </span>
                 </div>
-                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-relaxed">
+                <p className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono leading-[1.6]">
                   Cold rules. Chaotic outcomes.
                 </p>
               </div>
