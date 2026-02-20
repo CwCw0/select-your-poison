@@ -104,10 +104,10 @@ export default function ResponsiblePage() {
             <Heart style={{ width: '28px', height: '28px', color: '#FF0000', flexShrink: 0, marginTop: '2px' }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <span style={{ fontSize: '14px', fontWeight: 700, color: '#FF0000', letterSpacing: '2px' }}>
-                21+ ONLY
+                LEGAL DRINKING AGE ONLY
               </span>
               <p style={{ fontSize: '15px', color: '#CCCCCC', lineHeight: 1.8, fontFamily: 'var(--font-space-mono), monospace' }}>
-                This service is intended exclusively for adults of legal drinking age (21+ in the United States, or the legal drinking age in your jurisdiction). If you are underage, please do not use this service.
+                This service is intended exclusively for adults of legal drinking age in your jurisdiction (18+ in most countries, 21+ in USA, 20+ in Japan/Thailand, 19+ in South Korea, etc.). If you are underage, please do not use this service.
               </p>
             </div>
           </div>
@@ -282,81 +282,259 @@ export default function ResponsiblePage() {
       <section style={{ padding: '80px 0 100px', backgroundColor: '#0A0A0A' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '16px' }}>
-            Resources
+            Global Resources
           </h2>
           <p style={{ fontSize: '15px', color: '#999999', lineHeight: 1.8, fontFamily: 'var(--font-space-mono), monospace', marginBottom: '40px' }}>
-            If you or someone you know is struggling with alcohol, help is available. You are not alone.
+            If you or someone you know is struggling with alcohol, help is available worldwide. You are not alone.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* SAMHSA */}
-            <div style={{
-              padding: '32px',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #333333',
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '24px',
-            }}>
-              <div style={{
-                width: '56px',
-                height: '56px',
-                backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                <Phone style={{ width: '28px', height: '28px', color: '#A855F7' }} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '1px' }}>
-                  SAMHSA NATIONAL HELPLINE
-                </h3>
-                <p style={{ fontSize: '24px', fontWeight: 800, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace' }}>
-                  1-800-662-4357
-                </p>
-                <p style={{ fontSize: '14px', color: '#999999', lineHeight: 1.7, fontFamily: 'var(--font-space-mono), monospace' }}>
-                  Free, confidential, 24/7, 365-day-a-year treatment referral and information service for individuals and families facing mental and/or substance use disorders.
-                </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {/* Global/International */}
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#FF0000', letterSpacing: '1px', marginBottom: '20px' }}>
+                INTERNATIONAL
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Alcoholics Anonymous (AA) Worldwide
+                  </h4>
+                  <a
+                    href="https://www.aa.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: '14px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', textDecoration: 'none', display: 'block', marginBottom: '8px' }}
+                  >
+                    www.aa.org
+                  </a>
+                  <p style={{ fontSize: '13px', color: '#999999', lineHeight: 1.7, fontFamily: 'var(--font-space-mono), monospace' }}>
+                    Find AA meetings in 180+ countries. Available in multiple languages.
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* NIAAA */}
-            <div style={{
-              padding: '32px',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #333333',
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '24px',
-            }}>
-              <div style={{
-                width: '56px',
-                height: '56px',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                <Heart style={{ width: '28px', height: '28px', color: '#3B82F6' }} />
+            {/* Asia-Pacific */}
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#FF0000', letterSpacing: '1px', marginBottom: '20px' }}>
+                ASIA-PACIFIC
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Singapore • National Addictions Management Service
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    6-732-6837
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Malaysia • Talian Kasih Helpline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    15999
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Philippines • DOH National Crisis Hotline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    1553 or 0917-899-8727
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Thailand • Thanyarak Institute
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    1165
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Australia • National Alcohol and Drug Hotline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    1800-250-015
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    New Zealand • Alcohol Drug Helpline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    0800-787-797
+                  </p>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '1px' }}>
-                  NATIONAL INSTITUTE ON ALCOHOL ABUSE AND ALCOHOLISM (NIAAA)
-                </h3>
-                <a
-                  href="https://www.niaaa.nih.gov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ fontSize: '16px', fontWeight: 700, color: '#3B82F6', fontFamily: 'var(--font-space-mono), monospace', textDecoration: 'none' }}
-                >
-                  www.niaaa.nih.gov
-                </a>
-                <p style={{ fontSize: '14px', color: '#999999', lineHeight: 1.7, fontFamily: 'var(--font-space-mono), monospace' }}>
-                  Research-based information on alcohol use, prevention, and treatment. Includes tools for evaluating your drinking patterns and finding local treatment resources.
-                </p>
+            </div>
+
+            {/* Europe */}
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#FF0000', letterSpacing: '1px', marginBottom: '20px' }}>
+                EUROPE
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    UK • Drinkline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    0300-123-1110
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Germany • Sucht & Drogen Hotline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    01805-313-031
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    France • Alcool Info Service
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    0980-980-930
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Americas */}
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#FF0000', letterSpacing: '1px', marginBottom: '20px' }}>
+                AMERICAS
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    USA • SAMHSA National Helpline
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    1-800-662-4357
+                  </p>
+                  <p style={{ fontSize: '13px', color: '#999999', lineHeight: 1.7, fontFamily: 'var(--font-space-mono), monospace' }}>
+                    Free, confidential, 24/7, 365-day treatment referral and information service
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    Canada • Canadian Centre on Substance Use and Addiction
+                  </h4>
+                  <p style={{ fontSize: '18px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', marginBottom: '8px' }}>
+                    1-833-553-6983
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Online Resources */}
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#FF0000', letterSpacing: '1px', marginBottom: '20px' }}>
+                ONLINE SUPPORT (GLOBAL)
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    SMART Recovery Online
+                  </h4>
+                  <a
+                    href="https://www.smartrecovery.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: '14px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', textDecoration: 'none', display: 'block', marginBottom: '8px' }}
+                  >
+                    www.smartrecovery.org
+                  </a>
+                  <p style={{ fontSize: '13px', color: '#999999', lineHeight: 1.7, fontFamily: 'var(--font-space-mono), monospace' }}>
+                    Free online meetings and chat support, science-based recovery program
+                  </p>
+                </div>
+
+                <div style={{
+                  padding: '24px',
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333333',
+                }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    In The Rooms
+                  </h4>
+                  <a
+                    href="https://www.intherooms.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: '14px', fontWeight: 700, color: '#A855F7', fontFamily: 'var(--font-space-mono), monospace', textDecoration: 'none', display: 'block', marginBottom: '8px' }}
+                  >
+                    www.intherooms.com
+                  </a>
+                  <p style={{ fontSize: '13px', color: '#999999', lineHeight: 1.7, fontFamily: 'var(--font-space-mono), monospace' }}>
+                    Free online recovery meetings, available 24/7 in multiple languages
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -374,7 +552,7 @@ export default function ResponsiblePage() {
             Last updated: February 2025
           </span>
           <span style={{ fontSize: '12px', fontWeight: 600, color: '#FF0000', fontFamily: 'var(--font-space-mono), monospace', letterSpacing: '1px' }}>
-            21+ ONLY. PLEASE DRINK RESPONSIBLY.
+            LEGAL DRINKING AGE ONLY. PLEASE DRINK RESPONSIBLY.
           </span>
         </div>
       </footer>
