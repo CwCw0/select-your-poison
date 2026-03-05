@@ -857,13 +857,17 @@ export default function LobbyWaitingRoom() {
                             alignItems: 'center',
                             gap: '8px',
                             padding: '8px 14px',
-                            backgroundColor: '#1A1A1A',
-                            border: '1px solid #444444',
+                            backgroundColor: currentPlayer?.agent ? '#1A1A1A' : 'rgba(255, 0, 0, 0.1)',
+                            border: currentPlayer?.agent ? '1px solid #444444' : '1px solid rgba(255, 0, 0, 0.3)',
                             cursor: 'pointer',
-                            transition: 'border-color 0.2s ease',
+                            transition: 'all 0.2s ease',
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.borderColor = '#888888'}
-                          onMouseLeave={(e) => e.currentTarget.style.borderColor = '#444444'}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = currentPlayer?.agent ? '#888888' : 'rgba(255, 0, 0, 0.5)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = currentPlayer?.agent ? '#444444' : 'rgba(255, 0, 0, 0.3)';
+                          }}
                         >
                           <Shield style={{ width: '14px', height: '14px', color: agentColor }} />
                           <span style={{
@@ -873,7 +877,7 @@ export default function LobbyWaitingRoom() {
                             color: '#FFFFFF',
                             fontFamily: 'var(--font-space-mono), monospace',
                           }}>
-                            {showAgentDropdown ? 'CLOSE' : 'AGENT'}
+                            {showAgentDropdown ? 'CLOSE' : (currentPlayer?.agent ? currentPlayer.agent.toUpperCase() : 'SELECT AGENT')}
                           </span>
                           <span style={{ fontSize: '10px', color: '#666666' }}>
                             {showAgentDropdown ? '\u25B2' : '\u25BC'}

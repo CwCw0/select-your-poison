@@ -242,6 +242,8 @@ export default function GamePage() {
   const [copied, setCopied] = useState(false);
   const [lastSeenStratId, setLastSeenStratId] = useState<string | null>(null);
   const [stratNotification, setStratNotification] = useState<{ type: 'success' | 'failure'; message: string } | null>(null);
+  const [roundOutcomeStep, setRoundOutcomeStep] = useState<'round' | 'strat' | null>(null);
+  const [selectedRoundWon, setSelectedRoundWon] = useState<boolean | null>(null);
 
   // On mount, if no lobbyCode in the store, try to recover state
   useEffect(() => {
@@ -292,51 +294,65 @@ export default function GamePage() {
     setShowStratModal(false);
   };
 
-  const handleStratCompleted = () => {
-    // Show success notification
-    setStratNotification({
-      type: 'success',
-      message: "You're safe...for now..."
-    });
-
-    // Clear the notification after 3 seconds
-    setTimeout(() => setStratNotification(null), 3000);
-
-    // Skip current strat
-    skipStratOnServer();
-
-    // Auto-roll new strat after 2 seconds
-    setTimeout(() => {
-      rollStratOnServer();
-    }, 2000);
+  // Step 1: User selects round outcome (won/lost)
+  const handleRoundOutcomeSelection = (roundWon: boolean) => {
+    setSelectedRoundWon(roundWon);
+    setRoundOutcomeStep('strat');
   };
 
-  const handleStratFailed = async () => {
-    if (!game.currentStrat) return;
+  // Step 2: User selects strat outcome (completed/failed) and we process everything
+  const handleStratOutcomeSelection = async (stratCompleted: boolean) => {
+    if (selectedRoundWon === null) return;
 
-    const penaltyDrinks = game.currentStrat.penalty;
-
-    // Show failure notification
-    setStratNotification({
-      type: 'failure',
-      message: `Drink ${penaltyDrinks} ${penaltyDrinks === 1 ? 'time' : 'times'}!`
-    });
-
-    // Auto-add drinks to all players
-    for (const player of players) {
-      await addDrinkOnServer(player.id, penaltyDrinks);
+    // Handle round outcome first
+    if (selectedRoundWon) {
+      await roundWonOnServer();
+    } else {
+      await roundLostOnServer();
     }
 
-    // Clear the notification after 4 seconds
-    setTimeout(() => setStratNotification(null), 4000);
+    // Handle strat outcome
+    if (stratCompleted) {
+      // Show success notification
+      setStratNotification({
+        type: 'success',
+        message: "Strat completed! Safe from penalty drinks..."
+      });
+
+      // Clear the notification after 3 seconds
+      setTimeout(() => setStratNotification(null), 3000);
+    } else {
+      // Strat failed - add penalty drinks
+      if (game.currentStrat) {
+        const penaltyDrinks = game.currentStrat.penalty;
+
+        // Show failure notification
+        setStratNotification({
+          type: 'failure',
+          message: `Strat failed! Everyone drinks ${penaltyDrinks}x!`
+        });
+
+        // Auto-add drinks to all players
+        for (const player of players) {
+          await addDrinkOnServer(player.id, penaltyDrinks);
+        }
+
+        // Clear the notification after 4 seconds
+        setTimeout(() => setStratNotification(null), 4000);
+      }
+    }
 
     // Skip current strat
     skipStratOnServer();
 
-    // Auto-roll new strat after 3 seconds
+    // Auto-roll new strat after delay
     setTimeout(() => {
       rollStratOnServer();
-    }, 3000);
+    }, stratCompleted ? 2000 : 3000);
+
+    // Reset the two-step flow
+    setRoundOutcomeStep(null);
+    setSelectedRoundWon(null);
   };
 
   // Calculate totals
@@ -582,8 +598,8 @@ export default function GamePage() {
             </motion.div>
           )}
 
-          {/* Round Controls */}
-          {isHost && (
+          {/* Round Controls - Only show when strat roulette is disabled */}
+          {isHost && !hasStratRoulette && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '16px' }}>
               <button
                 type="button"
@@ -1262,88 +1278,231 @@ export default function GamePage() {
                 <div style={{
                   marginLeft: 'auto',
                   display: 'flex',
-                  gap: '12px',
-                  flexWrap: 'wrap'
+                  flexDirection: 'column',
+                  gap: '12px'
                 }}>
-                  <button
-                    type="button"
-                    onClick={handleStratCompleted}
-                    style={{
-                      padding: '12px 20px',
-                      backgroundColor: '#22C55E',
-                      border: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#16A34A';
-                      e.currentTarget.style.transform = 'scale(1.05)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#22C55E';
-                      e.currentTarget.style.transform = 'scale(1)';
-                    }}
-                  >
-                    <Check style={{ width: '16px', height: '16px', color: '#0C0C0C' }} />
-                    <span style={{
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      letterSpacing: '1px',
-                      color: '#0C0C0C',
-                      fontFamily: 'var(--font-space-mono), monospace'
-                    }}>
-                      COMPLETED
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleStratFailed}
-                    style={{
-                      padding: '12px 20px',
-                      backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                      border: '2px solid #EF4444',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.4)';
-                      e.currentTarget.style.transform = 'scale(1.05)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                      e.currentTarget.style.transform = 'scale(1)';
-                    }}
-                  >
-                    <X style={{ width: '16px', height: '16px', color: '#EF4444' }} />
-                    <span style={{
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      letterSpacing: '1px',
-                      color: '#EF4444',
-                      fontFamily: 'var(--font-space-mono), monospace'
-                    }}>
-                      FAILED
-                    </span>
-                  </button>
+                  {/* Two-Step Flow */}
+                  {roundOutcomeStep === 'strat' ? (
+                    // STEP 2: Strat outcome
+                    <>
+                      <span style={{
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        letterSpacing: '1.5px',
+                        color: '#999999',
+                        fontFamily: 'var(--font-space-mono), monospace',
+                        textAlign: 'center'
+                      }}>
+                        DID YOU COMPLETE THE STRAT?
+                      </span>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '8px'
+                      }}>
+                        <button
+                          type="button"
+                          onClick={() => handleStratOutcomeSelection(true)}
+                          style={{
+                            padding: '14px 20px',
+                            backgroundColor: '#22C55E',
+                            border: 'none',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            minHeight: '72px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#16A34A';
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#22C55E';
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        >
+                          <Check style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+                          <span style={{
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            letterSpacing: '1px',
+                            color: '#0C0C0C',
+                            fontFamily: 'var(--font-space-mono), monospace'
+                          }}>
+                            YES
+                          </span>
+                          <span style={{
+                            fontSize: '9px',
+                            color: '#0C0C0C',
+                            fontFamily: 'var(--font-space-mono), monospace',
+                            opacity: 0.7
+                          }}>
+                            No drinks
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleStratOutcomeSelection(false)}
+                          style={{
+                            padding: '14px 20px',
+                            backgroundColor: '#EF4444',
+                            border: 'none',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            minHeight: '72px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#DC2626';
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#EF4444';
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        >
+                          <X style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+                          <span style={{
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            letterSpacing: '1px',
+                            color: '#0C0C0C',
+                            fontFamily: 'var(--font-space-mono), monospace'
+                          }}>
+                            NO
+                          </span>
+                          <span style={{
+                            fontSize: '9px',
+                            color: '#0C0C0C',
+                            fontFamily: 'var(--font-space-mono), monospace',
+                            opacity: 0.7
+                          }}>
+                            +{game.currentStrat?.penalty || 0} drinks
+                          </span>
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    // STEP 1: Round outcome
+                    <>
+                      <span style={{
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        letterSpacing: '1.5px',
+                        color: '#999999',
+                        fontFamily: 'var(--font-space-mono), monospace',
+                        textAlign: 'center'
+                      }}>
+                        ROUND OUTCOME
+                      </span>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '8px'
+                      }}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleRoundOutcomeSelection(true);
+                          }}
+                          style={{
+                            padding: '14px 20px',
+                            backgroundColor: '#22C55E',
+                            border: 'none',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            minHeight: '72px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#16A34A';
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#22C55E';
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        >
+                          <Trophy style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+                          <span style={{
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            letterSpacing: '1.5px',
+                            color: '#0C0C0C',
+                            fontFamily: 'var(--font-space-mono), monospace'
+                          }}>
+                            WON
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleRoundOutcomeSelection(false);
+                          }}
+                          style={{
+                            padding: '14px 20px',
+                            backgroundColor: '#EF4444',
+                            border: 'none',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            minHeight: '72px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#DC2626';
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#EF4444';
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        >
+                          <Skull style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+                          <span style={{
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            letterSpacing: '1.5px',
+                            color: '#0C0C0C',
+                            fontFamily: 'var(--font-space-mono), monospace'
+                          }}>
+                            LOST
+                          </span>
+                        </button>
+                      </div>
+                    </>
+                  )}
                   {isHost && (
                     <button
                       type="button"
                       onClick={() => {
+                        setRoundOutcomeStep(null);
+                        setSelectedRoundWon(null);
                         rollStratOnServer();
                         setShowStratModal(true);
                       }}
                       style={{
-                        padding: '12px 20px',
+                        padding: '10px 16px',
                         backgroundColor: '#2A2A2A',
                         border: '2px solid #666666',
                         display: 'flex',
                         alignItems: 'center',
+                        justifyContent: 'center',
                         gap: '8px',
                         cursor: 'pointer'
                       }}
