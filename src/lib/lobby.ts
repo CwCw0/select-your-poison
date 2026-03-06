@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/db';
 import { GameMode, IntensityLevel, AgentType, GameSide, Strat } from '@/types';
 import { generateLobbyCode } from '@/lib/utils';
 import { getRandomStrat } from '@/lib/strats';
@@ -11,6 +12,7 @@ export interface LobbySettings {
 
 export interface LobbyPlayer {
   id: string;
+  userId?: string | null;
   name: string;
   agent: AgentType | null;
   color: string;
@@ -43,19 +45,7 @@ export interface Lobby {
   updatedAt: Date;
 }
 
-// In-memory store
-const lobbies: Map<string, Lobby> = new Map();
-const codeToLobby: Map<string, string> = new Map();
-
 const playerColors = ['#7DD3FC', '#A855F7', '#F97316', '#22C55E', '#F59E0B', '#EC4899', '#06B6D4', '#EF4444'];
-
-function generateLobbyId(): string {
-  return `lobby_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 9)}`;
-}
-
-function generatePlayerId(): string {
-  return `player_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 9)}`;
-}
 
 const initialGameState: GameState = {
   round: 1,
@@ -67,53 +57,106 @@ const initialGameState: GameState = {
   status: 'waiting',
 };
 
+const PLAYERS_INCLUDE = { orderBy: { joinedAt: 'asc' as const } };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toPlayer(p: any): LobbyPlayer {
+  return {
+    id: p.id,
+    userId: p.userId,
+    name: p.name,
+    agent: p.agent as AgentType | null,
+    color: p.color,
+    isHost: p.isHost,
+    isReady: p.isReady,
+    deaths: p.deaths,
+    drinks: p.drinks,
+    joinedAt: p.joinedAt,
+    connected: p.connected,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toLobby(row: any): Lobby {
+  return {
+    id: row.id,
+    code: row.code,
+    hostId: row.hostId,
+    settings: row.settings as LobbySettings,
+    game: row.game as GameState,
+    players: (row.players ?? []).map(toPlayer),
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function fetchLobby(lobbyId: string): Promise<any> {
+  return prisma.lobby.findUnique({
+    where: { id: lobbyId },
+    include: { players: PLAYERS_INCLUDE },
+  });
+}
+
 export async function createLobby(
   hostName: string,
   settings: LobbySettings,
   userId?: string
 ): Promise<{ lobby: Lobby; playerId: string }> {
-  const lobbyId = generateLobbyId();
-  const code = generateLobbyCode();
-  const playerId = userId || generatePlayerId();
+  // Retry loop to handle rare code collisions
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const code = generateLobbyCode();
+    try {
+      const color = playerColors[0];
+      const lobby = await prisma.lobby.create({
+        data: {
+          code,
+          hostId: '', // Filled below after player creation
+          settings: settings as object,
+          game: { ...initialGameState } as object,
+          players: {
+            create: {
+              name: hostName.toUpperCase(),
+              color,
+              isHost: true,
+              userId: userId ?? null,
+            },
+          },
+        },
+        include: { players: PLAYERS_INCLUDE },
+      });
 
-  const hostPlayer: LobbyPlayer = {
-    id: playerId,
-    name: hostName.toUpperCase(),
-    agent: null,
-    color: playerColors[0],
-    isHost: true,
-    isReady: false,
-    deaths: 0,
-    drinks: 0,
-    joinedAt: new Date(),
-    connected: true,
-  };
+      const hostPlayer = lobby.players[0];
 
-  const lobby: Lobby = {
-    id: lobbyId,
-    code,
-    hostId: playerId,
-    settings,
-    players: [hostPlayer],
-    game: { ...initialGameState },
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+      // Update hostId to the new LobbyPlayer's id
+      await prisma.lobby.update({
+        where: { id: lobby.id },
+        data: { hostId: hostPlayer.id },
+      });
+      lobby.hostId = hostPlayer.id;
 
-  lobbies.set(lobbyId, lobby);
-  codeToLobby.set(code, lobbyId);
-
-  return { lobby, playerId };
+      return { lobby: toLobby(lobby), playerId: hostPlayer.id };
+    } catch (err: unknown) {
+      // Retry only on unique constraint violation (duplicate code)
+      const isUniqueError =
+        err instanceof Error && err.message.includes('Unique constraint');
+      if (!isUniqueError) throw err;
+    }
+  }
+  throw new Error('Failed to generate unique lobby code');
 }
 
 export async function getLobby(lobbyId: string): Promise<Lobby | null> {
-  return lobbies.get(lobbyId) || null;
+  const lobby = await fetchLobby(lobbyId);
+  return lobby ? toLobby(lobby) : null;
 }
 
 export async function getLobbyByCode(code: string): Promise<Lobby | null> {
-  const lobbyId = codeToLobby.get(code.toUpperCase());
-  if (!lobbyId) return null;
-  return lobbies.get(lobbyId) || null;
+  const lobby = await prisma.lobby.findUnique({
+    where: { code: code.toUpperCase() },
+    include: { players: PLAYERS_INCLUDE },
+  });
+  return lobby ? toLobby(lobby) : null;
 }
 
 export async function joinLobby(
@@ -121,82 +164,84 @@ export async function joinLobby(
   playerName: string,
   userId?: string
 ): Promise<{ lobby: Lobby; playerId: string } | { error: string }> {
-  const lobby = await getLobbyByCode(code);
+  const lobbyRow = await prisma.lobby.findUnique({
+    where: { code: code.toUpperCase() },
+    include: { players: PLAYERS_INCLUDE },
+  });
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (lobby.game.status !== 'waiting') {
-    return { error: 'Game already in progress' };
-  }
+  const game = lobbyRow.game as unknown as GameState;
+  if (game.status !== 'waiting') return { error: 'Game already in progress' };
 
-  if (lobby.players.length >= lobby.settings.maxPlayers) {
-    return { error: 'Lobby is full' };
-  }
+  const settings = lobbyRow.settings as unknown as LobbySettings;
+  if (lobbyRow.players.length >= settings.maxPlayers) return { error: 'Lobby is full' };
 
-  const nameExists = lobby.players.some(
-    (p) => p.name.toUpperCase() === playerName.toUpperCase()
+  const nameExists = lobbyRow.players.some(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (p: any) => p.name.toUpperCase() === playerName.toUpperCase()
   );
+  if (nameExists) return { error: 'Name already taken in this lobby' };
 
-  if (nameExists) {
-    return { error: 'Name already taken in this lobby' };
-  }
+  const colorIndex = lobbyRow.players.length % playerColors.length;
 
-  const playerId = userId || generatePlayerId();
-  const colorIndex = lobby.players.length % playerColors.length;
+  const newPlayer = await prisma.lobbyPlayer.create({
+    data: {
+      lobbyId: lobbyRow.id,
+      name: playerName.toUpperCase(),
+      color: playerColors[colorIndex],
+      isHost: false,
+      userId: userId ?? null,
+    },
+  });
 
-  const newPlayer: LobbyPlayer = {
-    id: playerId,
-    name: playerName.toUpperCase(),
-    agent: null,
-    color: playerColors[colorIndex],
-    isHost: false,
-    isReady: false,
-    deaths: 0,
-    drinks: 0,
-    joinedAt: new Date(),
-    connected: true,
-  };
+  await prisma.lobby.update({
+    where: { id: lobbyRow.id },
+    data: { updatedAt: new Date() },
+  });
 
-  lobby.players.push(newPlayer);
-  lobby.updatedAt = new Date();
-
-  return { lobby, playerId };
+  const updated = await fetchLobby(lobbyRow.id);
+  return { lobby: toLobby(updated!), playerId: newPlayer.id };
 }
 
 export async function leaveLobby(
   lobbyId: string,
   playerId: string
 ): Promise<{ lobby: Lobby | null } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
+  const player = lobbyRow.players.find((p: LobbyPlayer) => p.id === playerId);
+  if (!player) return { error: 'Player not in lobby' };
+
+  await prisma.lobbyPlayer.delete({ where: { id: playerId } });
+
+  if (!player.isHost) {
+    await prisma.lobby.update({ where: { id: lobbyId }, data: { updatedAt: new Date() } });
+    const updated = await fetchLobby(lobbyId);
+    return { lobby: toLobby(updated!) };
   }
 
-  const playerIndex = lobby.players.findIndex((p) => p.id === playerId);
+  // Host left — find the next player
+  const remaining = lobbyRow.players.filter((p: LobbyPlayer) => p.id !== playerId);
 
-  if (playerIndex === -1) {
-    return { error: 'Player not in lobby' };
+  if (remaining.length === 0) {
+    await prisma.lobby.delete({ where: { id: lobbyId } });
+    return { lobby: null };
   }
 
-  const isHost = lobby.players[playerIndex].isHost;
-  lobby.players.splice(playerIndex, 1);
-  lobby.updatedAt = new Date();
+  const newHost = remaining[0];
+  await prisma.lobbyPlayer.update({
+    where: { id: newHost.id },
+    data: { isHost: true },
+  });
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { hostId: newHost.id, updatedAt: new Date() },
+  });
 
-  if (isHost) {
-    if (lobby.players.length > 0) {
-      lobby.players[0].isHost = true;
-      lobby.hostId = lobby.players[0].id;
-    } else {
-      lobbies.delete(lobbyId);
-      codeToLobby.delete(lobby.code);
-      return { lobby: null };
-    }
-  }
-
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function updatePlayerAgent(
@@ -204,22 +249,17 @@ export async function updatePlayerAgent(
   playerId: string,
   agent: AgentType
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const player = lobbyRow.players.find((p: LobbyPlayer) => p.id === playerId);
+  if (!player) return { error: 'Player not in lobby' };
 
-  const player = lobby.players.find((p) => p.id === playerId);
+  await prisma.lobbyPlayer.update({ where: { id: playerId }, data: { agent } });
+  await prisma.lobby.update({ where: { id: lobbyId }, data: { updatedAt: new Date() } });
 
-  if (!player) {
-    return { error: 'Player not in lobby' };
-  }
-
-  player.agent = agent;
-  lobby.updatedAt = new Date();
-
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function setPlayerReady(
@@ -227,22 +267,17 @@ export async function setPlayerReady(
   playerId: string,
   isReady: boolean
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const player = lobbyRow.players.find((p: LobbyPlayer) => p.id === playerId);
+  if (!player) return { error: 'Player not in lobby' };
 
-  const player = lobby.players.find((p) => p.id === playerId);
+  await prisma.lobbyPlayer.update({ where: { id: playerId }, data: { isReady } });
+  await prisma.lobby.update({ where: { id: lobbyId }, data: { updatedAt: new Date() } });
 
-  if (!player) {
-    return { error: 'Player not in lobby' };
-  }
-
-  player.isReady = isReady;
-  lobby.updatedAt = new Date();
-
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function updateLobbySettings(
@@ -250,65 +285,67 @@ export async function updateLobbySettings(
   playerId: string,
   settings: Partial<LobbySettings>
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  if (lobbyRow.hostId !== playerId) return { error: 'Only host can update settings' };
 
-  if (lobby.hostId !== playerId) {
-    return { error: 'Only host can update settings' };
-  }
+  const currentSettings = lobbyRow.settings as LobbySettings;
+  const newSettings = { ...currentSettings, ...settings };
 
-  lobby.settings = { ...lobby.settings, ...settings };
-  lobby.updatedAt = new Date();
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { settings: newSettings as object, updatedAt: new Date() },
+  });
 
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function startGame(
   lobbyId: string,
   playerId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  if (lobbyRow.hostId !== playerId) return { error: 'Only host can start the game' };
 
-  if (lobby.hostId !== playerId) {
-    return { error: 'Only host can start the game' };
-  }
+  const game = lobbyRow.game as GameState;
+  if (game.status !== 'waiting') return { error: 'Game already started' };
 
-  if (lobby.game.status !== 'waiting') {
-    return { error: 'Game already started' };
-  }
+  const settings = lobbyRow.settings as LobbySettings;
+  const newGame: GameState = {
+    ...game,
+    status: 'in_progress',
+    currentStrat: settings.modes.includes('strat_roulette') ? getRandomStrat() : null,
+  };
 
-  lobby.game.status = 'in_progress';
-  lobby.game.currentStrat = lobby.settings.modes.includes('strat_roulette')
-    ? getRandomStrat()
-    : null;
-  lobby.updatedAt = new Date();
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
 
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function endGame(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const game = lobbyRow.game as GameState;
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: { ...game, status: 'ended' } as object, updatedAt: new Date() },
+  });
 
-  lobby.game.status = 'ended';
-  lobby.updatedAt = new Date();
-
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
-// Game actions
 function getIntensityMultiplier(intensity: IntensityLevel): number {
   switch (intensity) {
     case 'casual': return 0.5;
@@ -323,27 +360,31 @@ export async function addDeath(
   lobbyId: string,
   playerId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const player = lobbyRow.players.find((p: LobbyPlayer) => p.id === playerId);
+  if (!player) return { error: 'Player not in lobby' };
 
-  const player = lobby.players.find((p) => p.id === playerId);
-  if (!player) {
-    return { error: 'Player not in lobby' };
-  }
+  const settings = lobbyRow.settings as LobbySettings;
+  const game = lobbyRow.game as GameState;
 
-  const intensityMultiplier = getIntensityMultiplier(lobby.settings.intensity);
-  const overtimeMultiplier = lobby.game.status === 'overtime' ? 2 : 1;
+  const intensityMultiplier = getIntensityMultiplier(settings.intensity);
+  const overtimeMultiplier = game.status === 'overtime' ? 2 : 1;
   const totalMultiplier = intensityMultiplier * overtimeMultiplier;
-  const drinksToAdd = lobby.settings.modes.includes('classic') ? Math.ceil(1 * totalMultiplier) : 0;
+  const drinksToAdd = settings.modes.includes('classic') ? Math.ceil(1 * totalMultiplier) : 0;
 
-  player.deaths += 1;
-  player.drinks += drinksToAdd;
-  lobby.updatedAt = new Date();
+  await prisma.lobbyPlayer.update({
+    where: { id: playerId },
+    data: {
+      deaths: { increment: 1 },
+      drinks: { increment: drinksToAdd },
+    },
+  });
+  await prisma.lobby.update({ where: { id: lobbyId }, data: { updatedAt: new Date() } });
 
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function addDrink(
@@ -351,33 +392,27 @@ export async function addDrink(
   playerId: string,
   amount: number = 1
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const player = lobbyRow.players.find((p: LobbyPlayer) => p.id === playerId);
+  if (!player) return { error: 'Player not in lobby' };
 
-  const player = lobby.players.find((p) => p.id === playerId);
-  if (!player) {
-    return { error: 'Player not in lobby' };
-  }
+  const newDrinks = Math.max(0, player.drinks + amount);
+  await prisma.lobbyPlayer.update({ where: { id: playerId }, data: { drinks: newDrinks } });
+  await prisma.lobby.update({ where: { id: lobbyId }, data: { updatedAt: new Date() } });
 
-  player.drinks = Math.max(0, player.drinks + amount);
-  lobby.updatedAt = new Date();
-
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function roundWon(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
-
-  const { game } = lobby;
+  const game = lobbyRow.game as GameState;
   const newTeamScore = game.teamScore + 1;
   const newRound = game.round + 1;
 
@@ -397,30 +432,31 @@ export async function roundWon(
     newStatus = 'overtime';
   }
 
-  lobby.game = {
+  const newGame: GameState = {
     ...game,
     round: newRound,
     teamScore: newTeamScore,
     side: newSide,
     status: newStatus,
-    // Clear strat after round - client controls rolling via two-step flow
     currentStrat: isGameEnd ? null : game.currentStrat,
   };
-  lobby.updatedAt = new Date();
 
-  return { lobby };
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
+
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function roundLost(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
-
-  const { game } = lobby;
+  const game = lobbyRow.game as GameState;
   const newEnemyScore = game.enemyScore + 1;
   const newRound = game.round + 1;
 
@@ -440,137 +476,143 @@ export async function roundLost(
     newStatus = 'overtime';
   }
 
-  lobby.game = {
+  const newGame: GameState = {
     ...game,
     round: newRound,
     enemyScore: newEnemyScore,
     side: newSide,
     status: newStatus,
-    // Clear strat after round - client controls rolling via two-step flow
     currentStrat: isGameEnd ? null : game.currentStrat,
   };
-  lobby.updatedAt = new Date();
 
-  return { lobby };
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
+
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function switchSides(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const game = lobbyRow.game as GameState;
+  const newGame: GameState = {
+    ...game,
+    side: game.side === 'attack' ? 'defense' : 'attack',
+  };
 
-  lobby.game.side = lobby.game.side === 'attack' ? 'defense' : 'attack';
-  lobby.updatedAt = new Date();
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
 
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function rollStrat(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const game = lobbyRow.game as GameState;
 
-  // Get a different strat than the current one to avoid duplicates
   let newStrat = getRandomStrat();
-  let attempts = 0;
-  const maxAttempts = 10;
-
-  while (lobby.game.currentStrat && newStrat.id === lobby.game.currentStrat.id && attempts < maxAttempts) {
+  for (let i = 0; i < 10 && game.currentStrat && newStrat.id === game.currentStrat.id; i++) {
     newStrat = getRandomStrat();
-    attempts++;
   }
 
-  lobby.game.currentStrat = newStrat;
-  lobby.updatedAt = new Date();
+  const newGame: GameState = { ...game, currentStrat: newStrat };
 
-  return { lobby };
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
+
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function rerollStrat(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const game = lobbyRow.game as GameState;
+  if (game.rerollsLeft <= 0) return { error: 'No rerolls left' };
 
-  if (lobby.game.rerollsLeft <= 0) {
-    return { error: 'No rerolls left' };
-  }
-
-  // Get a different strat than the current one to avoid duplicates
   let newStrat = getRandomStrat();
-  let attempts = 0;
-  const maxAttempts = 10;
-
-  while (lobby.game.currentStrat && newStrat.id === lobby.game.currentStrat.id && attempts < maxAttempts) {
+  for (let i = 0; i < 10 && game.currentStrat && newStrat.id === game.currentStrat.id; i++) {
     newStrat = getRandomStrat();
-    attempts++;
   }
 
-  lobby.game.currentStrat = newStrat;
-  lobby.game.rerollsLeft -= 1;
-  lobby.updatedAt = new Date();
+  const newGame: GameState = {
+    ...game,
+    currentStrat: newStrat,
+    rerollsLeft: game.rerollsLeft - 1,
+  };
 
-  return { lobby };
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
+
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function skipStrat(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const game = lobbyRow.game as GameState;
+  const newGame: GameState = { ...game, currentStrat: null };
 
-  lobby.game.currentStrat = null;
-  lobby.updatedAt = new Date();
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
 
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
 export async function resumeFromHalftime(
   lobbyId: string
 ): Promise<{ lobby: Lobby } | { error: string }> {
-  const lobby = lobbies.get(lobbyId);
+  const lobbyRow = await fetchLobby(lobbyId);
+  if (!lobbyRow) return { error: 'Lobby not found' };
 
-  if (!lobby) {
-    return { error: 'Lobby not found' };
-  }
+  const game = lobbyRow.game as GameState;
+  const newGame: GameState = { ...game, status: 'in_progress' };
 
-  lobby.game.status = 'in_progress';
-  lobby.updatedAt = new Date();
+  await prisma.lobby.update({
+    where: { id: lobbyId },
+    data: { game: newGame as object, updatedAt: new Date() },
+  });
 
-  return { lobby };
+  const updated = await fetchLobby(lobbyId);
+  return { lobby: toLobby(updated!) };
 }
 
-// Get all active lobbies
 export async function getAllLobbies(): Promise<Lobby[]> {
-  return Array.from(lobbies.values());
+  const rows = await prisma.lobby.findMany({ include: { players: PLAYERS_INCLUDE } });
+  return rows.map(toLobby);
 }
 
-// Cleanup old lobbies
 export async function cleanupOldLobbies(maxAgeMs: number = 24 * 60 * 60 * 1000): Promise<number> {
-  const now = Date.now();
-  let deleted = 0;
-
-  for (const [id, lobby] of lobbies.entries()) {
-    if (now - lobby.updatedAt.getTime() > maxAgeMs) {
-      lobbies.delete(id);
-      codeToLobby.delete(lobby.code);
-      deleted++;
-    }
-  }
-
-  return deleted;
+  const cutoff = new Date(Date.now() - maxAgeMs);
+  const result = await prisma.lobby.deleteMany({
+    where: { updatedAt: { lt: cutoff } },
+  });
+  return result.count;
 }

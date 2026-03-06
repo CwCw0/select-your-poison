@@ -1,6 +1,3 @@
-// Prisma Schema for Select Your Poison
-// Valorant drinking game + strat roulette
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,259 +6,69 @@ datasource db {
   provider = "postgresql"
 }
 
-// ============================================
-// AUTH MODELS (NextAuth compatible)
-// ============================================
-
 model User {
-  id            String    @id @default(cuid())
-  gamertag      String    @unique
-  email         String    @unique
-  emailVerified DateTime?
-  password      String?   // Null if using OAuth only
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           String        @id @default(cuid())
+  gamertag     String        @unique
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
-  // Relations
-  accounts      Account[]
-  sessions      Session[]
-  lobbiesHosted Lobby[]   @relation("LobbyHost")
-  players       Player[]
-  gameStats     GameStats?
+  sessions UserSession[]
+  players  LobbyPlayer[]
 
   @@map("users")
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
+  @@index([token])
+  @@map("user_sessions")
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map("verification_tokens")
-}
-
-// ============================================
-// GAME MODELS
-// ============================================
-
+// Lobby stores settings and game state as JSON columns for simplicity.
+// settings: { modes: string[], intensity: string, maxPlayers: number }
+// game: { round, teamScore, enemyScore, side, currentStrat, rerollsLeft, status }
 model Lobby {
-  id        String      @id @default(cuid())
-  code      String      @unique // e.g., "VXR-7K9"
-  status    LobbyStatus @default(WAITING)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  expiresAt DateTime    // Auto-cleanup old lobbies
+  id        String   @id @default(cuid())
+  code      String   @unique
+  hostId    String   // LobbyPlayer.id of the current host
+  settings  Json
+  game      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  // Settings
-  maxPlayers    Int             @default(5)
-  modes         GameMode[]
-  intensity     IntensityLevel  @default(CASUAL)
-
-  // Relations
-  hostId    String
-  host      User     @relation("LobbyHost", fields: [hostId], references: [id])
-  players   Player[]
-  games     Game[]
+  players LobbyPlayer[]
 
   @@index([code])
-  @@index([status])
   @@map("lobbies")
 }
 
-model Player {
+model LobbyPlayer {
   id        String   @id @default(cuid())
+  lobbyId   String
+  userId    String?  // Null for guest players
   name      String
-  agent     String?  // Selected Valorant agent
-  color     String   @default("#7DD3FC")
+  agent     String?
+  color     String
+  isHost    Boolean  @default(false)
   isReady   Boolean  @default(false)
+  deaths    Int      @default(0)
+  drinks    Int      @default(0)
   connected Boolean  @default(true)
   joinedAt  DateTime @default(now())
 
-  // Stats for current game
-  deaths    Int @default(0)
-  drinks    Int @default(0)
+  lobby Lobby @relation(fields: [lobbyId], references: [id], onDelete: Cascade)
+  user  User? @relation(fields: [userId], references: [id])
 
-  // Relations
-  lobbyId   String
-  lobby     Lobby    @relation(fields: [lobbyId], references: [id], onDelete: Cascade)
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
-
-  @@unique([lobbyId, name]) // Unique name per lobby
-  @@map("players")
-}
-
-model Game {
-  id        String     @id @default(cuid())
-  status    GameStatus @default(IN_PROGRESS)
-  startedAt DateTime   @default(now())
-  endedAt   DateTime?
-
-  // Game state
-  round       Int      @default(1)
-  teamScore   Int      @default(0)
-  enemyScore  Int      @default(0)
-  side        GameSide @default(ATTACK)
-  rerollsUsed Int      @default(0)
-
-  // Current strat (if strat roulette mode)
-  currentStratId String?
-  currentStratText String?
-  currentStratCategory StratCategory?
-  currentStratPenalty Int?
-
-  // Relations
-  lobbyId String
-  lobby   Lobby        @relation(fields: [lobbyId], references: [id], onDelete: Cascade)
-  rounds  RoundHistory[]
-  events  GameEvent[]
-
-  @@map("games")
-}
-
-model RoundHistory {
-  id          String   @id @default(cuid())
-  roundNumber Int
-  won         Boolean
-  side        GameSide
-  stratUsed   String?
-  timestamp   DateTime @default(now())
-
-  // Relations
-  gameId String
-  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
-
-  @@map("round_history")
-}
-
-model GameEvent {
-  id        String    @id @default(cuid())
-  type      EventType
-  playerId  String?
-  playerName String?
-  value     Int       @default(1)
-  round     Int
-  timestamp DateTime  @default(now())
-  metadata  Json?     // Extra data like strat info
-
-  // Relations
-  gameId String
-  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
-
-  @@map("game_events")
-}
-
-// ============================================
-// STATS & HISTORY
-// ============================================
-
-model GameStats {
-  id          String @id @default(cuid())
-  userId      String @unique
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Lifetime stats
-  gamesPlayed   Int @default(0)
-  gamesWon      Int @default(0)
-  totalDeaths   Int @default(0)
-  totalDrinks   Int @default(0)
-  stratsRolled  Int @default(0)
-  stratsCompleted Int @default(0)
-
-  // Tracking
-  mostPlayedAgent String?
-  favoriteMode    GameMode?
-  updatedAt       DateTime @updatedAt
-
-  @@map("game_stats")
-}
-
-// ============================================
-// ENUMS
-// ============================================
-
-enum LobbyStatus {
-  WAITING
-  IN_PROGRESS
-  HALFTIME
-  OVERTIME
-  ENDED
-}
-
-enum GameStatus {
-  IN_PROGRESS
-  HALFTIME
-  OVERTIME
-  ENDED
-}
-
-enum GameMode {
-  CLASSIC
-  AGENT_POISON
-  STRAT_ROULETTE
-  CHALLENGES
-  PUNISHMENT
-}
-
-enum IntensityLevel {
-  CASUAL
-  RANKED
-  IMMORTAL
-  RADIANT
-}
-
-enum GameSide {
-  ATTACK
-  DEFENSE
-}
-
-enum StratCategory {
-  EASY
-  MEDIUM
-  HARD
-  STUPID
-}
-
-enum EventType {
-  DEATH
-  DRINK
-  STRAT_ROLLED
-  STRAT_COMPLETED
-  STRAT_FAILED
-  ROUND_WON
-  ROUND_LOST
-  GAME_STARTED
-  GAME_ENDED
+  @@unique([lobbyId, name])
+  @@index([lobbyId])
+  @@map("lobby_players")
 }

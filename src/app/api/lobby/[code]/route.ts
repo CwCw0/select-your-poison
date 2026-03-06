@@ -57,7 +57,7 @@ export async function PATCH(
     // Authorization check for authenticated users
     const authToken = request.cookies.get('auth_token')?.value;
     if (authToken) {
-      const userId = getUserIdFromToken(authToken);
+      const userId = await getUserIdFromToken(authToken);
       if (!userId) {
         return NextResponse.json({ error: 'Invalid or expired session' }, { status: 403 });
       }
@@ -65,7 +65,7 @@ export async function PATCH(
       // Verify the authenticated user is in the lobby for lobby actions
       const lobbyActions = ['add_death', 'add_drink', 'start_game', 'end_game', 'update_settings', 'roll_strat', 'reroll_strat', 'skip_strat'];
       if (lobbyActions.includes(action)) {
-        const isInLobby = lobby.players.some((p) => p.id === userId);
+        const isInLobby = lobby.players.some((p) => p.userId === userId);
         if (!isInLobby) {
           return NextResponse.json({ error: 'You are not in this lobby' }, { status: 403 });
         }
@@ -74,13 +74,13 @@ export async function PATCH(
       // Host-only actions: verify the authenticated user is the host
       const hostOnlyActions = ['start_game', 'update_settings', 'end_game'];
       if (hostOnlyActions.includes(action)) {
-        if (lobby.hostId !== userId) {
+        const hostPlayer = lobby.players.find((p) => p.id === lobby.hostId);
+        if (!hostPlayer || hostPlayer.userId !== userId) {
           return NextResponse.json({ error: 'Only the host can perform this action' }, { status: 403 });
         }
       }
 
       // Note: add_death and add_drink are intentionally allowed for any player in the lobby
-      // This allows players to track deaths/drinks for their teammates during gameplay
     }
 
     let result;
@@ -166,14 +166,17 @@ export async function DELETE(
     // Authorization check for authenticated users
     const authToken = request.cookies.get('auth_token')?.value;
     if (authToken) {
-      const userId = getUserIdFromToken(authToken);
+      const userId = await getUserIdFromToken(authToken);
       if (!userId) {
         return NextResponse.json({ error: 'Invalid or expired session' }, { status: 403 });
       }
 
-      // User can only remove themselves, unless they are the host (host can remove anyone)
-      const isHost = lobby.hostId === userId;
-      if (!isHost && playerId !== userId) {
+      const hostPlayer = lobby.players.find((p) => p.id === lobby.hostId);
+      const isHost = hostPlayer?.userId === userId;
+      const playerToRemove = lobby.players.find((p) => p.id === playerId);
+
+      // User can only remove themselves, unless they are the host
+      if (!isHost && playerToRemove?.userId !== userId) {
         return NextResponse.json({ error: 'You can only remove yourself from the lobby' }, { status: 403 });
       }
     }

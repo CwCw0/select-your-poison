@@ -1,166 +1,126 @@
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
+import { prisma } from '@/lib/db';
 
-// Simple in-memory store for MVP (replace with database in production)
-interface User {
-  id: string;
-  gamertag: string;
-  email: string;
-  passwordHash: string;
-  createdAt: Date;
-}
-
-interface Session {
-  userId: string;
-  token: string;
-  expiresAt: Date;
-}
-
-// In-memory stores (replace with database)
-const users: Map<string, User> = new Map();
-const sessions: Map<string, Session> = new Map();
-const emailIndex: Map<string, string> = new Map(); // email -> id
-
-function generateId(): string {
-  return randomBytes(16).toString('hex');
-}
+type PublicUser = { id: string; gamertag: string; email: string; createdAt: Date };
 
 function generateToken(): string {
   return randomBytes(32).toString('hex');
 }
 
-export async function createUser(gamertag: string, email: string, password: string): Promise<{ user: Omit<User, 'passwordHash'>; token: string } | { error: string }> {
-  // Validate inputs
+export async function createUser(
+  gamertag: string,
+  email: string,
+  password: string
+): Promise<{ user: PublicUser; token: string } | { error: string }> {
   if (!gamertag || gamertag.length < 3 || gamertag.length > 16) {
     return { error: 'Gamertag must be between 3 and 16 characters' };
   }
-
   if (!email || !email.includes('@')) {
     return { error: 'Invalid email address' };
   }
-
   if (!password || password.length < 6) {
     return { error: 'Password must be at least 6 characters' };
   }
 
-  // Check if email already exists
-  if (emailIndex.has(email.toLowerCase())) {
-    return { error: 'Email already registered' };
+  const normalizedEmail = email.toLowerCase();
+  const normalizedGamertag = gamertag.toUpperCase();
+
+  const existing = await prisma.user.findFirst({
+    where: { OR: [{ email: normalizedEmail }, { gamertag: normalizedGamertag }] },
+    select: { email: true, gamertag: true },
+  });
+
+  if (existing) {
+    if (existing.email === normalizedEmail) return { error: 'Email already registered' };
+    return { error: 'Gamertag already taken' };
   }
 
-  const id = generateId();
   const passwordHash = await bcrypt.hash(password, 12);
-  const user: User = {
-    id,
-    gamertag: gamertag.toUpperCase(),
-    email: email.toLowerCase(),
-    passwordHash,
-    createdAt: new Date(),
-  };
 
-  users.set(id, user);
-  emailIndex.set(email.toLowerCase(), id);
+  const user = await prisma.user.create({
+    data: { gamertag: normalizedGamertag, email: normalizedEmail, passwordHash },
+  });
 
-  // Create session
   const token = generateToken();
-  const session: Session = {
-    userId: id,
-    token,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-  };
-  sessions.set(token, session);
+  await prisma.userSession.create({
+    data: {
+      userId: user.id,
+      token,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+  });
 
   return {
-    user: {
-      id: user.id,
-      gamertag: user.gamertag,
-      email: user.email,
-      createdAt: user.createdAt,
-    },
+    user: { id: user.id, gamertag: user.gamertag, email: user.email, createdAt: user.createdAt },
     token,
   };
 }
 
-export async function loginUser(email: string, password: string): Promise<{ user: Omit<User, 'passwordHash'>; token: string } | { error: string }> {
-  const userId = emailIndex.get(email.toLowerCase());
+export async function loginUser(
+  email: string,
+  password: string
+): Promise<{ user: PublicUser; token: string } | { error: string }> {
+  const user = await prisma.user.findUnique({
+    where: { email: email.toLowerCase() },
+  });
 
-  if (!userId) {
-    return { error: 'Invalid email or password' };
-  }
-
-  const user = users.get(userId);
-
-  if (!user) {
-    return { error: 'Invalid email or password' };
-  }
+  if (!user) return { error: 'Invalid email or password' };
 
   const passwordValid = await bcrypt.compare(password, user.passwordHash);
-  if (!passwordValid) {
-    return { error: 'Invalid email or password' };
-  }
+  if (!passwordValid) return { error: 'Invalid email or password' };
 
-  // Create session
   const token = generateToken();
-  const session: Session = {
-    userId: user.id,
-    token,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-  };
-  sessions.set(token, session);
+  await prisma.userSession.create({
+    data: {
+      userId: user.id,
+      token,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+  });
 
   return {
-    user: {
-      id: user.id,
-      gamertag: user.gamertag,
-      email: user.email,
-      createdAt: user.createdAt,
-    },
+    user: { id: user.id, gamertag: user.gamertag, email: user.email, createdAt: user.createdAt },
     token,
   };
 }
 
-export async function getSession(token: string): Promise<{ user: Omit<User, 'passwordHash'> } | null> {
-  const session = sessions.get(token);
+export async function getSession(
+  token: string
+): Promise<{ user: PublicUser } | null> {
+  const session = await prisma.userSession.findUnique({
+    where: { token },
+    include: { user: true },
+  });
 
-  if (!session) {
-    return null;
-  }
+  if (!session) return null;
 
   if (session.expiresAt < new Date()) {
-    sessions.delete(token);
-    return null;
-  }
-
-  const user = users.get(session.userId);
-
-  if (!user) {
+    await prisma.userSession.delete({ where: { token } }).catch(() => {});
     return null;
   }
 
   return {
     user: {
-      id: user.id,
-      gamertag: user.gamertag,
-      email: user.email,
-      createdAt: user.createdAt,
+      id: session.user.id,
+      gamertag: session.user.gamertag,
+      email: session.user.email,
+      createdAt: session.user.createdAt,
     },
   };
 }
 
-/**
- * Returns the userId associated with a valid, non-expired session token,
- * or null if the token is invalid or expired.
- */
-export function getUserIdFromToken(token: string): string | null {
-  const session = sessions.get(token);
+export async function getUserIdFromToken(token: string): Promise<string | null> {
+  const session = await prisma.userSession.findUnique({
+    where: { token },
+    select: { userId: true, expiresAt: true },
+  });
 
-  if (!session) {
-    return null;
-  }
+  if (!session) return null;
 
   if (session.expiresAt < new Date()) {
-    sessions.delete(token);
+    await prisma.userSession.delete({ where: { token } }).catch(() => {});
     return null;
   }
 
@@ -168,34 +128,19 @@ export function getUserIdFromToken(token: string): string | null {
 }
 
 export async function logout(token: string): Promise<void> {
-  sessions.delete(token);
+  await prisma.userSession.deleteMany({ where: { token } });
 }
 
 export async function getCurrentUser() {
   const cookieStore = await cookies();
   const token = cookieStore.get('auth_token')?.value;
-
-  if (!token) {
-    return null;
-  }
-
+  if (!token) return null;
   return getSession(token);
 }
 
-/**
- * Removes all expired sessions from the in-memory store.
- * Returns the number of sessions that were cleaned up.
- */
-export function cleanupExpiredSessions(): number {
-  const now = new Date();
-  let removed = 0;
-
-  for (const [token, session] of sessions) {
-    if (session.expiresAt < now) {
-      sessions.delete(token);
-      removed++;
-    }
-  }
-
-  return removed;
+export async function cleanupExpiredSessions(): Promise<number> {
+  const result = await prisma.userSession.deleteMany({
+    where: { expiresAt: { lt: new Date() } },
+  });
+  return result.count;
 }

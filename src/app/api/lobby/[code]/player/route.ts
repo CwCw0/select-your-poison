@@ -24,13 +24,14 @@ export async function PATCH(
     // Authorization check for authenticated users
     const authToken = request.cookies.get('auth_token')?.value;
     if (authToken) {
-      const userId = getUserIdFromToken(authToken);
+      const userId = await getUserIdFromToken(authToken);
       if (!userId) {
         return NextResponse.json({ error: 'Invalid or expired session' }, { status: 403 });
       }
 
       // Authenticated users can only update their own player data
-      if (playerId !== userId) {
+      const playerToUpdate = lobby.players.find((p) => p.id === playerId);
+      if (!playerToUpdate || playerToUpdate.userId !== userId) {
         return NextResponse.json({ error: 'You can only update your own player data' }, { status: 403 });
       }
     }
