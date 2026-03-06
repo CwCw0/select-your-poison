@@ -362,7 +362,7 @@ export async function addDrink(
     return { error: 'Player not in lobby' };
   }
 
-  player.drinks += amount;
+  player.drinks = Math.max(0, player.drinks + amount);
   lobby.updatedAt = new Date();
 
   return { lobby };
@@ -377,7 +377,7 @@ export async function roundWon(
     return { error: 'Lobby not found' };
   }
 
-  const { game, settings } = lobby;
+  const { game } = lobby;
   const newTeamScore = game.teamScore + 1;
   const newRound = game.round + 1;
 
@@ -403,9 +403,8 @@ export async function roundWon(
     teamScore: newTeamScore,
     side: newSide,
     status: newStatus,
-    currentStrat: settings.modes.includes('strat_roulette') && !isGameEnd
-      ? getRandomStrat()
-      : null,
+    // Clear strat after round - client controls rolling via two-step flow
+    currentStrat: isGameEnd ? null : game.currentStrat,
   };
   lobby.updatedAt = new Date();
 
@@ -421,7 +420,7 @@ export async function roundLost(
     return { error: 'Lobby not found' };
   }
 
-  const { game, settings } = lobby;
+  const { game } = lobby;
   const newEnemyScore = game.enemyScore + 1;
   const newRound = game.round + 1;
 
@@ -447,9 +446,8 @@ export async function roundLost(
     enemyScore: newEnemyScore,
     side: newSide,
     status: newStatus,
-    currentStrat: settings.modes.includes('strat_roulette') && !isGameEnd
-      ? getRandomStrat()
-      : null,
+    // Clear strat after round - client controls rolling via two-step flow
+    currentStrat: isGameEnd ? null : game.currentStrat,
   };
   lobby.updatedAt = new Date();
 

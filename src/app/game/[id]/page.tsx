@@ -244,6 +244,8 @@ export default function GamePage() {
   const [stratNotification, setStratNotification] = useState<{ type: 'success' | 'failure'; message: string } | null>(null);
   const [roundOutcomeStep, setRoundOutcomeStep] = useState<'round' | 'strat' | null>(null);
   const [selectedRoundWon, setSelectedRoundWon] = useState<boolean | null>(null);
+  const [capturedStratPenalty, setCapturedStratPenalty] = useState<number>(0);
+  const [overtimeAnnouncementSeen, setOvertimeAnnouncementSeen] = useState(false);
 
   // On mount, if no lobbyCode in the store, try to recover state
   useEffect(() => {
@@ -294,8 +296,9 @@ export default function GamePage() {
     setShowStratModal(false);
   };
 
-  // Step 1: User selects round outcome (won/lost)
+  // Step 1: User selects round outcome (won/lost) — capture strat penalty NOW before any server calls
   const handleRoundOutcomeSelection = (roundWon: boolean) => {
+    setCapturedStratPenalty(game.currentStrat?.penalty ?? 0);
     setSelectedRoundWon(roundWon);
     setRoundOutcomeStep('strat');
   };
@@ -313,46 +316,30 @@ export default function GamePage() {
 
     // Handle strat outcome
     if (stratCompleted) {
-      // Show success notification
-      setStratNotification({
-        type: 'success',
-        message: "Strat completed! Safe from penalty drinks..."
-      });
-
-      // Clear the notification after 3 seconds
+      setStratNotification({ type: 'success', message: "Strat completed! Safe from penalty drinks..." });
       setTimeout(() => setStratNotification(null), 3000);
     } else {
-      // Strat failed - add penalty drinks
-      if (game.currentStrat) {
-        const penaltyDrinks = game.currentStrat.penalty;
-
-        // Show failure notification
+      // Use penalty captured at step 1 — game.currentStrat may already be stale by now
+      if (capturedStratPenalty > 0) {
         setStratNotification({
           type: 'failure',
-          message: `Strat failed! Everyone drinks ${penaltyDrinks}x!`
+          message: `Strat failed! Everyone drinks ${capturedStratPenalty}x!`
         });
-
-        // Auto-add drinks to all players
         for (const player of players) {
-          await addDrinkOnServer(player.id, penaltyDrinks);
+          await addDrinkOnServer(player.id, capturedStratPenalty);
         }
-
-        // Clear the notification after 4 seconds
         setTimeout(() => setStratNotification(null), 4000);
       }
     }
 
-    // Skip current strat
+    // Clear current strat then roll a new one after a short delay
     skipStratOnServer();
+    setTimeout(() => rollStratOnServer(), stratCompleted ? 2000 : 3000);
 
-    // Auto-roll new strat after delay
-    setTimeout(() => {
-      rollStratOnServer();
-    }, stratCompleted ? 2000 : 3000);
-
-    // Reset the two-step flow
+    // Reset the two-step flow state
     setRoundOutcomeStep(null);
     setSelectedRoundWon(null);
+    setCapturedStratPenalty(0);
   };
 
   // Calculate totals
@@ -369,9 +356,9 @@ export default function GamePage() {
     return <HalftimeScreen />;
   }
 
-  // If overtime, show overlay
-  if (game.status === 'overtime' && game.round === 25) {
-    return <OvertimeScreen />;
+  // If overtime announcement not yet seen, show overlay (local state — doesn't change server status)
+  if (game.status === 'overtime' && !overtimeAnnouncementSeen) {
+    return <OvertimeScreen onDismiss={() => setOvertimeAnnouncementSeen(true)} />;
   }
 
   return (
@@ -1281,8 +1268,8 @@ export default function GamePage() {
                   flexDirection: 'column',
                   gap: '12px'
                 }}>
-                  {/* Two-Step Flow */}
-                  {roundOutcomeStep === 'strat' ? (
+                  {/* Two-Step Flow — host only (controls round tracking + strat outcome) */}
+                  {isHost && (roundOutcomeStep === 'strat' ? (
                     // STEP 2: Strat outcome
                     <>
                       <span style={{
@@ -1385,7 +1372,7 @@ export default function GamePage() {
                             fontFamily: 'var(--font-space-mono), monospace',
                             opacity: 0.7
                           }}>
-                            +{game.currentStrat?.penalty || 0} drinks
+                            +{capturedStratPenalty} drinks
                           </span>
                         </button>
                       </div>
@@ -1486,7 +1473,7 @@ export default function GamePage() {
                         </button>
                       </div>
                     </>
-                  )}
+                  ))}
                   {isHost && (
                     <button
                       type="button"
@@ -2416,13 +2403,8 @@ function HalftimeScreen() {
 }
 
 // Overtime Screen
-function OvertimeScreen() {
-  const { resumeFromHalftimeOnServer } = useGameStore();
+function OvertimeScreen({ onDismiss }: { onDismiss: () => void }) {
   const isHost = useIsHost();
-
-  const handleContinue = () => {
-    resumeFromHalftimeOnServer();
-  };
 
   return (
     <main style={{
@@ -2579,7 +2561,7 @@ function OvertimeScreen() {
         {isHost && (
           <button
             type="button"
-            onClick={handleContinue}
+            onClick={onDismiss}
             style={{
               height: '60px',
               padding: '0 40px',
