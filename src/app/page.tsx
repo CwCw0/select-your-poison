@@ -188,20 +188,46 @@ export default function Home() {
           </motion.p>
 
           {/* Hero CTAs */}
-          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4 mt-8 px-4 sm:px-0">
-            <Link
-              href="/lobby/create"
-              className="inline-flex items-center justify-center gap-3.5 h-14 min-w-[200px] px-8 bg-[#FF0000] rounded-[3px] no-underline w-full sm:w-auto hover:bg-[#E50000] hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:scale-[1.02] transition-all duration-200"
+          <motion.div variants={fadeInUp} className="flex flex-col items-center w-full gap-6 mt-8 px-4 sm:px-0">
+            <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
+              <Link
+                href="/lobby/create"
+                className="inline-flex items-center justify-center gap-3.5 h-14 min-w-50 px-8 bg-[#FF0000] rounded-[3px] no-underline w-full sm:w-auto hover:bg-[#E50000] hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:scale-[1.02] transition-all duration-200"
+              >
+                <Play className="w-5 h-5 text-[#0C0C0C] fill-[#0C0C0C]" />
+                <span className="text-[13px] font-bold tracking-[2px] text-[#0C0C0C] font-mono whitespace-nowrap">START GAME</span>
+              </Link>
+              <Link
+                href="#how"
+                className="inline-flex items-center justify-center h-14 min-w-50 px-8 border border-(--border-default) rounded-[3px] no-underline w-full sm:w-auto hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200"
+              >
+                <span className="text-[13px] font-semibold tracking-[2px] text-(--text-primary) font-mono whitespace-nowrap">HOW IT WORKS</span>
+              </Link>
+            </div>
+
+            {/* Quick Join */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const input = (e.currentTarget.elements.namedItem('joinCode') as HTMLInputElement)?.value?.trim();
+                if (input) window.location.href = `/lobby/${input}`;
+              }}
+              className="flex items-center gap-2 w-full sm:w-auto"
             >
-              <Play className="w-5 h-5 text-[#0C0C0C] fill-[#0C0C0C]" />
-              <span className="text-[13px] font-bold tracking-[2px] text-[#0C0C0C] font-mono whitespace-nowrap">START GAME</span>
-            </Link>
-            <Link
-              href="#how"
-              className="inline-flex items-center justify-center h-14 min-w-[200px] px-8 border border-[var(--border-default)] rounded-[3px] no-underline w-full sm:w-auto hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200"
-            >
-              <span className="text-[13px] font-semibold tracking-[2px] text-[var(--text-primary)] font-mono whitespace-nowrap">HOW IT WORKS</span>
-            </Link>
+              <input
+                name="joinCode"
+                type="text"
+                placeholder="ENTER LOBBY CODE"
+                className="h-11 px-4 bg-transparent border border-(--border-default) rounded-[3px] text-[12px] font-mono tracking-[1px] text-(--text-primary) placeholder:text-(--text-muted) w-full sm:w-55 outline-none focus:border-[#FF0000] transition-colors"
+                maxLength={12}
+              />
+              <button
+                type="submit"
+                className="h-11 px-5 bg-(--bg-secondary) border border-(--border-default) rounded-[3px] text-[11px] font-bold tracking-[1px] text-(--text-primary) font-mono cursor-pointer hover:border-[#FF0000] transition-colors whitespace-nowrap"
+              >
+                JOIN
+              </button>
+            </form>
           </motion.div>
         </motion.div>
       </section>
@@ -469,7 +495,7 @@ export default function Home() {
             {/* footerBottom */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-5 pt-8 sm:pt-10 border-t border-[var(--border-default)]">
               <span className="text-[11px] sm:text-[12px] text-[var(--text-muted)] font-mono text-center sm:text-left">
-                © {new Date().getFullYear()} SELECT YOUR POISON. Valorant is a trademark of Riot Games, Inc. Not affiliated with or endorsed by Riot Games.
+                © {new Date().getFullYear()} Nimbus Studio. Valorant is a trademark of Riot Games, Inc. Not affiliated with or endorsed by Riot Games.
               </span>
               <span className="text-[11px] sm:text-[12px] font-semibold text-[#FF0000] font-mono tracking-[1px]">
                 21+ ONLY. PLEASE DRINK RESPONSIBLY.

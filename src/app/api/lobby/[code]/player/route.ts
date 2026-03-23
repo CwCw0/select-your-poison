@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getLobbyByCode, updatePlayerAgent, setPlayerReady } from '@/lib/lobby';
 import { getUserIdFromToken } from '@/lib/auth';
+import { updatePlayerSchema } from '@/lib/validations';
+import { notifyLobbyChanged } from '@/lib/lobby-events';
 
 export async function PATCH(
   request: NextRequest,
@@ -9,7 +11,16 @@ export async function PATCH(
   try {
     const { code } = await params;
     const body = await request.json();
-    const { playerId, agent, isReady } = body;
+    const parsed = updatePlayerSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || 'Invalid input' },
+        { status: 400 }
+      );
+    }
+
+    const { playerId, agent, isReady } = parsed.data;
 
     const lobby = await getLobbyByCode(code);
 
@@ -17,8 +28,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'Lobby not found' }, { status: 404 });
     }
 
-    if (!playerId) {
-      return NextResponse.json({ error: 'Player ID required' }, { status: 400 });
+    // Verify the player exists in this lobby
+    const playerInLobby = lobby.players.find((p) => p.id === playerId);
+    if (!playerInLobby) {
+      return NextResponse.json({ error: 'Player not found in lobby' }, { status: 403 });
     }
 
     // Authorization check for authenticated users
@@ -30,8 +43,7 @@ export async function PATCH(
       }
 
       // Authenticated users can only update their own player data
-      const playerToUpdate = lobby.players.find((p) => p.id === playerId);
-      if (!playerToUpdate || playerToUpdate.userId !== userId) {
+      if (playerInLobby.userId !== userId) {
         return NextResponse.json({ error: 'You can only update your own player data' }, { status: 403 });
       }
     }
@@ -50,6 +62,7 @@ export async function PATCH(
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
+    notifyLobbyChanged(code);
     return NextResponse.json({ success: true, lobby: result.lobby });
   } catch (error) {
     console.error('Update player error:', error);

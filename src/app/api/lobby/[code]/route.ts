@@ -16,6 +16,8 @@ import {
   resumeFromHalftime,
 } from '@/lib/lobby';
 import { getUserIdFromToken } from '@/lib/auth';
+import { lobbyActionSchema, leaveLobbySchema } from '@/lib/validations';
+import { notifyLobbyChanged } from '@/lib/lobby-events';
 
 export async function GET(
   request: NextRequest,
@@ -46,7 +48,16 @@ export async function PATCH(
   try {
     const { code } = await params;
     const body = await request.json();
-    const { action, playerId, settings, amount } = body;
+    const parsed = lobbyActionSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || 'Invalid action' },
+        { status: 400 }
+      );
+    }
+
+    const { action, playerId, settings, amount } = parsed.data;
 
     const lobby = await getLobbyByCode(code);
 
@@ -54,7 +65,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Lobby not found' }, { status: 404 });
     }
 
-    // Authorization check for authenticated users
+    // Authorization: check authenticated users
     const authToken = request.cookies.get('auth_token')?.value;
     if (authToken) {
       const userId = await getUserIdFromToken(authToken);
@@ -62,13 +73,10 @@ export async function PATCH(
         return NextResponse.json({ error: 'Invalid or expired session' }, { status: 403 });
       }
 
-      // Verify the authenticated user is in the lobby for lobby actions
-      const lobbyActions = ['add_death', 'add_drink', 'start_game', 'end_game', 'update_settings', 'roll_strat', 'reroll_strat', 'skip_strat'];
-      if (lobbyActions.includes(action)) {
-        const isInLobby = lobby.players.some((p) => p.userId === userId);
-        if (!isInLobby) {
-          return NextResponse.json({ error: 'You are not in this lobby' }, { status: 403 });
-        }
+      // Verify the authenticated user is in the lobby
+      const isInLobby = lobby.players.some((p) => p.userId === userId);
+      if (!isInLobby) {
+        return NextResponse.json({ error: 'You are not in this lobby' }, { status: 403 });
       }
 
       // Host-only actions: verify the authenticated user is the host
@@ -79,8 +87,20 @@ export async function PATCH(
           return NextResponse.json({ error: 'Only the host can perform this action' }, { status: 403 });
         }
       }
+    } else if (playerId) {
+      // Guest authorization: verify the playerId belongs to a player in this lobby
+      const playerInLobby = lobby.players.find((p) => p.id === playerId);
+      if (!playerInLobby) {
+        return NextResponse.json({ error: 'Player not found in lobby' }, { status: 403 });
+      }
 
-      // Note: add_death and add_drink are intentionally allowed for any player in the lobby
+      // Host-only actions for guests: verify playerId is the host
+      const hostOnlyActions = ['start_game', 'update_settings', 'end_game'];
+      if (hostOnlyActions.includes(action)) {
+        if (playerId !== lobby.hostId) {
+          return NextResponse.json({ error: 'Only the host can perform this action' }, { status: 403 });
+        }
+      }
     }
 
     let result;
@@ -88,6 +108,7 @@ export async function PATCH(
     switch (action) {
       case 'update_settings':
         if (!playerId) return NextResponse.json({ error: 'Player ID required' }, { status: 400 });
+        if (!settings) return NextResponse.json({ error: 'Settings required' }, { status: 400 });
         result = await updateLobbySettings(lobby.id, playerId, settings);
         break;
       case 'start_game':
@@ -134,6 +155,7 @@ export async function PATCH(
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
+    notifyLobbyChanged(code);
     return NextResponse.json({ success: true, lobby: result.lobby });
   } catch (error) {
     console.error('Update lobby error:', error);
@@ -151,7 +173,16 @@ export async function DELETE(
   try {
     const { code } = await params;
     const body = await request.json();
-    const { playerId } = body;
+    const parsed = leaveLobbySchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || 'Invalid input' },
+        { status: 400 }
+      );
+    }
+
+    const { playerId } = parsed.data;
 
     const lobby = await getLobbyByCode(code);
 
@@ -159,8 +190,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Lobby not found' }, { status: 404 });
     }
 
-    if (!playerId) {
-      return NextResponse.json({ error: 'Player ID required' }, { status: 400 });
+    // Verify the player exists in this lobby
+    const playerInLobby = lobby.players.find((p) => p.id === playerId);
+    if (!playerInLobby) {
+      return NextResponse.json({ error: 'Player not found in lobby' }, { status: 403 });
     }
 
     // Authorization check for authenticated users
@@ -173,10 +206,9 @@ export async function DELETE(
 
       const hostPlayer = lobby.players.find((p) => p.id === lobby.hostId);
       const isHost = hostPlayer?.userId === userId;
-      const playerToRemove = lobby.players.find((p) => p.id === playerId);
 
       // User can only remove themselves, unless they are the host
-      if (!isHost && playerToRemove?.userId !== userId) {
+      if (!isHost && playerInLobby.userId !== userId) {
         return NextResponse.json({ error: 'You can only remove yourself from the lobby' }, { status: 403 });
       }
     }
@@ -187,6 +219,7 @@ export async function DELETE(
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
+    notifyLobbyChanged(code);
     return NextResponse.json({ success: true, lobby: result.lobby });
   } catch (error) {
     console.error('Leave lobby error:', error);

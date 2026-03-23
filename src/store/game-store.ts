@@ -65,8 +65,10 @@ interface GameStore extends LobbyState {
   rerollStratOnServer: () => Promise<void>;
   skipStratOnServer: () => Promise<void>;
 
-  // Polling
+  // Real-time & polling
   fetchLobby: () => Promise<void>;
+  connectSSE: () => void;
+  disconnectSSE: () => void;
   syncFromServer: (lobbyData: ServerLobbyData) => void;
   resetStore: () => void;
 
@@ -94,6 +96,8 @@ const initialGameState: GameState = {
   rerollsLeft: 3,
   status: 'waiting',
 };
+
+let activeSSE: EventSource | null = null;
 
 const initialSettings: GameSettings = {
   modes: ['classic'],
@@ -364,7 +368,7 @@ export const useGameStore = create<GameStore>()(
         if (lobby) get().syncFromServer(lobby);
       },
 
-      // Fetch latest lobby state from server
+      // Fetch latest lobby state from server (used as fallback)
       fetchLobby: async () => {
         const { lobbyCode } = get();
         if (!lobbyCode) return;
@@ -376,6 +380,45 @@ export const useGameStore = create<GameStore>()(
             get().syncFromServer(data.lobby);
           }
         } catch { /* ignore polling errors */ }
+      },
+
+      // SSE real-time connection
+      connectSSE: () => {
+        const { lobbyCode } = get();
+        if (!lobbyCode) return;
+
+        // Close existing connection if any
+        get().disconnectSSE();
+
+        const eventSource = new EventSource(`/api/lobby/${lobbyCode}/events`);
+
+        eventSource.addEventListener('update', (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.lobby) {
+              get().syncFromServer(data.lobby);
+            }
+          } catch { /* ignore parse errors */ }
+        });
+
+        eventSource.addEventListener('connected', () => {
+          // Fetch current state on connect to ensure we're in sync
+          get().fetchLobby();
+        });
+
+        eventSource.onerror = () => {
+          // SSE failed — will auto-reconnect, but also fetch to stay current
+          get().fetchLobby();
+        };
+
+        activeSSE = eventSource;
+      },
+
+      disconnectSSE: () => {
+        if (activeSSE) {
+          activeSSE.close();
+          activeSSE = null;
+        }
       },
 
       // Sync local state from server data

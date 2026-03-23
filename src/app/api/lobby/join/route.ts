@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { joinLobby } from '@/lib/lobby';
 import { getSession } from '@/lib/auth';
+import { joinLobbySchema } from '@/lib/validations';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, playerName } = body;
+    const parsed = joinLobbySchema.safeParse(body);
 
-    if (!code || !playerName) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Lobby code and player name are required' },
+        { error: parsed.error.issues[0]?.message || 'Invalid input' },
         { status: 400 }
       );
     }
+
+    const { code, playerName } = parsed.data;
 
     // Check for authenticated user
     const token = request.cookies.get('auth_token')?.value;

@@ -18,50 +18,7 @@ import {
 } from 'lucide-react';
 import { useGameStore, useCurrentPlayer, useIsHost } from '@/store/game-store';
 import { AgentType } from '@/types';
-
-const AGENTS: AgentType[] = [
-  'jett', 'reyna', 'phoenix', 'raze', 'yoru', 'neon', 'iso',
-  'sova', 'breach', 'skye', 'kayo', 'fade', 'gekko',
-  'brimstone', 'omen', 'viper', 'astra', 'harbor', 'clove',
-  'sage', 'cypher', 'killjoy', 'chamber', 'deadlock', 'vyse',
-];
-
-const AGENT_ROLES: Record<string, string> = {
-  jett: 'DUELIST', reyna: 'DUELIST', phoenix: 'DUELIST', raze: 'DUELIST',
-  yoru: 'DUELIST', neon: 'DUELIST', iso: 'DUELIST',
-  sova: 'INITIATOR', breach: 'INITIATOR', skye: 'INITIATOR',
-  kayo: 'INITIATOR', fade: 'INITIATOR', gekko: 'INITIATOR',
-  brimstone: 'CONTROLLER', omen: 'CONTROLLER', viper: 'CONTROLLER',
-  astra: 'CONTROLLER', harbor: 'CONTROLLER', clove: 'CONTROLLER',
-  sage: 'SENTINEL', cypher: 'SENTINEL', killjoy: 'SENTINEL',
-  chamber: 'SENTINEL', deadlock: 'SENTINEL', vyse: 'SENTINEL',
-};
-
-const AGENT_COLORS: Record<string, string> = {
-  jett: '#7DD3FC', reyna: '#A855F7', phoenix: '#F97316', raze: '#F97316',
-  yoru: '#3B82F6', neon: '#22D3EE', iso: '#6366F1',
-  sova: '#3B82F6', breach: '#F59E0B', skye: '#22C55E',
-  kayo: '#64748B', fade: '#6366F1', gekko: '#84CC16',
-  brimstone: '#F59E0B', omen: '#6366F1', viper: '#22C55E',
-  astra: '#A855F7', harbor: '#22D3EE', clove: '#EC4899',
-  sage: '#22C55E', cypher: '#FBBF24', killjoy: '#FBBF24',
-  chamber: '#D4AF37', deadlock: '#9CA3AF', vyse: '#8B5CF6',
-};
-
-const MODE_LABELS: Record<string, string> = {
-  classic: 'PUNISHMENT',
-  agent_poison: 'AGENT POISON',
-  strat_roulette: 'STRAT ROULETTE',
-  challenges: 'CHALLENGES',
-  punishment: 'PUNISHMENT',
-};
-
-const INTENSITY_LABELS: Record<string, { label: string; color: string }> = {
-  casual: { label: 'IRON', color: '#78716C' },
-  ranked: { label: 'GOLD', color: '#EAB308' },
-  immortal: { label: 'DIAMOND', color: '#A855F7' },
-  radiant: { label: 'RADIANT', color: '#FF0000' },
-};
+import { AGENTS, AGENT_ROLES, AGENT_COLORS, ROLE_LABELS, MODE_LABELS, INTENSITY_LABELS, getAgentColor, getAgentHeaderTextColor } from '@/lib/constants';
 
 export default function LobbyWaitingRoom() {
   const router = useRouter();
@@ -74,6 +31,8 @@ export default function LobbyWaitingRoom() {
     settings,
     game,
     fetchLobby,
+    connectSSE,
+    disconnectSSE,
     startGameOnServer,
     updateAgentOnServer,
     setReadyOnServer,
@@ -109,13 +68,14 @@ export default function LobbyWaitingRoom() {
     }
   }, [loading, lobbyCode, code, players.length]);
 
-  // Poll for lobby updates every 2 seconds
+  // SSE for real-time updates, with slow polling fallback
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchLobby();
-    }, 2000);
-
-    return () => clearInterval(interval);
+    connectSSE();
+    const interval = setInterval(() => fetchLobby(), 10000);
+    return () => {
+      disconnectSSE();
+      clearInterval(interval);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -688,7 +648,7 @@ export default function LobbyWaitingRoom() {
             </p>
           </motion.div>
 
-          {/* Player Count */}
+          {/* Player Count + Ready Count */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -710,14 +670,25 @@ export default function LobbyWaitingRoom() {
                 PLAYERS
               </span>
             </div>
-            <span style={{
-              fontSize: '14px',
-              fontWeight: 700,
-              color: '#FF0000',
-              fontFamily: 'var(--font-space-mono), monospace',
-            }}>
-              {players.length}/{settings.maxPlayers}
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <span style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                color: players.filter(p => p.isReady).length === players.length && players.length > 0 ? '#22C55E' : '#666666',
+                fontFamily: 'var(--font-space-mono), monospace',
+                letterSpacing: '1px',
+              }}>
+                {players.filter(p => p.isReady).length}/{players.length} READY
+              </span>
+              <span style={{
+                fontSize: '14px',
+                fontWeight: 700,
+                color: '#FF0000',
+                fontFamily: 'var(--font-space-mono), monospace',
+              }}>
+                {players.length}/{settings.maxPlayers}
+              </span>
+            </div>
           </motion.div>
 
           {/* Player List */}
@@ -725,9 +696,8 @@ export default function LobbyWaitingRoom() {
             <AnimatePresence>
               {players.map((player, index) => {
                 const isCurrentUser = player.id === currentPlayer?.id;
-                const agentColor = player.color || AGENT_COLORS[player.agent || ''] || '#666666';
-                const isLightAgent = ['#7DD3FC', '#E5E5E5', '#22D3EE', '#84CC16', '#FBBF24', '#F59E0B', '#D4AF37', '#22C55E', '#EAB308', '#9CA3AF'].includes(agentColor);
-                const agentTextColor = isLightAgent ? '#0C0C0C' : '#FFFFFF';
+                const agentColor = player.color || getAgentColor(player.agent);
+                const agentTextColor = getAgentHeaderTextColor(agentColor);
 
                 return (
                   <motion.div
@@ -830,7 +800,7 @@ export default function LobbyWaitingRoom() {
                               color: '#555555',
                               fontFamily: 'var(--font-space-mono), monospace',
                             }}>
-                              {AGENT_ROLES[player.agent] || ''}
+                              {ROLE_LABELS[AGENT_ROLES[player.agent as AgentType]] || ''}
                             </span>
                           </>
                         ) : (
@@ -954,7 +924,7 @@ export default function LobbyWaitingRoom() {
                                       color: '#666666',
                                       fontFamily: 'var(--font-space-mono), monospace',
                                     }}>
-                                      {AGENT_ROLES[agent] || ''}
+                                      {ROLE_LABELS[AGENT_ROLES[agent as AgentType]] || ''}
                                     </span>
                                     {isSelected && (
                                       <Check style={{ width: '12px', height: '12px', color: '#22C55E' }} />
@@ -1002,8 +972,8 @@ export default function LobbyWaitingRoom() {
               <motion.div
                 key={`empty-${i}`}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: (players.length + i) * 0.05 }}
+                animate={{ opacity: [0.4, 0.7, 0.4] }}
+                transition={{ delay: (players.length + i) * 0.05, duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1099,6 +1069,28 @@ export default function LobbyWaitingRoom() {
 
             {/* Start Game - Host Only */}
             {isHost && (
+              <>
+                {/* Ready progress bar */}
+                {players.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '1px', color: '#555555', fontFamily: 'var(--font-space-mono), monospace' }}>READINESS</span>
+                      <span style={{
+                        fontSize: '9px', fontWeight: 600, letterSpacing: '1px', fontFamily: 'var(--font-space-mono), monospace',
+                        color: players.filter(p => p.isReady).length === players.length ? '#22C55E' : '#666666',
+                      }}>
+                        {Math.round((players.filter(p => p.isReady).length / players.length) * 100)}%
+                      </span>
+                    </div>
+                    <div style={{ height: '4px', backgroundColor: '#1A1A1A', overflow: 'hidden' }}>
+                      <motion.div
+                        animate={{ width: `${(players.filter(p => p.isReady).length / players.length) * 100}%` }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                        style={{ height: '100%', backgroundColor: players.filter(p => p.isReady).length === players.length ? '#22C55E' : '#FF0000' }}
+                      />
+                    </div>
+                  </div>
+                )}
               <button
                 type="button"
                 onClick={handleStartGame}
@@ -1145,6 +1137,7 @@ export default function LobbyWaitingRoom() {
                   {starting ? 'STARTING...' : 'START GAME'}
                 </span>
               </button>
+              </>
             )}
 
             {/* Non-host message */}

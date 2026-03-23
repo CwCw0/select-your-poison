@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createLobby } from '@/lib/lobby';
 import { getSession } from '@/lib/auth';
+import { createLobbySchema } from '@/lib/validations';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { hostName, settings } = body;
+    const parsed = createLobbySchema.safeParse(body);
 
-    if (!hostName) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Host name is required' },
+        { error: parsed.error.issues[0]?.message || 'Invalid input' },
         { status: 400 }
       );
     }
+
+    const { hostName, settings } = parsed.data;
 
     // Check for authenticated user
     const token = request.cookies.get('auth_token')?.value;
@@ -25,13 +28,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const defaultSettings = {
-      modes: settings?.modes || ['classic'],
-      intensity: settings?.intensity || 'ranked',
-      maxPlayers: settings?.maxPlayers || 5,
-    };
-
-    const result = await createLobby(hostName, defaultSettings, userId);
+    const result = await createLobby(hostName, settings, userId);
 
     return NextResponse.json({
       success: true,
