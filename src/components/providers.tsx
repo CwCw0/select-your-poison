@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import { ReactNode, useEffect } from 'react';
 import { EasterEggProvider } from './EasterEggs';
 import { Onboarding } from './Onboarding';
+import PageTransition from './PageTransition';
 import { useThemeStore } from '@/store/theme-store';
 
 interface ProvidersProps {
@@ -36,7 +37,9 @@ export function Providers({ children }: ProvidersProps) {
       <ThemeProvider>
         <EasterEggProvider>
           <Onboarding />
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </EasterEggProvider>
       </ThemeProvider>
     </SessionProvider>

@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { Zap, Skull, Target, Dices, User, Play, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLogoEasterEgg, VoicelineEffect } from '@/components/EasterEggs';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -21,19 +21,132 @@ const staggerChildren = {
   },
 };
 
+// Cinematic intro overlay
+function IntroOverlay({ onComplete }: { onComplete: () => void }) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-[9999] bg-[#0C0C0C] flex items-center justify-center overflow-hidden"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+    >
+      {/* Scanline effect */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,0,0,0.03) 2px, rgba(255,0,0,0.03) 4px)',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 1, 0.6] }}
+        transition={{ duration: 0.8, times: [0, 0.3, 1] }}
+      />
+
+      {/* Center content */}
+      <div className="relative flex flex-col items-center gap-6">
+        {/* Skull icon pulse */}
+        <motion.div
+          className="w-20 h-20 bg-[#FF0000] flex items-center justify-center"
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: [0, 1.2, 1], rotate: [-180, 10, 0] }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <Skull className="w-10 h-10 text-[#0C0C0C]" />
+        </motion.div>
+
+        {/* Text reveal */}
+        <motion.div
+          className="flex flex-col items-center gap-1"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+        >
+          <motion.span
+            className="text-[11px] font-bold tracking-[6px] text-[#FF0000] font-mono"
+            initial={{ letterSpacing: '12px', opacity: 0 }}
+            animate={{ letterSpacing: '6px', opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            SELECT YOUR
+          </motion.span>
+          <motion.span
+            className="text-3xl sm:text-4xl font-extrabold text-white tracking-[4px]"
+            initial={{ opacity: 0, scale: 1.5, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ delay: 0.7, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            POISON
+          </motion.span>
+        </motion.div>
+
+        {/* Red line sweep */}
+        <motion.div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[1px] bg-[#FF0000]"
+          initial={{ width: 0 }}
+          animate={{ width: ['0%', '120vw'] }}
+          transition={{ delay: 1.1, duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
+          onAnimationComplete={onComplete}
+        />
+      </div>
+
+      {/* Corner accents */}
+      <motion.div
+        className="absolute top-6 left-6 w-8 h-8 border-l-2 border-t-2 border-[#FF0000]"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 0.5, scale: 1 }}
+        transition={{ delay: 0.3, duration: 0.3 }}
+      />
+      <motion.div
+        className="absolute bottom-6 right-6 w-8 h-8 border-r-2 border-b-2 border-[#FF0000]"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 0.5, scale: 1 }}
+        transition={{ delay: 0.3, duration: 0.3 }}
+      />
+    </motion.div>
+  );
+}
+
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
   const { handleClick: handleLogoClick, showVoiceline, voiceline } = useLogoEasterEgg();
+
+  useEffect(() => {
+    // Only show intro once per session
+    const hasSeenIntro = sessionStorage.getItem('syp-intro-seen');
+    if (!hasSeenIntro) {
+      setShowIntro(true);
+    } else {
+      setIntroComplete(true);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    setTimeout(() => {
+      setShowIntro(false);
+      setIntroComplete(true);
+      sessionStorage.setItem('syp-intro-seen', '1');
+    }, 200);
+  };
 
   return (
     <main className="min-h-screen bg-[var(--bg-primary)]">
+      {/* Cinematic Intro */}
+      <AnimatePresence>
+        {showIntro && <IntroOverlay onComplete={handleIntroComplete} />}
+      </AnimatePresence>
+
       {/* Voiceline Easter Egg */}
       <AnimatePresence>
         {showVoiceline && <VoicelineEffect data={voiceline} />}
       </AnimatePresence>
 
       {/* Navigation - height 72, padding [0, 64] */}
-      <header className="w-full h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-16 border-b border-[var(--border-default)]">
+      <motion.header
+        className="w-full h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-16 border-b border-[var(--border-default)]"
+        initial={{ opacity: 0, y: -20 }}
+        animate={introComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         {/* Logo with Easter Egg */}
         <button
           onClick={handleLogoClick}
@@ -62,46 +175,22 @@ export default function Home() {
         </nav>
 
         {/* Right Side Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="flex items-center gap-3">
           {/* Theme Toggle */}
           <ThemeToggle size="sm" />
 
           {/* Desktop Buttons */}
           <Link
             href="/login"
-            className="hidden sm:flex hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '44px',
-              minWidth: '100px',
-              paddingLeft: '28px',
-              paddingRight: '28px',
-              border: '1px solid var(--border-default)',
-              borderRadius: '3px',
-              textDecoration: 'none',
-            }}
+            className="hidden sm:inline-flex items-center justify-center h-11 min-w-[100px] px-7 border border-[var(--border-default)] rounded-[3px] no-underline hover:border-[#FF0000] hover:bg-[#FF0000]/5 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#FF0000] transition-all duration-200"
           >
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '1.5px', color: 'var(--text-primary)', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>LOG IN</span>
+            <span className="text-[11px] font-semibold tracking-[1.5px] text-[var(--text-primary)] font-mono whitespace-nowrap">LOG IN</span>
           </Link>
           <Link
             href="/lobby/create"
-            className="hidden sm:flex hover:bg-[#E50000] hover:shadow-[0_0_20px_rgba(255,0,0,0.3)] transition-all duration-200"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '44px',
-              minWidth: '140px',
-              paddingLeft: '28px',
-              paddingRight: '28px',
-              backgroundColor: '#FF0000',
-              borderRadius: '3px',
-              textDecoration: 'none',
-            }}
+            className="hidden sm:inline-flex items-center justify-center h-11 min-w-[140px] px-7 bg-[#FF0000] rounded-[3px] no-underline hover:bg-[#E50000] hover:shadow-[0_0_20px_rgba(255,0,0,0.3)] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0C0C0C] transition-all duration-200"
           >
-            <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '1.5px', color: '#0C0C0C', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>CREATE LOBBY</span>
+            <span className="text-[11px] font-bold tracking-[1.5px] text-[#0C0C0C] font-mono whitespace-nowrap">CREATE LOBBY</span>
           </Link>
 
           {/* Mobile Menu Button */}
@@ -117,7 +206,7 @@ export default function Home() {
             )}
           </button>
         </div>
-      </header>
+      </motion.header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -177,7 +266,7 @@ export default function Home() {
         <motion.div
           className="flex flex-col items-center gap-6 sm:gap-8 text-center max-w-5xl"
           initial="initial"
-          animate="animate"
+          animate={introComplete ? "animate" : "initial"}
           variants={staggerChildren}
         >
           {/* Hero Tag */}
@@ -210,44 +299,19 @@ export default function Home() {
           </motion.p>
 
           {/* Hero CTAs */}
-          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center w-full sm:w-auto px-4 sm:px-0" style={{ gap: '16px', marginTop: '32px' }}>
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4 mt-8 px-4 sm:px-0">
             <Link
               href="/lobby/create"
-              className="group hover:bg-[#E50000] hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:scale-[1.02] transition-all duration-200 w-full sm:w-auto"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                height: '56px',
-                minWidth: '200px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                backgroundColor: '#FF0000',
-                borderRadius: '3px',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center justify-center gap-3.5 h-14 min-w-[200px] px-8 bg-[#FF0000] rounded-[3px] no-underline w-full sm:w-auto hover:bg-[#E50000] hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:scale-[1.02] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF0000] transition-all duration-200"
             >
-              <Play style={{ width: '20px', height: '20px', color: '#0C0C0C', fill: '#0C0C0C' }} />
-              <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '2px', color: '#0C0C0C', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>START GAME</span>
+              <Play className="w-5 h-5 text-[#0C0C0C] fill-[#0C0C0C]" />
+              <span className="text-[13px] font-bold tracking-[2px] text-[#0C0C0C] font-mono whitespace-nowrap">START GAME</span>
             </Link>
             <Link
               href="#how"
-              className="hover:border-[#FF0000] hover:bg-[#FF0000]/5 transition-all duration-200 w-full sm:w-auto"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '56px',
-                minWidth: '200px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                border: '1px solid var(--border-default)',
-                borderRadius: '3px',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center justify-center h-14 min-w-[200px] px-8 border border-[var(--border-default)] rounded-[3px] no-underline w-full sm:w-auto hover:border-[#FF0000] hover:bg-[#FF0000]/5 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#FF0000] transition-all duration-200"
             >
-              <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '2px', color: 'var(--text-primary)', fontFamily: 'var(--font-space-mono), monospace', whiteSpace: 'nowrap' }}>HOW IT WORKS</span>
+              <span className="text-[13px] font-semibold tracking-[2px] text-[var(--text-primary)] font-mono whitespace-nowrap">HOW IT WORKS</span>
             </Link>
           </motion.div>
         </motion.div>
@@ -461,23 +525,9 @@ export default function Home() {
             </p>
             <Link
               href="/lobby/create"
-              className="group hover:bg-[#E50000] hover:shadow-[0_0_40px_rgba(255,0,0,0.5)] hover:scale-[1.02] transition-all duration-200 w-full sm:w-auto"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                height: '56px',
-                minWidth: '220px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                backgroundColor: '#FF0000',
-                borderRadius: '3px',
-                marginTop: '16px',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center justify-center gap-3.5 h-14 min-w-[220px] px-8 bg-[#FF0000] rounded-[3px] no-underline mt-4 w-full sm:w-auto hover:bg-[#E50000] hover:shadow-[0_0_40px_rgba(255,0,0,0.5)] hover:scale-[1.02] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF0000] transition-all duration-200"
             >
-              <Zap style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+              <Zap className="w-5 h-5 text-[#0C0C0C]" />
               <span className="text-[13px] sm:text-[14px] font-bold tracking-[2px] text-[#0C0C0C] font-mono whitespace-nowrap">CREATE LOBBY NOW</span>
             </Link>
           </motion.div>

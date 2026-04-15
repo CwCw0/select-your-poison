@@ -59,15 +59,9 @@ export default function LoginPage() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', height: '100vh', backgroundColor: '#0C0C0C', display: 'flex', overflow: 'hidden' }}>
+    <main className="min-h-screen h-screen bg-[#0C0C0C] flex overflow-hidden">
       {/* Left Panel */}
-      <div className="hidden lg:flex" style={{
-        flex: 1,
-        backgroundColor: '#0A0A0A',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: '80px 96px'
-      }}>
+      <div className="hidden lg:flex flex-1 flex-col justify-between bg-[#0A0A0A] p-20 xl:px-24">
         {/* Top Section */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '56px' }}>
           {/* Logo */}
@@ -105,14 +99,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Panel */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '80px',
-        borderLeft: '1px solid #333333'
-      }} className="lg:flex-none lg:w-[600px]">
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 md:px-16 lg:flex-none lg:w-[600px] lg:px-20 lg:border-l lg:border-[#333333]">
         {/* Mobile Logo */}
         <div className="lg:hidden" style={{ marginBottom: '56px' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '16px', textDecoration: 'none' }}>
@@ -158,16 +145,7 @@ export default function LoginPage() {
                 placeholder="agent@valorant.gg"
                 aria-invalid={!!validationErrors.email}
                 aria-describedby={validationErrors.email ? 'email-error' : undefined}
-                style={{
-                  height: '56px',
-                  padding: '0 20px',
-                  backgroundColor: 'transparent',
-                  border: validationErrors.email ? '1px solid #EF4444' : '1px solid #333333',
-                  color: '#FFFFFF',
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  fontSize: '14px',
-                  outline: 'none'
-                }}
+                className={`h-14 px-5 bg-transparent border text-white font-mono text-sm outline-none transition-colors duration-200 focus:border-[#FF0000] focus:shadow-[0_0_0_1px_#FF0000] ${validationErrors.email ? 'border-[#EF4444]' : 'border-[#333333]'}`}
               />
               {validationErrors.email && (
                 <span id="email-error" style={{ fontSize: '11px', color: '#EF4444', fontFamily: 'var(--font-space-mono), monospace' }}>
@@ -193,17 +171,7 @@ export default function LoginPage() {
                   placeholder="••••••••••••"
                   aria-invalid={!!validationErrors.password}
                   aria-describedby={validationErrors.password ? 'password-error' : undefined}
-                  style={{
-                    width: '100%',
-                    height: '56px',
-                    padding: '0 56px 0 20px',
-                    backgroundColor: 'transparent',
-                    border: validationErrors.password ? '1px solid #EF4444' : '1px solid #333333',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-space-mono), monospace',
-                    fontSize: '14px',
-                    outline: 'none'
-                  }}
+                  className={`w-full h-14 pl-5 pr-14 bg-transparent border text-white font-mono text-sm outline-none transition-colors duration-200 focus:border-[#FF0000] focus:shadow-[0_0_0_1px_#FF0000] ${validationErrors.password ? 'border-[#EF4444]' : 'border-[#333333]'}`}
                 />
                 <button
                   type="button"
@@ -237,29 +205,20 @@ export default function LoginPage() {
             </Link>
 
             {/* Login Button */}
-            <button
+            <motion.button
               type="submit"
               disabled={isLoading}
-              style={{
-                height: '60px',
-                backgroundColor: '#FF0000',
-                color: '#0C0C0C',
-                fontSize: '15px',
-                fontWeight: 700,
-                letterSpacing: '2px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                border: 'none',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-                opacity: isLoading ? 0.5 : 1,
-                marginTop: '8px'
-              }}
+              whileHover={!isLoading ? { scale: 1.01 } : undefined}
+              whileTap={!isLoading ? { scale: 0.97 } : undefined}
+              className="h-[60px] bg-[#FF0000] text-[#0C0C0C] text-[15px] font-bold tracking-[2px] flex items-center justify-center gap-3.5 border-none mt-2 transition-all duration-200 hover:bg-[#E50000] hover:shadow-[0_0_24px_rgba(255,0,0,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF0000] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <LogIn style={{ width: '22px', height: '22px' }} />
+              {isLoading ? (
+                <Loader2 className="w-[22px] h-[22px] animate-spin" />
+              ) : (
+                <LogIn className="w-[22px] h-[22px]" />
+              )}
               {isLoading ? 'ENTERING...' : 'ENTER THE ARENA'}
-            </button>
+            </motion.button>
           </form>
 
           {/* Divider */}
@@ -270,55 +229,37 @@ export default function LoginPage() {
           </div>
 
           {/* Social Login */}
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <button
+          <div className="flex gap-4">
+            <motion.button
               type="button"
               onClick={() => handleOAuthLogin('discord')}
               disabled={oauthLoading !== null}
-              style={{
-                flex: 1,
-                height: '56px',
-                border: '1px solid #333333',
-                backgroundColor: 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                cursor: oauthLoading !== null ? 'not-allowed' : 'pointer',
-                opacity: oauthLoading !== null ? 0.5 : 1
-              }}
+              whileHover={oauthLoading === null ? { scale: 1.02 } : undefined}
+              whileTap={oauthLoading === null ? { scale: 0.97 } : undefined}
+              className="flex-1 h-14 border border-[#333333] bg-transparent flex items-center justify-center gap-3.5 transition-all duration-200 hover:border-[#5865F2] hover:bg-[#5865F2]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#5865F2] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {oauthLoading === 'discord' ? (
-                <Loader2 style={{ width: '20px', height: '20px', color: '#5865F2', animation: 'spin 1s linear infinite' }} />
+                <Loader2 className="w-5 h-5 text-[#5865F2] animate-spin" />
               ) : (
-                <MessageCircle style={{ width: '20px', height: '20px', color: '#5865F2' }} />
+                <MessageCircle className="w-5 h-5 text-[#5865F2]" />
               )}
-              <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '1px', color: '#FFFFFF', fontFamily: 'var(--font-space-mono), monospace' }}>DISCORD</span>
-            </button>
-            <button
+              <span className="text-[13px] font-semibold tracking-[1px] text-white font-mono">DISCORD</span>
+            </motion.button>
+            <motion.button
               type="button"
               onClick={() => handleOAuthLogin('google')}
               disabled={oauthLoading !== null}
-              style={{
-                flex: 1,
-                height: '56px',
-                border: '1px solid #333333',
-                backgroundColor: 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '14px',
-                cursor: oauthLoading !== null ? 'not-allowed' : 'pointer',
-                opacity: oauthLoading !== null ? 0.5 : 1
-              }}
+              whileHover={oauthLoading === null ? { scale: 1.02 } : undefined}
+              whileTap={oauthLoading === null ? { scale: 0.97 } : undefined}
+              className="flex-1 h-14 border border-[#333333] bg-transparent flex items-center justify-center gap-3.5 transition-all duration-200 hover:border-[#FFFFFF]/50 hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {oauthLoading === 'google' ? (
-                <Loader2 style={{ width: '20px', height: '20px', color: '#FFFFFF', animation: 'spin 1s linear infinite' }} />
+                <Loader2 className="w-5 h-5 text-white animate-spin" />
               ) : (
-                <Circle style={{ width: '20px', height: '20px', color: '#FFFFFF' }} />
+                <Circle className="w-5 h-5 text-white" />
               )}
-              <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '1px', color: '#FFFFFF', fontFamily: 'var(--font-space-mono), monospace' }}>GOOGLE</span>
-            </button>
+              <span className="text-[13px] font-semibold tracking-[1px] text-white font-mono">GOOGLE</span>
+            </motion.button>
           </div>
 
           {/* Signup Link */}
