@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /lobby/
+Disallow: /game/
+Sitemap: https://selectyourpoison.gg/sitemap.xml

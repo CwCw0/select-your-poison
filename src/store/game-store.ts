@@ -60,6 +60,10 @@ interface GameStore extends LobbyState {
   updateSettings: (settings: Partial<GameSettings>) => void;
   toggleMode: (mode: GameMode) => void;
   setIntensity: (intensity: IntensityLevel) => void;
+
+  // Server Actions (stubs for multiplayer — Phase 3/4)
+  leaveLobbyOnServer: () => void;
+  resumeFromHalftimeOnServer: () => void;
 }
 
 const initialGameState: GameState = {
@@ -407,6 +411,14 @@ export const useGameStore = create<GameStore>()(
         set((state) => ({
           settings: { ...state.settings, intensity },
         }));
+      },
+
+      // Server action stubs (Phase 3/4 multiplayer)
+      leaveLobbyOnServer: () => {
+        get().leaveLobby();
+      },
+      resumeFromHalftimeOnServer: () => {
+        set({ status: 'in_progress' });
       },
     }),
     {
