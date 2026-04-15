@@ -129,76 +129,28 @@ export default function GamePage() {
   return (
     <main className="min-h-screen h-screen bg-[#0C0C0C] flex overflow-hidden">
       {/* Sidebar */}
-      <aside className="hidden lg:flex" style={{
-        width: '380px',
-        backgroundColor: '#0A0A0A',
-        flexDirection: 'column',
-        gap: '24px',
-        padding: '24px',
-        borderRight: '1px solid #444444',
-        height: '100vh',
-        overflowY: 'auto'
-      }}>
+      <aside className="hidden lg:flex w-[380px] bg-[#0A0A0A] flex-col gap-6 p-6 border-r border-[#444444] h-screen overflow-y-auto">
         {/* Logo Row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              backgroundColor: '#FF0000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Skull style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
+        <div className="flex items-center justify-between w-full">
+          <Link href="/" className="flex items-center gap-3 no-underline">
+            <div className="w-10 h-10 bg-[#FF0000] flex items-center justify-center">
+              <Skull className="w-5 h-5 text-[#0C0C0C]" />
             </div>
-            <span style={{
-              fontSize: '16px',
-              fontWeight: 800,
-              letterSpacing: '2px',
-              color: '#FFFFFF'
-            }}>
+            <span className="text-base font-extrabold tracking-[2px] text-white">
               SYP
             </span>
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setShowHelp(!showHelp)}
-              style={{
-                width: '36px',
-                height: '36px',
-                border: '1px solid #555555',
-                backgroundColor: 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }}
+              className="w-9 h-9 border border-[#555555] bg-transparent flex items-center justify-center cursor-pointer"
             >
-              <HelpCircle style={{ width: '16px', height: '16px', color: '#CCCCCC' }} />
+              <HelpCircle className="w-4 h-4 text-[#CCCCCC]" />
             </button>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 12px',
-              backgroundColor: 'rgba(255, 0, 0, 0.15)',
-              border: '1px solid #FF0000'
-            }}>
-              <div style={{
-                width: '8px',
-                height: '8px',
-                backgroundColor: '#FF0000',
-                animation: 'pulse 2s infinite'
-              }} />
-              <span style={{
-                fontSize: '10px',
-                fontWeight: 700,
-                letterSpacing: '2px',
-                color: '#FF0000',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#FF0000]/15 border border-[#FF0000]">
+              <div className="w-2 h-2 bg-[#FF0000] animate-pulse" />
+              <span className="text-[10px] font-bold tracking-[2px] text-[#FF0000] font-mono">
                 LIVE
               </span>
             </div>
@@ -212,91 +164,36 @@ export default function GamePage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              style={{
-                backgroundColor: '#1A1A1A',
-                border: '1px solid #444444',
-                padding: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                overflow: 'hidden'
-              }}
+              className="bg-[#1A1A1A] border border-[#444444] p-4 flex flex-col gap-3 overflow-hidden"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <HelpCircle style={{ width: '16px', height: '16px', color: '#22D3EE' }} />
-                <span style={{
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  color: '#22D3EE',
-                  letterSpacing: '1px'
-                }}>HOW TO PLAY</span>
+              <div className="flex items-center gap-2">
+                <HelpCircle className="w-4 h-4 text-cyan-400" />
+                <span className="text-xs font-bold text-cyan-400 tracking-[1px]">HOW TO PLAY</span>
               </div>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px',
-                fontSize: '12px',
-                color: '#DDDDDD',
-                fontFamily: 'var(--font-space-mono), monospace',
-                lineHeight: 1.6
-              }}>
-                <p><span style={{ color: '#22C55E', fontWeight: 700 }}>1.</span> Track deaths by clicking + DEATH on player cards</p>
-                <p><span style={{ color: '#22C55E', fontWeight: 700 }}>2.</span> Drinks auto-calculate based on game mode</p>
-                <p><span style={{ color: '#22C55E', fontWeight: 700 }}>3.</span> Mark round results with WIN/LOSS buttons</p>
-                <p><span style={{ color: '#22C55E', fontWeight: 700 }}>4.</span> Use ROLL STRAT for random challenges</p>
-                <p style={{ color: '#FF0000', fontWeight: 600, marginTop: '8px' }}>Remember: Drink responsibly!</p>
+              <div className="flex flex-col gap-2 text-xs text-[#DDDDDD] font-mono leading-relaxed">
+                <p><span className="text-green-500 font-bold">1.</span> Track deaths by clicking + DEATH on player cards</p>
+                <p><span className="text-green-500 font-bold">2.</span> Drinks auto-calculate based on game mode</p>
+                <p><span className="text-green-500 font-bold">3.</span> Mark round results with WIN/LOSS buttons</p>
+                <p><span className="text-green-500 font-bold">4.</span> Use ROLL STRAT for random challenges</p>
+                <p className="text-[#FF0000] font-semibold mt-2">Remember: Drink responsibly!</p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Round Section */}
-        <div style={{
-          padding: '20px 0',
-          borderTop: '1px solid #444444',
-          borderBottom: '1px solid #444444',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px'
-        }}>
-          <span style={{
-            fontSize: '11px',
-            fontWeight: 600,
-            letterSpacing: '2px',
-            color: '#CCCCCC',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div className="py-5 border-t border-b border-[#444444] flex flex-col gap-3">
+          <span className="text-[11px] font-semibold tracking-[2px] text-[#CCCCCC] font-mono">
             CURRENT ROUND
           </span>
-          <div style={{
-            fontSize: '64px',
-            fontWeight: 800,
-            color: '#FFFFFF',
-            letterSpacing: '-2px',
-            lineHeight: 1
-          }}>
+          <div className="text-[64px] font-extrabold text-white tracking-[-2px] leading-none">
             {formatRound(game.round)}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{
-              padding: '6px 12px',
-              backgroundColor: 'rgba(255, 0, 0, 0.2)',
-              border: '1px solid #FF0000',
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '1px',
-              color: '#FF0000',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+          <div className="flex items-center gap-3">
+            <span className="px-3 py-1.5 bg-[#FF0000]/20 border border-[#FF0000] text-xs font-bold tracking-[1px] text-[#FF0000] font-mono">
               {game.side.toUpperCase()}
             </span>
-            <span style={{
-              fontSize: '18px',
-              fontWeight: 700,
-              letterSpacing: '1px',
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+            <span className="text-lg font-bold tracking-[1px] text-white font-mono">
               {formatScore(game.teamScore, game.enemyScore)}
             </span>
           </div>
@@ -306,15 +203,7 @@ export default function GamePage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              style={{
-                padding: '12px 16px',
-                backgroundColor: 'rgba(255, 0, 0, 0.3)',
-                border: '2px solid #FF0000',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                marginTop: '8px'
-              }}
+              className="p-3 px-4 bg-[#FF0000]/30 border-2 border-[#FF0000] flex items-center gap-3 mt-2"
             >
               <motion.div
                 animate={{
@@ -322,28 +211,13 @@ export default function GamePage() {
                   opacity: [1, 0.7, 1]
                 }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  backgroundColor: '#FF0000',
-                  borderRadius: '50%'
-                }}
+                className="w-3 h-3 bg-[#FF0000] rounded-full"
               />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '2px',
-                  color: '#FF0000',
-                  fontFamily: 'var(--font-space-mono), monospace'
-                }}>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[11px] font-bold tracking-[2px] text-[#FF0000] font-mono">
                   SUDDEN DEATH ACTIVE
                 </span>
-                <span style={{
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  color: '#FFFFFF'
-                }}>
+                <span className="text-[13px] font-extrabold text-white">
                   {currentMultiplier}X DRINK MULTIPLIER
                 </span>
               </div>
@@ -352,52 +226,24 @@ export default function GamePage() {
 
           {/* Round Controls */}
           {isHost && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '16px' }}>
+            <div className="flex flex-col gap-2 pt-4">
               <button
                 type="button"
                 onClick={roundWon}
-                style={{
-                  height: '56px',
-                  backgroundColor: '#22C55E',
-                  border: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  cursor: 'pointer'
-                }}
+                className="h-14 bg-green-500 border-none flex items-center justify-center gap-3 cursor-pointer hover:bg-green-600 transition-colors"
               >
-                <Trophy style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
-                <span style={{
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  letterSpacing: '2px',
-                  color: '#0C0C0C'
-                }}>
+                <Trophy className="w-5 h-5 text-[#0C0C0C]" />
+                <span className="text-sm font-bold tracking-[2px] text-[#0C0C0C]">
                   ROUND WON
                 </span>
               </button>
               <button
                 type="button"
                 onClick={roundLost}
-                style={{
-                  height: '56px',
-                  backgroundColor: '#EF4444',
-                  border: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  cursor: 'pointer'
-                }}
+                className="h-14 bg-red-500 border-none flex items-center justify-center gap-3 cursor-pointer hover:bg-red-600 transition-colors"
               >
-                <X style={{ width: '20px', height: '20px', color: '#FFFFFF' }} />
-                <span style={{
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  letterSpacing: '2px',
-                  color: '#FFFFFF'
-                }}>
+                <X className="w-5 h-5 text-white" />
+                <span className="text-sm font-bold tracking-[2px] text-white">
                   ROUND LOST
                 </span>
               </button>
@@ -406,14 +252,8 @@ export default function GamePage() {
         </div>
 
         {/* Quick Actions */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <span style={{
-            fontSize: '11px',
-            fontWeight: 600,
-            letterSpacing: '2px',
-            color: '#CCCCCC',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div className="flex flex-col gap-3">
+          <span className="text-[11px] font-semibold tracking-[2px] text-[#CCCCCC] font-mono">
             QUICK ACTIONS
           </span>
           {hasStratRoulette && (
@@ -423,74 +263,30 @@ export default function GamePage() {
                 rollStrat();
                 setShowStratModal(true);
               }}
-              style={{
-                height: '56px',
-                backgroundColor: '#FF0000',
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                cursor: 'pointer'
-              }}
+              className="h-14 bg-[#FF0000] border-none flex items-center justify-center gap-3 cursor-pointer hover:bg-[#DC2626] transition-colors"
             >
-              <Dices style={{ width: '20px', height: '20px', color: '#0C0C0C' }} />
-              <span style={{
-                fontSize: '14px',
-                fontWeight: 700,
-                letterSpacing: '2px',
-                color: '#0C0C0C'
-              }}>
+              <Dices className="w-5 h-5 text-[#0C0C0C]" />
+              <span className="text-sm font-bold tracking-[2px] text-[#0C0C0C]">
                 ROLL STRAT
               </span>
             </button>
           )}
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={switchSides}
-              style={{
-                flex: 1,
-                height: '48px',
-                backgroundColor: '#2A2A2A',
-                border: '2px solid #666666',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }}
+              className="flex-1 h-12 bg-[#2A2A2A] border-2 border-[#666666] flex items-center justify-center cursor-pointer hover:border-[#888888] hover:bg-[#333333] transition-colors"
             >
-              <span style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                letterSpacing: '1px',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+              <span className="text-xs font-bold tracking-[1px] text-white font-mono">
                 SWITCH SIDES
               </span>
             </button>
             <button
               type="button"
               onClick={endGame}
-              style={{
-                flex: 1,
-                height: '48px',
-                backgroundColor: 'rgba(239, 68, 68, 0.25)',
-                border: '2px solid #EF4444',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }}
+              className="flex-1 h-12 bg-red-500/25 border-2 border-red-500 flex items-center justify-center cursor-pointer hover:bg-red-500/40 transition-colors"
             >
-              <span style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                letterSpacing: '1px',
-                color: '#EF4444',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+              <span className="text-xs font-bold tracking-[1px] text-red-500 font-mono">
                 END GAME
               </span>
             </button>
@@ -499,37 +295,22 @@ export default function GamePage() {
 
         {/* Agent Rules Section - Always show if Agent Poison mode is enabled */}
         {hasAgentPoison && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="flex flex-col gap-3">
             <button
               type="button"
               onClick={() => setShowAgentRules(!showAgentRules)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0
-              }}
+              className="flex items-center justify-between w-full bg-transparent border-none cursor-pointer p-0"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Target style={{ width: '16px', height: '16px', color: '#A855F7' }} />
-                <span style={{
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '2px',
-                  color: '#A855F7',
-                  fontFamily: 'var(--font-space-mono), monospace'
-                }}>
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-purple-500" />
+                <span className="text-[11px] font-semibold tracking-[2px] text-purple-500 font-mono">
                   YOUR AGENT RULES
                 </span>
               </div>
               {showAgentRules ? (
-                <ChevronUp style={{ width: '16px', height: '16px', color: '#A855F7' }} />
+                <ChevronUp className="w-4 h-4 text-purple-500" />
               ) : (
-                <ChevronDown style={{ width: '16px', height: '16px', color: '#A855F7' }} />
+                <ChevronDown className="w-4 h-4 text-purple-500" />
               )}
             </button>
             <AnimatePresence>
@@ -538,51 +319,26 @@ export default function GamePage() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  style={{
-                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                    border: '1px solid #A855F7',
-                    padding: '16px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                    overflow: 'hidden'
-                  }}
+                  className="bg-purple-500/10 border border-purple-500 p-4 flex flex-col gap-3 overflow-hidden"
                 >
                   {currentPlayer?.agent ? (
                     <>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div className="flex items-center gap-2">
                         <div
+                          className="w-6 h-6"
                           style={{
-                            width: '24px',
-                            height: '24px',
                             backgroundColor: agentColors[currentPlayer.agent.toLowerCase()] || '#7DD3FC'
                           }}
                         />
-                        <span style={{
-                          fontSize: '14px',
-                          fontWeight: 700,
-                          color: '#FFFFFF',
-                          letterSpacing: '1px'
-                        }}>
+                        <span className="text-sm font-bold text-white tracking-[1px]">
                           {currentPlayer.agent.toUpperCase()}
                         </span>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div className="flex flex-col gap-2">
                         {(agentRules[currentPlayer.agent.toLowerCase()] || []).map((rule, i) => (
-                          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                            <div style={{
-                              width: '6px',
-                              height: '6px',
-                              backgroundColor: '#A855F7',
-                              marginTop: '6px',
-                              flexShrink: 0
-                            }} />
-                            <span style={{
-                              fontSize: '12px',
-                              color: '#DDDDDD',
-                              fontFamily: 'var(--font-space-mono), monospace',
-                              lineHeight: 1.5
-                            }}>
+                          <div key={i} className="flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-purple-500 mt-1.5 shrink-0" />
+                            <span className="text-xs text-[#DDDDDD] font-mono leading-normal">
                               {rule}
                             </span>
                           </div>
@@ -590,13 +346,9 @@ export default function GamePage() {
                       </div>
                     </>
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <AlertCircle style={{ width: '16px', height: '16px', color: '#F59E0B' }} />
-                      <span style={{
-                        fontSize: '12px',
-                        color: '#F59E0B',
-                        fontFamily: 'var(--font-space-mono), monospace'
-                      }}>
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-500" />
+                      <span className="text-xs text-amber-500 font-mono">
                         No agent selected - select an agent in lobby to see rules
                       </span>
                     </div>
@@ -609,20 +361,9 @@ export default function GamePage() {
 
         {/* Show mode not enabled hint if Agent Poison not selected */}
         {!hasAgentPoison && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '12px',
-            backgroundColor: '#1A1A1A',
-            border: '1px solid #444444'
-          }}>
-            <Target style={{ width: '16px', height: '16px', color: '#888888' }} />
-            <span style={{
-              fontSize: '11px',
-              color: '#888888',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+          <div className="flex items-center gap-2 p-3 bg-[#1A1A1A] border border-[#444444]">
+            <Target className="w-4 h-4 text-[#888888]" />
+            <span className="text-[11px] text-[#888888] font-mono">
               Enable AGENT POISON mode for agent-specific rules
             </span>
           </div>
@@ -630,54 +371,25 @@ export default function GamePage() {
 
         {/* Current Strat */}
         {hasStratRoulette && game.currentStrat && (
-          <div style={{
-            backgroundColor: 'rgba(255, 0, 0, 0.1)',
-            border: '1px solid #FF0000',
-            padding: '16px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
-            <span style={{
-              fontSize: '10px',
-              fontWeight: 600,
-              letterSpacing: '2px',
-              color: '#FF0000',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+          <div className="bg-[#FF0000]/10 border border-[#FF0000] p-4 flex flex-col gap-3">
+            <span className="text-[10px] font-semibold tracking-[2px] text-[#FF0000] font-mono">
               ACTIVE STRAT
             </span>
-            <p style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: '#FFFFFF',
-              lineHeight: 1.5
-            }}>
+            <p className="text-sm font-semibold text-white leading-normal">
               &quot;{game.currentStrat.text}&quot;
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="flex items-center gap-3">
               <div
+                className="px-3 py-1"
                 style={{
-                  padding: '4px 12px',
                   backgroundColor: stratCategoryColors[game.currentStrat.category]
                 }}
               >
-                <span style={{
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '1px',
-                  color: '#0C0C0C',
-                  fontFamily: 'var(--font-space-mono), monospace'
-                }}>
+                <span className="text-[10px] font-bold tracking-[1px] text-[#0C0C0C] font-mono">
                   {stratCategoryLabels[game.currentStrat.category]}
                 </span>
               </div>
-              <span style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: '#CCCCCC',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+              <span className="text-xs font-medium text-[#CCCCCC] font-mono">
                 Fail = {game.currentStrat.penalty} drinks
               </span>
             </div>
@@ -685,47 +397,23 @@ export default function GamePage() {
         )}
 
         {/* Lobby Code */}
-        <div style={{
-          marginTop: 'auto',
-          paddingTop: '16px',
-          borderTop: '1px solid #444444'
-        }}>
+        <div className="mt-auto pt-4 border-t border-[#444444]">
           <button
             type="button"
             onClick={handleCopyCode}
-            style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '12px 16px',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #555555',
-              cursor: 'pointer'
-            }}
+            className="w-full flex items-center justify-between px-4 py-3 bg-[#1A1A1A] border border-[#555555] cursor-pointer hover:bg-[#222222] hover:border-[#666666] transition-colors"
           >
-            <span style={{
-              fontSize: '10px',
-              fontWeight: 600,
-              letterSpacing: '1px',
-              color: '#CCCCCC',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+            <span className="text-[10px] font-semibold tracking-[1px] text-[#CCCCCC] font-mono">
               LOBBY CODE
             </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{
-                fontSize: '14px',
-                fontWeight: 700,
-                letterSpacing: '2px',
-                color: '#FF0000'
-              }}>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold tracking-[2px] text-[#FF0000]">
                 {lobbyId}
               </span>
               {copied ? (
-                <Check style={{ width: '16px', height: '16px', color: '#22C55E' }} />
+                <Check className="w-4 h-4 text-green-500" />
               ) : (
-                <Copy style={{ width: '16px', height: '16px', color: '#888888' }} />
+                <Copy className="w-4 h-4 text-[#888888]" />
               )}
             </div>
           </button>
@@ -733,94 +421,33 @@ export default function GamePage() {
       </aside>
 
       {/* Main Content */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '32px',
-        gap: '24px',
-        overflowY: 'auto'
-      }} className="pt-20 pb-20 lg:pt-8 lg:pb-0">
+      <div className="flex-1 flex flex-col p-8 gap-6 overflow-y-auto pt-20 pb-20 lg:pt-8 lg:pb-0">
         {/* Header - Responsive */}
-        <header style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '24px',
-          width: '100%'
-        }} className="lg:flex-row lg:items-center lg:justify-between">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <h1 style={{
-              fontSize: '28px',
-              fontWeight: 800,
-              letterSpacing: '1px',
-              color: '#FFFFFF'
-            }}>
+        <header className="flex flex-col gap-6 w-full lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-[28px] font-extrabold tracking-[1px] text-white">
               LIVE TRACKER
             </h1>
-            <p style={{
-              fontSize: '13px',
-              color: '#999999',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+            <p className="text-[13px] text-[#999999] font-mono">
               Click player cards to track deaths and drinks
             </p>
           </div>
 
           {/* Stats Summary - Grid on mobile, flex on desktop */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '16px'
-          }} className="lg:flex lg:gap-8">
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-              alignItems: 'center',
-              padding: '16px 24px',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #333333'
-            }}>
-              <span style={{
-                fontSize: '10px',
-                fontWeight: 600,
-                letterSpacing: '1px',
-                color: '#999999',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+          <div className="grid grid-cols-2 gap-4 lg:flex lg:gap-8">
+            <div className="flex flex-col gap-1 items-center px-6 py-4 bg-[#1A1A1A] border border-[#333333]">
+              <span className="text-[10px] font-semibold tracking-[1px] text-[#999999] font-mono">
                 TOTAL DEATHS
               </span>
-              <span style={{
-                fontSize: '32px',
-                fontWeight: 800,
-                color: '#FFFFFF'
-              }}>
+              <span className="text-[32px] font-extrabold text-white">
                 {totalDeaths}
               </span>
             </div>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-              alignItems: 'center',
-              padding: '16px 24px',
-              backgroundColor: 'rgba(255, 0, 0, 0.1)',
-              border: '1px solid #FF0000'
-            }}>
-              <span style={{
-                fontSize: '10px',
-                fontWeight: 600,
-                letterSpacing: '1px',
-                color: '#FF0000',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+            <div className="flex flex-col gap-1 items-center px-6 py-4 bg-[#FF0000]/10 border border-[#FF0000]">
+              <span className="text-[10px] font-semibold tracking-[1px] text-[#FF0000] font-mono">
                 TOTAL DRINKS
               </span>
-              <span style={{
-                fontSize: '32px',
-                fontWeight: 800,
-                color: '#FF0000'
-              }}>
+              <span className="text-[32px] font-extrabold text-[#FF0000]">
                 {totalDrinks}
               </span>
             </div>
@@ -828,19 +455,8 @@ export default function GamePage() {
         </header>
 
         {/* Active Modes Indicator */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          flexWrap: 'wrap'
-        }}>
-          <span style={{
-            fontSize: '10px',
-            fontWeight: 600,
-            letterSpacing: '1px',
-            color: '#666666',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-[10px] font-semibold tracking-[1px] text-[#666666] font-mono">
             ACTIVE MODES:
           </span>
           {settings.modes.map((mode) => {
@@ -855,15 +471,11 @@ export default function GamePage() {
             return (
               <span
                 key={mode}
+                className="px-3 py-1.5 text-[10px] font-bold tracking-[1px] font-mono"
                 style={{
-                  padding: '6px 12px',
                   backgroundColor: `${color}15`,
                   border: `1px solid ${color}`,
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '1px',
                   color: color,
-                  fontFamily: 'var(--font-space-mono), monospace'
                 }}
               >
                 {mode.toUpperCase().replace('_', ' ')}
@@ -873,13 +485,7 @@ export default function GamePage() {
         </div>
 
         {/* Player Cards - Responsive Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '20px',
-          flex: 1,
-          alignContent: 'start'
-        }}>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 flex-1 content-start">
           {players.length > 0 ? (
             players.map((player) => (
               <PlayerCard
@@ -893,31 +499,14 @@ export default function GamePage() {
               />
             ))
           ) : (
-            <div style={{
-              gridColumn: '1 / -1',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '2px dashed #333333',
-              minHeight: '400px',
-              padding: '40px'
-            }}>
-              <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <AlertCircle style={{ width: '64px', height: '64px', color: '#FF0000', margin: '0 auto' }} />
-                <p style={{ color: '#CCCCCC', fontFamily: 'var(--font-space-mono), monospace', fontSize: '14px' }}>No players in lobby</p>
-                <p style={{ color: '#666666', fontFamily: 'var(--font-space-mono), monospace', fontSize: '12px' }}>Create a new lobby to start tracking</p>
+            <div className="col-span-full flex items-center justify-center border-2 border-dashed border-[#333333] min-h-[400px] p-10">
+              <div className="text-center flex flex-col gap-4">
+                <AlertCircle className="w-16 h-16 text-[#FF0000] mx-auto" />
+                <p className="text-[#CCCCCC] font-mono text-sm">No players in lobby</p>
+                <p className="text-[#666666] font-mono text-xs">Create a new lobby to start tracking</p>
                 <Link
                   href="/lobby/create"
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: '#FF0000',
-                    color: '#0C0C0C',
-                    fontWeight: 700,
-                    fontSize: '12px',
-                    letterSpacing: '1px',
-                    textDecoration: 'none',
-                    display: 'inline-block'
-                  }}
+                  className="px-6 py-3 bg-[#FF0000] text-[#0C0C0C] font-bold text-xs tracking-[1px] no-underline inline-block hover:bg-[#DC2626] transition-colors"
                 >
                   CREATE NEW LOBBY
                 </Link>
@@ -1024,199 +613,86 @@ function PlayerCard({
   return (
     <motion.div
       layout
+      className="flex-1 min-w-[280px] flex flex-col overflow-hidden transition-[background-color,box-shadow] duration-200 ease-out"
       style={{
-        flex: 1,
-        minWidth: '280px',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
         backgroundColor: deathFlash ? 'rgba(239, 68, 68, 0.15)' : drinkFlash ? 'rgba(245, 158, 11, 0.15)' : '#0C0C0C',
         border: `2px solid ${agentColor}`,
         boxShadow: isCurrentPlayer ? `0 0 20px ${agentColor}40, inset 0 0 30px ${agentColor}10` : 'none',
-        transition: 'background-color 0.2s ease, box-shadow 0.3s ease',
       }}
     >
       {/* Header with gradient */}
       <div
+        className="h-[60px] px-5 flex items-center justify-between relative"
         style={{
-          height: '60px',
-          padding: '0 20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
           background: `linear-gradient(135deg, ${agentColor} 0%, ${agentColor}CC 100%)`,
           borderBottom: `3px solid ${agentColor}`,
-          position: 'relative',
         }}
       >
         {/* You indicator */}
         {isCurrentPlayer && (
-          <div style={{
-            position: 'absolute',
-            top: '8px',
-            right: '8px',
-            padding: '2px 8px',
-            backgroundColor: headerTextColor,
-            opacity: 0.9,
-          }}>
-            <span style={{
-              fontSize: '8px',
-              fontWeight: 700,
-              letterSpacing: '1px',
-              color: agentColor,
-              fontFamily: 'var(--font-space-mono), monospace',
-            }}>
+          <div
+            className="absolute top-2 right-2 px-2 py-0.5 opacity-90"
+            style={{ backgroundColor: headerTextColor }}
+          >
+            <span
+              className="text-[8px] font-bold tracking-[1px] font-mono"
+              style={{ color: agentColor }}
+            >
               YOU
             </span>
           </div>
         )}
         <span
-          style={{
-            fontSize: '15px',
-            fontWeight: 800,
-            letterSpacing: '2px',
-            color: headerTextColor,
-          }}
+          className="text-[15px] font-extrabold tracking-[2px]"
+          style={{ color: headerTextColor }}
         >
           {player.name || 'PLAYER'}
         </span>
         <span
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            letterSpacing: '1px',
-            color: headerTextColor,
-            opacity: 0.8,
-            fontFamily: 'var(--font-space-mono), monospace',
-          }}
+          className="text-[11px] font-bold tracking-[1px] opacity-80 font-mono"
+          style={{ color: headerTextColor }}
         >
           {player.agent?.toUpperCase() || 'AGENT'}
         </span>
       </div>
 
       {/* Body */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '20px',
-        gap: '20px',
-      }}>
+      <div className="flex-1 flex flex-col p-5 gap-5">
         {/* Stats - Side by side with cleaner look */}
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div className="flex gap-4">
           {/* Deaths stat */}
-          <div style={{
-            flex: 1,
-            padding: '16px',
-            backgroundColor: '#1A1A1A',
-            border: '1px solid #333333',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            position: 'relative',
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '4px',
-              height: '100%',
-              backgroundColor: '#FFFFFF',
-              opacity: 0.3,
-            }} />
-            <span style={{
-              fontSize: '10px',
-              fontWeight: 600,
-              letterSpacing: '2px',
-              color: '#888888',
-              fontFamily: 'var(--font-space-mono), monospace',
-            }}>
+          <div className="flex-1 p-4 bg-[#1A1A1A] border border-[#333333] flex flex-col gap-2 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-white/30" />
+            <span className="text-[10px] font-semibold tracking-[2px] text-[#888888] font-mono">
               DEATHS
             </span>
-            <span style={{
-              fontSize: '44px',
-              fontWeight: 800,
-              color: '#FFFFFF',
-              lineHeight: 1,
-              letterSpacing: '-2px',
-            }}>
+            <span className="text-[44px] font-extrabold text-white leading-none tracking-[-2px]">
               {player.deaths}
             </span>
           </div>
           {/* Drinks stat */}
-          <div style={{
-            flex: 1,
-            padding: '16px',
-            backgroundColor: 'rgba(255, 0, 0, 0.08)',
-            border: '1px solid rgba(255, 0, 0, 0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            position: 'relative',
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '4px',
-              height: '100%',
-              backgroundColor: '#FF0000',
-            }} />
-            <span style={{
-              fontSize: '10px',
-              fontWeight: 600,
-              letterSpacing: '2px',
-              color: '#FF0000',
-              fontFamily: 'var(--font-space-mono), monospace',
-            }}>
+          <div className="flex-1 p-4 bg-[#FF0000]/[0.08] border border-[#FF0000]/30 flex flex-col gap-2 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#FF0000]" />
+            <span className="text-[10px] font-semibold tracking-[2px] text-[#FF0000] font-mono">
               DRINKS
             </span>
-            <span style={{
-              fontSize: '44px',
-              fontWeight: 800,
-              color: '#FF0000',
-              lineHeight: 1,
-              letterSpacing: '-2px',
-            }}>
+            <span className="text-[44px] font-extrabold text-[#FF0000] leading-none tracking-[-2px]">
               {player.drinks}
             </span>
           </div>
         </div>
 
         {/* Action Buttons - Improved styling */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div className="grid grid-cols-2 gap-3">
           <motion.button
             type="button"
             onClick={handleDeath}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            style={{
-              height: '56px',
-              backgroundColor: '#1A1A1A',
-              border: '2px solid #555555',
-              borderLeft: '4px solid #FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#252525';
-              e.currentTarget.style.borderColor = '#888888';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 255, 255, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#1A1A1A';
-              e.currentTarget.style.borderColor = '#555555';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
+            className="h-14 bg-[#1A1A1A] border-2 border-[#555555] border-l-4 border-l-white flex items-center justify-center gap-2.5 cursor-pointer transition-all duration-150 ease-in-out hover:bg-[#252525] hover:border-[#888888] hover:shadow-[0_4px_12px_rgba(255,255,255,0.1)]"
           >
-            <Skull style={{ width: '22px', height: '22px', color: '#FFFFFF' }} />
-            <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '1px', color: '#FFFFFF', fontFamily: 'var(--font-space-mono), monospace' }}>
+            <Skull className="w-[22px] h-[22px] text-white" />
+            <span className="text-[13px] font-bold tracking-[1px] text-white font-mono">
               + DEATH
             </span>
           </motion.button>
@@ -1225,31 +701,10 @@ function PlayerCard({
             onClick={handleDrink}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            style={{
-              height: '56px',
-              backgroundColor: '#FF0000',
-              borderTop: 'none',
-              borderRight: 'none',
-              borderBottom: 'none',
-              borderLeft: '4px solid #CC0000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#DC2626';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 0, 0, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#FF0000';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
+            className="h-14 bg-[#FF0000] border-t-0 border-r-0 border-b-0 border-l-4 border-l-[#CC0000] flex items-center justify-center gap-2.5 cursor-pointer transition-all duration-150 ease-in-out hover:bg-[#DC2626] hover:shadow-[0_4px_12px_rgba(255,0,0,0.3)]"
           >
-            <Beer style={{ width: '22px', height: '22px', color: '#0C0C0C' }} />
-            <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '1px', color: '#0C0C0C', fontFamily: 'var(--font-space-mono), monospace' }}>
+            <Beer className="w-[22px] h-[22px] text-[#0C0C0C]" />
+            <span className="text-[13px] font-bold tracking-[1px] text-[#0C0C0C] font-mono">
               + DRINK
             </span>
           </motion.button>
@@ -1257,45 +712,25 @@ function PlayerCard({
 
         {/* Agent Rules Toggle (if Agent Poison mode) */}
         {hasAgentPoison && playerRules.length > 0 && (
-          <div style={{
-            borderTop: '1px solid #333333',
-            paddingTop: '16px',
-          }}>
+          <div className="border-t border-[#333333] pt-4">
             <button
               type="button"
               onClick={() => setShowRules(!showRules)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                textAlign: 'left',
-                backgroundColor: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px 0',
-              }}
+              className="w-full flex items-center justify-between text-left bg-transparent border-none cursor-pointer py-2 px-0"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  backgroundColor: agentColor,
-                }} />
-                <span style={{
-                  fontSize: '10px',
-                  fontWeight: 600,
-                  letterSpacing: '2px',
-                  color: '#888888',
-                  fontFamily: 'var(--font-space-mono), monospace',
-                }}>
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-2 h-2"
+                  style={{ backgroundColor: agentColor }}
+                />
+                <span className="text-[10px] font-semibold tracking-[2px] text-[#888888] font-mono">
                   AGENT RULES
                 </span>
               </div>
               {showRules ? (
-                <ChevronUp style={{ width: '16px', height: '16px', color: '#666666' }} />
+                <ChevronUp className="w-4 h-4 text-[#666666]" />
               ) : (
-                <ChevronDown style={{ width: '16px', height: '16px', color: '#666666' }} />
+                <ChevronDown className="w-4 h-4 text-[#666666]" />
               )}
             </button>
             <AnimatePresence>
@@ -1304,30 +739,15 @@ function PlayerCard({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                    marginTop: '12px',
-                    overflow: 'hidden',
-                    paddingLeft: '16px',
-                  }}
+                  className="flex flex-col gap-2.5 mt-3 overflow-hidden pl-4"
                 >
                   {playerRules.slice(0, 3).map((rule, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                      <div style={{
-                        width: '4px',
-                        height: '4px',
-                        marginTop: '6px',
-                        flexShrink: 0,
-                        backgroundColor: agentColor,
-                      }} />
-                      <span style={{
-                        fontSize: '11px',
-                        color: '#BBBBBB',
-                        fontFamily: 'var(--font-space-mono), monospace',
-                        lineHeight: 1.5,
-                      }}>
+                    <div key={i} className="flex items-start gap-2.5">
+                      <div
+                        className="w-1 h-1 mt-1.5 shrink-0"
+                        style={{ backgroundColor: agentColor }}
+                      />
+                      <span className="text-[11px] text-[#BBBBBB] font-mono leading-normal">
                         {rule}
                       </span>
                     </div>
@@ -1358,138 +778,61 @@ function StratRouletteModal({
 }) {
   return (
     <motion.div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.95)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 50,
-        padding: '32px'
-      }}
+      className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        style={{
-          maxWidth: '600px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '32px',
-          textAlign: 'center'
-        }}
+        className="max-w-[600px] w-full flex flex-col items-center gap-8 text-center"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
       >
-        <span style={{
-          fontSize: '12px',
-          fontWeight: 600,
-          letterSpacing: '4px',
-          color: '#FF0000',
-          fontFamily: 'var(--font-space-mono), monospace'
-        }}>
+        <span className="text-xs font-semibold tracking-[4px] text-[#FF0000] font-mono">
           STRAT ROULETTE
         </span>
 
-        <div style={{
-          padding: '12px 24px',
-          backgroundColor: stratCategoryColors[strat.category]
-        }}>
-          <span style={{
-            fontSize: '14px',
-            fontWeight: 700,
-            letterSpacing: '2px',
-            color: '#0C0C0C',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div
+          className="px-6 py-3"
+          style={{ backgroundColor: stratCategoryColors[strat.category] }}
+        >
+          <span className="text-sm font-bold tracking-[2px] text-[#0C0C0C] font-mono">
             {stratCategoryLabels[strat.category]}
           </span>
         </div>
 
-        <h2 style={{
-          fontSize: '36px',
-          fontWeight: 800,
-          color: '#FFFFFF',
-          lineHeight: 1.2,
-          letterSpacing: '-2px',
-          padding: '0 16px'
-        }}>
+        <h2 className="text-4xl font-extrabold text-white leading-tight tracking-[-2px] px-4">
           &quot;{strat.text}&quot;
         </h2>
 
-        <p style={{
-          fontSize: '16px',
-          color: '#CCCCCC',
-          maxWidth: '400px',
-          padding: '0 16px',
-          lineHeight: 1.6
-        }}>
+        <p className="text-base text-[#CCCCCC] max-w-[400px] px-4 leading-relaxed">
           {strat.description}
         </p>
 
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '32px',
-          flexWrap: 'wrap',
-          justifyContent: 'center'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Beer style={{ width: '20px', height: '20px', color: '#FF0000' }} />
-            <span style={{
-              fontSize: '14px',
-              color: '#CCCCCC',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+        <div className="flex items-center gap-8 flex-wrap justify-center">
+          <div className="flex items-center gap-2">
+            <Beer className="w-5 h-5 text-[#FF0000]" />
+            <span className="text-sm text-[#CCCCCC] font-mono">
               +{strat.penalty} drinks if failed
             </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Clock style={{ width: '20px', height: '20px', color: '#999999' }} />
-            <span style={{
-              fontSize: '14px',
-              color: '#CCCCCC',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+          <div className="flex items-center gap-2">
+            <Clock className="w-5 h-5 text-[#999999]" />
+            <span className="text-sm text-[#CCCCCC] font-mono">
               {strat.duration === 'round' ? 'This round' : strat.duration === 'half' ? 'This half' : 'Entire game'}
             </span>
           </div>
         </div>
 
-        <div style={{
-          display: 'flex',
-          gap: '16px',
-          marginTop: '16px',
-          flexWrap: 'wrap',
-          justifyContent: 'center'
-        }}>
+        <div className="flex gap-4 mt-4 flex-wrap justify-center">
           <button
             type="button"
             onClick={onAccept}
-            style={{
-              height: '60px',
-              padding: '0 32px',
-              backgroundColor: '#FF0000',
-              border: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              cursor: 'pointer'
-            }}
+            className="h-[60px] px-8 bg-[#FF0000] border-none flex items-center justify-center gap-3 cursor-pointer hover:bg-[#DC2626] transition-colors"
           >
-            <Check style={{ width: '22px', height: '22px', color: '#0C0C0C' }} />
-            <span style={{
-              fontSize: '15px',
-              fontWeight: 700,
-              letterSpacing: '2px',
-              color: '#0C0C0C'
-            }}>
+            <Check className="w-[22px] h-[22px] text-[#0C0C0C]" />
+            <span className="text-[15px] font-bold tracking-[2px] text-[#0C0C0C]">
               ACCEPT FATE
             </span>
           </button>
@@ -1497,27 +840,14 @@ function StratRouletteModal({
             type="button"
             onClick={onReroll}
             disabled={rerollsLeft <= 0}
-            style={{
-              height: '60px',
-              padding: '0 32px',
-              backgroundColor: '#2A2A2A',
-              border: '2px solid #666666',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              cursor: rerollsLeft > 0 ? 'pointer' : 'not-allowed',
-              opacity: rerollsLeft > 0 ? 1 : 0.5
-            }}
+            className={`h-[60px] px-8 bg-[#2A2A2A] border-2 border-[#666666] flex items-center justify-center gap-3 transition-colors ${
+              rerollsLeft > 0
+                ? 'cursor-pointer opacity-100 hover:bg-[#333333] hover:border-[#888888]'
+                : 'cursor-not-allowed opacity-50'
+            }`}
           >
-            <Dices style={{ width: '22px', height: '22px', color: '#FFFFFF' }} />
-            <span style={{
-              fontSize: '15px',
-              fontWeight: 600,
-              letterSpacing: '1px',
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+            <Dices className="w-[22px] h-[22px] text-white" />
+            <span className="text-[15px] font-semibold tracking-[1px] text-white font-mono">
               REROLL ({rerollsLeft})
             </span>
           </button>
@@ -1526,16 +856,7 @@ function StratRouletteModal({
         <button
           type="button"
           onClick={onSkip}
-          style={{
-            fontSize: '13px',
-            color: '#999999',
-            fontFamily: 'var(--font-space-mono), monospace',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '8px 16px',
-            marginTop: '8px'
-          }}
+          className="text-[13px] text-[#999999] font-mono bg-none border-none cursor-pointer px-4 py-2 mt-2 hover:text-[#CCCCCC] transition-colors"
         >
           Skip this round
         </button>
@@ -1553,145 +874,53 @@ function HalftimeScreen() {
   };
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      backgroundColor: '#0C0C0C',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '32px'
-    }}>
+    <main className="min-h-screen bg-[#0C0C0C] flex items-center justify-center p-8">
       <motion.div
-        style={{
-          maxWidth: '700px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '32px',
-          textAlign: 'center'
-        }}
+        className="max-w-[700px] w-full flex flex-col items-center gap-8 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div style={{
-          padding: '12px 32px',
-          backgroundColor: '#F59E0B'
-        }}>
-          <span style={{
-            fontSize: '14px',
-            fontWeight: 700,
-            letterSpacing: '2px',
-            color: '#0C0C0C',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div className="px-8 py-3 bg-amber-500">
+          <span className="text-sm font-bold tracking-[2px] text-[#0C0C0C] font-mono">
             HALF TIME
           </span>
         </div>
 
-        <h1 style={{
-          fontSize: '56px',
-          fontWeight: 800,
-          color: '#FFFFFF',
-          letterSpacing: '-2px'
-        }}>
+        <h1 className="text-[56px] font-extrabold text-white tracking-[-2px]">
           SIDE SWAP
         </h1>
 
-        <p style={{
-          fontSize: '18px',
-          color: '#CCCCCC',
-          fontFamily: 'var(--font-space-mono), monospace'
-        }}>
+        <p className="text-lg text-[#CCCCCC] font-mono">
           Take a break. Grab a drink. Regroup.
         </p>
 
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '32px',
-          marginTop: '16px'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>TEAM</span>
-            <div style={{
-              fontSize: '64px',
-              fontWeight: 800,
-              color: '#22C55E'
-            }}>
+        <div className="flex items-center gap-8 mt-4">
+          <div className="text-center">
+            <span className="text-xs font-mono text-[#999999]">TEAM</span>
+            <div className="text-[64px] font-extrabold text-green-500">
               {game.teamScore}
             </div>
           </div>
-          <span style={{
-            fontSize: '40px',
-            fontWeight: 300,
-            color: '#666666'
-          }}>-</span>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>ENEMY</span>
-            <div style={{
-              fontSize: '64px',
-              fontWeight: 800,
-              color: '#EF4444'
-            }}>
+          <span className="text-[40px] font-light text-[#666666]">-</span>
+          <div className="text-center">
+            <span className="text-xs font-mono text-[#999999]">ENEMY</span>
+            <div className="text-[64px] font-extrabold text-red-500">
               {game.enemyScore}
             </div>
           </div>
         </div>
 
-        <div style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          letterSpacing: '2px',
-          color: '#F59E0B',
-          fontFamily: 'var(--font-space-mono), monospace'
-        }}>
+        <div className="text-sm font-semibold tracking-[2px] text-amber-500 font-mono">
           {game.side === 'defense' ? 'ATTACK' : 'DEFENSE'} → {game.side.toUpperCase()}
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: '12px',
-          marginTop: '16px',
-          width: '100%'
-        }}>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3 mt-4 w-full">
           {players.map((player) => (
-            <div key={player.id} style={{
-              padding: '16px',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #444444'
-            }}>
-              <span style={{
-                fontSize: '12px',
-                fontFamily: 'var(--font-space-mono), monospace',
-                color: '#CCCCCC'
-              }}>{player.name}</span>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '16px',
-                marginTop: '8px'
-              }}>
-                <span style={{
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  color: '#FFFFFF'
-                }}>{player.deaths}</span>
-                <span style={{
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  color: '#FF0000'
-                }}>{player.drinks}</span>
+            <div key={player.id} className="p-4 bg-[#1A1A1A] border border-[#444444]">
+              <span className="text-xs font-mono text-[#CCCCCC]">{player.name}</span>
+              <div className="flex items-center justify-center gap-4 mt-2">
+                <span className="text-xl font-bold text-white">{player.deaths}</span>
+                <span className="text-xl font-bold text-[#FF0000]">{player.drinks}</span>
               </div>
             </div>
           ))}
@@ -1700,26 +929,10 @@ function HalftimeScreen() {
         <button
           type="button"
           onClick={handleContinue}
-          style={{
-            height: '60px',
-            padding: '0 40px',
-            backgroundColor: '#FF0000',
-            border: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-            marginTop: '16px'
-          }}
+          className="h-[60px] px-10 bg-[#FF0000] border-none flex items-center justify-center gap-3 cursor-pointer mt-4 hover:bg-[#DC2626] transition-colors"
         >
-          <Play style={{ width: '22px', height: '22px', color: '#0C0C0C' }} />
-          <span style={{
-            fontSize: '15px',
-            fontWeight: 700,
-            letterSpacing: '2px',
-            color: '#0C0C0C'
-          }}>
+          <Play className="w-[22px] h-[22px] text-[#0C0C0C]" />
+          <span className="text-[15px] font-bold tracking-[2px] text-[#0C0C0C]">
             CONTINUE TO SECOND HALF
           </span>
         </button>
@@ -1735,152 +948,51 @@ function OvertimeScreen() {
   };
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      backgroundColor: '#0C0C0C',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '32px'
-    }}>
+    <main className="min-h-screen bg-[#0C0C0C] flex items-center justify-center p-8">
       <motion.div
-        style={{
-          maxWidth: '600px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '32px',
-          textAlign: 'center'
-        }}
+        className="max-w-[600px] w-full flex flex-col items-center gap-8 text-center"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <div style={{
-          width: '128px',
-          height: '128px',
-          borderRadius: '50%',
-          backgroundColor: 'rgba(255, 0, 0, 0.2)',
-          border: '2px solid #FF0000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Trophy style={{ width: '64px', height: '64px', color: '#FF0000' }} />
+        <div className="w-32 h-32 rounded-full bg-[#FF0000]/20 border-2 border-[#FF0000] flex items-center justify-center">
+          <Trophy className="w-16 h-16 text-[#FF0000]" />
         </div>
 
-        <div style={{
-          padding: '8px 24px',
-          backgroundColor: '#FF0000'
-        }}>
-          <span style={{
-            fontSize: '14px',
-            fontWeight: 700,
-            letterSpacing: '4px',
-            color: '#0C0C0C',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div className="px-6 py-2 bg-[#FF0000]">
+          <span className="text-sm font-bold tracking-[4px] text-[#0C0C0C] font-mono">
             OVERTIME
           </span>
         </div>
 
-        <h1 style={{
-          fontSize: '56px',
-          fontWeight: 800,
-          color: '#FFFFFF',
-          letterSpacing: '-2px'
-        }}>
+        <h1 className="text-[56px] font-extrabold text-white tracking-[-2px]">
           SUDDEN DEATH
         </h1>
 
-        <p style={{
-          fontSize: '18px',
-          color: '#CCCCCC',
-          fontFamily: 'var(--font-space-mono), monospace'
-        }}>
+        <p className="text-lg text-[#CCCCCC] font-mono">
           Score tied 12-12. First to win 2 rounds takes the match.
         </p>
 
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '24px',
-          marginTop: '16px'
-        }}>
-          <span style={{
-            fontSize: '64px',
-            fontWeight: 800,
-            color: '#22C55E'
-          }}>12</span>
-          <span style={{
-            fontSize: '48px',
-            fontWeight: 300,
-            color: '#666666'
-          }}>-</span>
-          <span style={{
-            fontSize: '64px',
-            fontWeight: 800,
-            color: '#EF4444'
-          }}>12</span>
+        <div className="flex items-center gap-6 mt-4">
+          <span className="text-[64px] font-extrabold text-green-500">12</span>
+          <span className="text-[48px] font-light text-[#666666]">-</span>
+          <span className="text-[64px] font-extrabold text-red-500">12</span>
         </div>
 
-        <div style={{
-          padding: '24px',
-          backgroundColor: '#1A1A1A',
-          border: '1px solid #444444',
-          width: '100%',
-          marginTop: '16px'
-        }}>
-          <span style={{
-            fontSize: '11px',
-            fontWeight: 600,
-            letterSpacing: '2px',
-            color: '#999999',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div className="p-6 bg-[#1A1A1A] border border-[#444444] w-full mt-4">
+          <span className="text-[11px] font-semibold tracking-[2px] text-[#999999] font-mono">
             OVERTIME RULES
           </span>
-          <ul style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-            marginTop: '16px',
-            textAlign: 'left',
-            listStyle: 'none',
-            padding: 0,
-            margin: '16px 0 0 0'
-          }}>
-            <li style={{
-              fontSize: '14px',
-              color: '#CCCCCC',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
-              <span style={{ color: '#FF0000' }}>•</span>
+          <ul className="flex flex-col gap-3 mt-4 text-left list-none p-0 m-0">
+            <li className="text-sm text-[#CCCCCC] flex items-center gap-2 font-mono">
+              <span className="text-[#FF0000]">•</span>
               2X DRINK MULTIPLIER on all deaths
             </li>
-            <li style={{
-              fontSize: '14px',
-              color: '#CCCCCC',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
-              <span style={{ color: '#FF0000' }}>•</span>
+            <li className="text-sm text-[#CCCCCC] flex items-center gap-2 font-mono">
+              <span className="text-[#FF0000]">•</span>
               First team to 14 wins
             </li>
-            <li style={{
-              fontSize: '14px',
-              color: '#CCCCCC',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
-              <span style={{ color: '#FF0000' }}>•</span>
+            <li className="text-sm text-[#CCCCCC] flex items-center gap-2 font-mono">
+              <span className="text-[#FF0000]">•</span>
               No mercy. Full send only.
             </li>
           </ul>
@@ -1889,26 +1001,10 @@ function OvertimeScreen() {
         <button
           type="button"
           onClick={handleContinue}
-          style={{
-            height: '60px',
-            padding: '0 40px',
-            backgroundColor: '#FF0000',
-            border: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-            marginTop: '16px'
-          }}
+          className="h-[60px] px-10 bg-[#FF0000] border-none flex items-center justify-center gap-3 cursor-pointer mt-4 hover:bg-[#DC2626] transition-colors"
         >
-          <Play style={{ width: '22px', height: '22px', color: '#0C0C0C' }} />
-          <span style={{
-            fontSize: '15px',
-            fontWeight: 700,
-            letterSpacing: '2px',
-            color: '#0C0C0C'
-          }}>
+          <Play className="w-[22px] h-[22px] text-[#0C0C0C]" />
+          <span className="text-[15px] font-bold tracking-[2px] text-[#0C0C0C]">
             CONTINUE TO OVERTIME
           </span>
         </button>
@@ -1945,191 +1041,80 @@ function GameEndScreen() {
   };
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      backgroundColor: '#0C0C0C',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '32px'
-    }}>
+    <main className="min-h-screen bg-[#0C0C0C] flex items-center justify-center p-8">
       <motion.div
-        style={{
-          maxWidth: '700px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '32px',
-          textAlign: 'center'
-        }}
+        className="max-w-[700px] w-full flex flex-col items-center gap-8 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div style={{
-          padding: '12px 32px',
-          backgroundColor: isVictory ? '#22C55E' : '#EF4444'
-        }}>
-          <span style={{
-            fontSize: '14px',
-            fontWeight: 700,
-            letterSpacing: '2px',
-            color: '#0C0C0C',
-            fontFamily: 'var(--font-space-mono), monospace'
-          }}>
+        <div
+          className="px-8 py-3"
+          style={{ backgroundColor: isVictory ? '#22C55E' : '#EF4444' }}
+        >
+          <span className="text-sm font-bold tracking-[2px] text-[#0C0C0C] font-mono">
             {isVictory ? 'VICTORY' : 'DEFEAT'}
           </span>
         </div>
 
-        <h1 style={{
-          fontSize: '56px',
-          fontWeight: 800,
-          color: '#FFFFFF',
-          letterSpacing: '-2px'
-        }}>
+        <h1 className="text-[56px] font-extrabold text-white tracking-[-2px]">
           GAME OVER
         </h1>
 
         {/* Final Score */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '32px',
-          marginTop: '16px'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>TEAM</span>
-            <div style={{
-              fontSize: '72px',
-              fontWeight: 800,
-              color: isVictory ? '#22C55E' : '#FFFFFF'
-            }}>
+        <div className="flex items-center gap-8 mt-4">
+          <div className="text-center">
+            <span className="text-xs font-mono text-[#999999]">TEAM</span>
+            <div
+              className="text-[72px] font-extrabold"
+              style={{ color: isVictory ? '#22C55E' : '#FFFFFF' }}
+            >
               {game.teamScore}
             </div>
           </div>
-          <span style={{
-            fontSize: '40px',
-            fontWeight: 300,
-            color: '#666666'
-          }}>-</span>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>ENEMY</span>
-            <div style={{
-              fontSize: '72px',
-              fontWeight: 800,
-              color: !isVictory ? '#EF4444' : '#FFFFFF'
-            }}>
+          <span className="text-[40px] font-light text-[#666666]">-</span>
+          <div className="text-center">
+            <span className="text-xs font-mono text-[#999999]">ENEMY</span>
+            <div
+              className="text-[72px] font-extrabold"
+              style={{ color: !isVictory ? '#EF4444' : '#FFFFFF' }}
+            >
               {game.enemyScore}
             </div>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '12px',
-          marginTop: '16px',
-          width: '100%'
-        }}>
-          <div style={{
-            padding: '16px',
-            backgroundColor: '#1A1A1A',
-            border: '1px solid #444444'
-          }}>
-            <span style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>TOTAL DEATHS</span>
-            <div style={{
-              fontSize: '28px',
-              fontWeight: 700,
-              color: '#FFFFFF',
-              marginTop: '8px'
-            }}>
+        <div className="grid grid-cols-2 gap-3 mt-4 w-full">
+          <div className="p-4 bg-[#1A1A1A] border border-[#444444]">
+            <span className="text-[11px] font-mono text-[#999999]">TOTAL DEATHS</span>
+            <div className="text-[28px] font-bold text-white mt-2">
               {totalDeaths}
             </div>
           </div>
-          <div style={{
-            padding: '16px',
-            backgroundColor: 'rgba(255, 0, 0, 0.1)',
-            border: '1px solid rgba(255, 0, 0, 0.3)'
-          }}>
-            <span style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#FF0000'
-            }}>TOTAL DRINKS</span>
-            <div style={{
-              fontSize: '28px',
-              fontWeight: 700,
-              color: '#FF0000',
-              marginTop: '8px'
-            }}>
+          <div className="p-4 bg-[#FF0000]/10 border border-[#FF0000]/30">
+            <span className="text-[11px] font-mono text-[#FF0000]">TOTAL DRINKS</span>
+            <div className="text-[28px] font-bold text-[#FF0000] mt-2">
               {totalDrinks}
             </div>
           </div>
-          <div style={{
-            padding: '16px',
-            backgroundColor: '#1A1A1A',
-            border: '1px solid #444444'
-          }}>
-            <span style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>MOST DEATHS</span>
-            <div style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: '#FFFFFF',
-              marginTop: '8px'
-            }}>
+          <div className="p-4 bg-[#1A1A1A] border border-[#444444]">
+            <span className="text-[11px] font-mono text-[#999999]">MOST DEATHS</span>
+            <div className="text-base font-bold text-white mt-2">
               {mostDeaths?.name || 'N/A'}
             </div>
             {mostDeaths && (
-              <span style={{
-                fontSize: '12px',
-                color: '#999999',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+              <span className="text-xs text-[#999999] font-mono">
                 {mostDeaths.deaths} deaths
               </span>
             )}
           </div>
-          <div style={{
-            padding: '16px',
-            backgroundColor: '#1A1A1A',
-            border: '1px solid #444444'
-          }}>
-            <span style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>MOST DRINKS</span>
-            <div style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: '#FF0000',
-              marginTop: '8px'
-            }}>
+          <div className="p-4 bg-[#1A1A1A] border border-[#444444]">
+            <span className="text-[11px] font-mono text-[#999999]">MOST DRINKS</span>
+            <div className="text-base font-bold text-[#FF0000] mt-2">
               {mostDrinks?.name || 'N/A'}
             </div>
             {mostDrinks && (
-              <span style={{
-                fontSize: '12px',
-                color: '#999999',
-                fontFamily: 'var(--font-space-mono), monospace'
-              }}>
+              <span className="text-xs text-[#999999] font-mono">
                 {mostDrinks.drinks} drinks
               </span>
             )}
@@ -2138,90 +1123,34 @@ function GameEndScreen() {
 
         {/* Player Summary */}
         {players.length > 0 && (
-          <div style={{ width: '100%', marginTop: '16px' }}>
-            <span style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-space-mono), monospace',
-              color: '#999999'
-            }}>PLAYER RANKINGS</span>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              marginTop: '16px'
-            }}>
+          <div className="w-full mt-4">
+            <span className="text-[11px] font-mono text-[#999999]">PLAYER RANKINGS</span>
+            <div className="flex flex-col gap-2 mt-4">
               {sortedByDrinks.map((player, index) => {
-                const agentColor = agentColors[player.agent?.toLowerCase() || ''] || '#7DD3FC';
+                const playerAgentColor = agentColors[player.agent?.toLowerCase() || ''] || '#7DD3FC';
                 return (
                   <div
                     key={player.id}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '16px',
-                      backgroundColor: '#1A1A1A',
-                      borderLeft: `4px solid ${agentColor}`
-                    }}
+                    className="flex items-center justify-between p-4 bg-[#1A1A1A]"
+                    style={{ borderLeft: `4px solid ${playerAgentColor}` }}
                   >
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '16px'
-                    }}>
-                      <span style={{
-                        fontSize: '16px',
-                        fontWeight: 700,
-                        color: '#999999'
-                      }}>#{index + 1}</span>
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start'
-                      }}>
-                        <span style={{
-                          fontWeight: 700,
-                          color: '#FFFFFF'
-                        }}>{player.name}</span>
-                        <span style={{
-                          fontSize: '10px',
-                          color: '#999999',
-                          fontFamily: 'var(--font-space-mono), monospace'
-                        }}>
+                    <div className="flex items-center gap-4">
+                      <span className="text-base font-bold text-[#999999]">#{index + 1}</span>
+                      <div className="flex flex-col items-start">
+                        <span className="font-bold text-white">{player.name}</span>
+                        <span className="text-[10px] text-[#999999] font-mono">
                           {player.agent?.toUpperCase() || 'AGENT'}
                         </span>
                       </div>
                     </div>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '24px'
-                    }}>
-                      <div style={{ textAlign: 'right' }}>
-                        <span style={{
-                          fontSize: '10px',
-                          color: '#999999',
-                          fontFamily: 'var(--font-space-mono), monospace',
-                          display: 'block'
-                        }}>DEATHS</span>
-                        <span style={{
-                          fontSize: '18px',
-                          fontWeight: 700,
-                          color: '#FFFFFF'
-                        }}>{player.deaths}</span>
+                    <div className="flex items-center gap-6">
+                      <div className="text-right">
+                        <span className="text-[10px] text-[#999999] font-mono block">DEATHS</span>
+                        <span className="text-lg font-bold text-white">{player.deaths}</span>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <span style={{
-                          fontSize: '10px',
-                          color: '#FF0000',
-                          fontFamily: 'var(--font-space-mono), monospace',
-                          display: 'block'
-                        }}>DRINKS</span>
-                        <span style={{
-                          fontSize: '18px',
-                          fontWeight: 700,
-                          color: '#FF0000'
-                        }}>{player.drinks}</span>
+                      <div className="text-right">
+                        <span className="text-[10px] text-[#FF0000] font-mono block">DRINKS</span>
+                        <span className="text-lg font-bold text-[#FF0000]">{player.drinks}</span>
                       </div>
                     </div>
                   </div>
@@ -2232,61 +1161,24 @@ function GameEndScreen() {
         )}
 
         {/* Actions */}
-        <div style={{
-          display: 'flex',
-          gap: '16px',
-          marginTop: '16px',
-          flexWrap: 'wrap',
-          justifyContent: 'center'
-        }}>
+        <div className="flex gap-4 mt-4 flex-wrap justify-center">
           <button
             type="button"
             onClick={handleNewGame}
-            style={{
-              height: '60px',
-              padding: '0 32px',
-              backgroundColor: '#FF0000',
-              border: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              cursor: 'pointer'
-            }}
+            className="h-[60px] px-8 bg-[#FF0000] border-none flex items-center justify-center gap-3 cursor-pointer hover:bg-[#DC2626] transition-colors"
           >
-            <Play style={{ width: '22px', height: '22px', color: '#0C0C0C' }} />
-            <span style={{
-              fontSize: '15px',
-              fontWeight: 700,
-              letterSpacing: '2px',
-              color: '#0C0C0C'
-            }}>
+            <Play className="w-[22px] h-[22px] text-[#0C0C0C]" />
+            <span className="text-[15px] font-bold tracking-[2px] text-[#0C0C0C]">
               NEW GAME
             </span>
           </button>
           <button
             type="button"
             onClick={handleHome}
-            style={{
-              height: '60px',
-              padding: '0 32px',
-              backgroundColor: '#2A2A2A',
-              border: '2px solid #666666',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              cursor: 'pointer'
-            }}
+            className="h-[60px] px-8 bg-[#2A2A2A] border-2 border-[#666666] flex items-center justify-center gap-3 cursor-pointer hover:bg-[#333333] hover:border-[#888888] transition-colors"
           >
-            <Home style={{ width: '22px', height: '22px', color: '#FFFFFF' }} />
-            <span style={{
-              fontSize: '15px',
-              fontWeight: 600,
-              letterSpacing: '1px',
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-space-mono), monospace'
-            }}>
+            <Home className="w-[22px] h-[22px] text-white" />
+            <span className="text-[15px] font-semibold tracking-[1px] text-white font-mono">
               HOME
             </span>
           </button>

@@ -77,7 +77,7 @@ const intensityLevels = [
 
 export default function RulesPage() {
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#0C0C0C' }}>
+    <main className="min-h-screen bg-[#0C0C0C]">
       {/* Header */}
       <header className="h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-12 border-b border-[#333333]">
         <Link href="/" className="flex items-center gap-3">
@@ -96,20 +96,20 @@ export default function RulesPage() {
       </header>
 
       {/* Hero Section */}
-      <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
+      <section className="pt-16 sm:pt-24 pb-16 sm:pb-20">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+            className="flex flex-col gap-6"
           >
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '4px', color: '#FF0000', fontFamily: 'var(--font-space-mono), monospace' }}>
+            <span className="text-[11px] font-semibold tracking-[4px] text-[#FF0000] font-mono">
               HOW TO PLAY
             </span>
-            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-3px', lineHeight: 1 }}>
+            <h1 className="text-[clamp(3rem,8vw,5rem)] font-extrabold text-white tracking-[-3px] leading-none">
               THE RULES
             </h1>
-            <p style={{ fontSize: '18px', color: '#999999', lineHeight: 1.8, maxWidth: '700px' }}>
+            <p className="text-lg text-[#999999] leading-[1.8] max-w-[700px]">
               Select Your Poison turns every Valorant match into a drinking game.
               Choose your modes, set your intensity, and prepare for chaos.
             </p>
@@ -118,19 +118,13 @@ export default function RulesPage() {
       </section>
 
       {/* Safety Warning */}
-      <section style={{ padding: '0 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
-          <div style={{
-            padding: '32px',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid #F59E0B',
-            display: 'flex',
-            gap: '20px'
-          }}>
-            <AlertTriangle style={{ width: '24px', height: '24px', color: '#F59E0B', flexShrink: 0, marginTop: '2px' }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: '#F59E0B', letterSpacing: '1px' }}>DRINK RESPONSIBLY</span>
-              <p style={{ fontSize: '14px', color: 'rgba(245, 158, 11, 0.8)', lineHeight: 1.7 }}>
+      <section className="pb-16 sm:pb-20">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="p-6 sm:p-8 bg-[rgba(245,158,11,0.1)] border border-[#F59E0B] flex gap-5">
+            <AlertTriangle className="w-6 h-6 text-[#F59E0B] shrink-0 mt-0.5" />
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-bold text-[#F59E0B] tracking-[1px]">DRINK RESPONSIBLY</span>
+              <p className="text-sm text-[rgba(245,158,11,0.8)] leading-[1.7]">
                 This is meant to be fun. Know your limits, stay hydrated, and never drink and drive.
                 Use non-alcoholic beverages if you prefer. The point is to have a good time with your squad.
               </p>
@@ -140,36 +134,29 @@ export default function RulesPage() {
       </section>
 
       {/* Getting Started */}
-      <section style={{ padding: '80px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
-          <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
+      <section className="py-16 sm:py-20 bg-[#0A0A0A]">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12">
+          <h2 className="text-[32px] font-extrabold text-white tracking-[-1px] mb-12">
             Getting Started
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '24px' }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: <Users style={{ width: '28px', height: '28px', color: '#FF0000' }} />, title: '1. Create a Lobby', desc: 'Host creates a lobby and shares the code with the squad. No account needed.' },
-              { icon: <Shield style={{ width: '28px', height: '28px', color: '#FF0000' }} />, title: '2. Pick Your Modes', desc: 'Select one or more game modes. Mix Agent Poison with Strat Roulette for maximum chaos.' },
-              { icon: <Wine style={{ width: '28px', height: '28px', color: '#FF0000' }} />, title: '3. Track & Drink', desc: 'Use the tracker during your Valorant match. Tap to add deaths, watch drinks stack up.' },
+              { icon: <Users className="w-7 h-7 text-[#FF0000]" />, title: '1. Create a Lobby', desc: 'Host creates a lobby and shares the code with the squad. No account needed.' },
+              { icon: <Shield className="w-7 h-7 text-[#FF0000]" />, title: '2. Pick Your Modes', desc: 'Select one or more game modes. Mix Agent Poison with Strat Roulette for maximum chaos.' },
+              { icon: <Wine className="w-7 h-7 text-[#FF0000]" />, title: '3. Track & Drink', desc: 'Use the tracker during your Valorant match. Tap to add deaths, watch drinks stack up.' },
             ].map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                style={{
-                  padding: '40px',
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #333333',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '20px'
-                }}
+                className="p-8 sm:p-10 bg-[#1A1A1A] border border-[#333333] flex flex-col gap-5"
               >
-                <div style={{ width: '56px', height: '56px', backgroundColor: 'rgba(255, 0, 0, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="w-14 h-14 bg-[rgba(255,0,0,0.1)] flex items-center justify-center">
                   {item.icon}
                 </div>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>{item.title}</h3>
-                <p style={{ fontSize: '15px', color: '#999999', lineHeight: 1.8 }}>{item.desc}</p>
+                <h3 className="text-xl font-bold text-white">{item.title}</h3>
+                <p className="text-[15px] text-[#999999] leading-[1.8]">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -177,50 +164,37 @@ export default function RulesPage() {
       </section>
 
       {/* Game Modes */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
-          <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
+      <section className="py-16 sm:py-24">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12">
+          <h2 className="text-[32px] font-extrabold text-white tracking-[-1px] mb-12">
             Game Modes
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div className="flex flex-col gap-6">
             {rules.map((mode, index) => (
               <motion.div
                 key={mode.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                style={{
-                  padding: '40px',
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #333333',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '24px'
-                }}
-                className="md:flex-row"
+                className="p-8 sm:p-10 bg-[#1A1A1A] border border-[#333333] flex flex-col md:flex-row gap-6"
               >
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px', minWidth: '300px' }}>
-                  <div style={{
-                    width: '56px',
-                    height: '56px',
-                    backgroundColor: mode.iconBg,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                  }}>
-                    <span style={{ color: '#FFFFFF' }}>{mode.icon}</span>
+                <div className="flex items-start gap-5 md:min-w-[300px]">
+                  <div
+                    className="w-14 h-14 flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: mode.iconBg }}
+                  >
+                    <span className="text-white">{mode.icon}</span>
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '1px', marginBottom: '8px' }}>{mode.title}</h3>
-                    <p style={{ fontSize: '14px', color: '#999999', lineHeight: 1.6 }}>{mode.description}</p>
+                    <h3 className="text-xl font-bold text-white tracking-[1px] mb-2">{mode.title}</h3>
+                    <p className="text-sm text-[#999999] leading-relaxed">{mode.description}</p>
                   </div>
                 </div>
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+                <ul className="flex flex-col gap-3 flex-1">
                   {mode.rules.map((rule, ruleIndex) => (
-                    <li key={ruleIndex} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-                      <span style={{ color: '#FF0000', marginTop: '6px', fontSize: '8px' }}>●</span>
-                      <span style={{ fontSize: '15px', color: '#999999', lineHeight: 1.7 }}>{rule}</span>
+                    <li key={ruleIndex} className="flex items-start gap-3.5">
+                      <span className="text-[#FF0000] mt-1.5 text-[8px]">●</span>
+                      <span className="text-[15px] text-[#999999] leading-[1.7]">{rule}</span>
                     </li>
                   ))}
                 </ul>
@@ -231,35 +205,26 @@ export default function RulesPage() {
       </section>
 
       {/* Intensity Levels */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
-          <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '16px' }}>
+      <section className="py-16 sm:py-24 bg-[#0A0A0A]">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12">
+          <h2 className="text-[32px] font-extrabold text-white tracking-[-1px] mb-4">
             Intensity Levels
           </h2>
-          <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.7, marginBottom: '48px' }}>
+          <p className="text-base text-[#999999] leading-[1.7] mb-12">
             The intensity multiplier affects how many drinks you take. Choose wisely.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '24px' }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             {intensityLevels.map((level, index) => (
               <motion.div
                 key={level.name}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.05 }}
-                style={{
-                  padding: '32px 24px',
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #333333',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  gap: '12px'
-                }}
+                className="p-6 sm:p-8 bg-[#1A1A1A] border border-[#333333] flex flex-col items-center text-center gap-3"
               >
-                <span style={{ fontSize: '36px', fontWeight: 800, color: level.color }}>{level.multiplier}</span>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '2px' }}>{level.name}</span>
-                <span style={{ fontSize: '13px', color: '#999999', lineHeight: 1.6 }}>{level.description}</span>
+                <span className="text-4xl font-extrabold" style={{ color: level.color }}>{level.multiplier}</span>
+                <span className="text-sm font-bold text-white tracking-[2px]">{level.name}</span>
+                <span className="text-[13px] text-[#999999] leading-relaxed">{level.description}</span>
               </motion.div>
             ))}
           </div>
@@ -267,42 +232,22 @@ export default function RulesPage() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: '120px 0', backgroundColor: '#0C0C0C', borderTop: '1px solid #333333' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '40px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-2px', marginBottom: '40px' }}>
+      <section className="py-20 sm:py-28 border-t border-[#333333]">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-12 text-center">
+          <h2 className="text-[40px] font-extrabold text-white tracking-[-2px] mb-10">
             Ready to Play?
           </h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <div className="flex justify-center gap-4 flex-wrap">
             <Link
               href="/lobby/create"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '20px 40px',
-                backgroundColor: '#FF0000',
-                fontSize: '14px',
-                fontWeight: 700,
-                color: '#0C0C0C',
-                letterSpacing: '2px'
-              }}
+              className="flex items-center gap-3 py-5 px-10 bg-[#FF0000] text-sm font-bold text-[#0C0C0C] tracking-[2px] no-underline hover:bg-[#E50000] active:scale-[0.97] transition-all"
             >
-              <Zap style={{ width: '20px', height: '20px' }} />
+              <Zap className="w-5 h-5" />
               CREATE LOBBY
             </Link>
             <Link
               href="/lobby/join"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '20px 40px',
-                border: '1px solid #333333',
-                fontSize: '14px',
-                fontWeight: 700,
-                color: '#FFFFFF',
-                letterSpacing: '2px'
-              }}
+              className="flex items-center gap-3 py-5 px-10 border border-[#333333] text-sm font-bold text-white tracking-[2px] no-underline hover:border-[#FF0000] active:scale-[0.97] transition-all"
             >
               JOIN GAME
             </Link>
