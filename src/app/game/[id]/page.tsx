@@ -24,189 +24,18 @@ import {
 import { useGameStore, useCurrentPlayer, useIsHost, useHasMode, useIsOvertime, useCurrentMultiplier } from '@/store/game-store';
 import { formatRound, formatScore } from '@/lib/utils';
 import { stratCategoryColors, stratCategoryLabels } from '@/lib/strats';
+import { agentColors as importedColors, agents } from '@/lib/agents';
+import MobileControls from '@/components/game/MobileControls';
 
-// Agent colors from Pencil design
-const agentColors: Record<string, string> = {
-  jett: '#7DD3FC',
-  reyna: '#A855F7',
-  phoenix: '#F97316',
-  cypher: '#E5E5E5',
-  sage: '#22D3EE',
-  omen: '#6366F1',
-  brimstone: '#EF4444',
-  sova: '#3B82F6',
-  viper: '#22C55E',
-  killjoy: '#EAB308',
-  raze: '#F97316',
-  breach: '#F59E0B',
-  skye: '#84CC16',
-  yoru: '#8B5CF6',
-  astra: '#A855F7',
-  kayo: '#6B7280',
-  chamber: '#D4AF37',
-  neon: '#06B6D4',
-  fade: '#78716C',
-  harbor: '#0EA5E9',
-  gekko: '#84CC16',
-  deadlock: '#9CA3AF',
-  iso: '#A855F7',
-  clove: '#EC4899',
-  vyse: '#8B5CF6',
-};
+// Use agent data from lib instead of inline duplicates
+const agentColors: Record<string, string> = importedColors as Record<string, string>;
 
-// Agent-specific drinking rules
-const agentRules: Record<string, string[]> = {
-  jett: [
-    'Say "Watch this" and die → 2 drinks',
-    'Updraft into enemies and die → 1 drink',
-    'Whiff all 5 knives → 2 drinks',
-    'Dash into site and get traded → 1 drink',
-  ],
-  reyna: [
-    'Die without getting a soul orb → 1 drink',
-    'Dismiss into 3+ enemies → 2 drinks',
-    'Ult and get 0 kills → 2 drinks',
-    'Leer yourself accidentally → 1 drink',
-  ],
-  phoenix: [
-    'Flash yourself → 1 drink',
-    'Flash your team → 1 drink per teammate',
-    'Die in your ult → 1 drink',
-    'Molly yourself to death → 2 drinks',
-  ],
-  raze: [
-    'Kill yourself with satchel → 2 drinks',
-    'Boombot finds 0 enemies → 1 drink',
-    'Whiff the showstopper → 3 drinks',
-    'Grenade yourself → 1 drink',
-  ],
-  yoru: [
-    'TP into 3+ enemies → 2 drinks',
-    'Clone gets killed instantly → 1 drink',
-    'Die during ult → 2 drinks',
-    'Fake TP outplay fails → 1 drink',
-  ],
-  neon: [
-    'Sprint into 5 enemies and die → 1 drink',
-    'Stun yourself with wall → 1 drink',
-    'Ult for 0 kills → 2 drinks',
-    'Run out of energy mid-fight → 1 drink',
-  ],
-  iso: [
-    'Lose the 1v1 in your ult → 3 drinks',
-    'Shield pops and you still die → 1 drink',
-    'Ult the wrong enemy → 2 drinks',
-    'Wall blocks nothing useful → 1 drink',
-  ],
-  sova: [
-    'Recon dart reveals 0 enemies → 1 drink',
-    'Shock dart yourself → 1 drink',
-    'Lineups take so long round ends → 2 drinks',
-    'Hunter\'s Fury hits nothing → 2 drinks',
-  ],
-  breach: [
-    'Flash your entire team → 2 drinks',
-    'Stun yourself → 1 drink',
-    'Ult misses everyone → 2 drinks',
-    'Aftershock kills teammate → 2 drinks',
-  ],
-  skye: [
-    'Dog finds nothing → 1 drink',
-    'Flash your own team → 1 drink per teammate',
-    'Heal full HP teammate → 1 drink',
-    'Ult finds 0 enemies → 2 drinks',
-  ],
-  kayo: [
-    'Knife suppresses 0 enemies → 1 drink',
-    'Flash your team → 1 drink per teammate',
-    'Die in ult without rez → 2 drinks',
-    'Molly yourself → 1 drink',
-  ],
-  fade: [
-    'Prowler finds nothing → 1 drink',
-    'Haunt reveals 0 enemies → 1 drink',
-    'Tether catches teammates → 1 drink',
-    'Ult catches only 1 enemy → 1 drink',
-  ],
-  gekko: [
-    'Dizzy blinds 0 enemies → 1 drink',
-    'Forget to pick up buddies → 1 drink each',
-    'Wingman fails plant/defuse → 2 drinks',
-    'Thrash catches no one → 1 drink',
-  ],
-  brimstone: [
-    'Smoke your own team → 1 drink',
-    'Molly a teammate → 1 drink',
-    'Ult your own team → 2 drinks',
-    'Stim beacon in spawn → 1 drink',
-  ],
-  omen: [
-    'TP into 5 enemies → 2 drinks',
-    'TP gets canceled → 1 drink',
-    'Flash yourself → 1 drink',
-    'Ult to enemy spawn and die → 3 drinks',
-  ],
-  viper: [
-    'Molly your own team → 1 drink',
-    'Wall blocks your team → 1 drink',
-    'Run out of fuel at worst time → 2 drinks',
-    'Ult and no one enters → 1 drink',
-  ],
-  astra: [
-    'Spend 30 seconds in astral form → 1 drink',
-    'Suck your own team → 1 drink',
-    'Stun your teammates → 1 drink',
-    'Ult blocks team\'s push → 2 drinks',
-  ],
-  harbor: [
-    'Wall blocks your team → 1 drink',
-    'Cascade hits no one → 1 drink',
-    'Cove gets destroyed instantly → 1 drink',
-    'Ult catches 0 enemies → 2 drinks',
-  ],
-  clove: [
-    'Self-res then die again → 2 drinks',
-    'Smoke your own team → 1 drink',
-    'Ult and get 0 kills → 2 drinks',
-    'Forget you can self-res → 1 drink',
-  ],
-  sage: [
-    'MUST res someone or drink 3 at end',
-    'Res in open, they die again → 2 drinks',
-    'Wall blocks your team → 1 drink',
-    'Slow your own team → 1 drink',
-  ],
-  cypher: [
-    'Tripwire catches nothing all game → 2 drinks',
-    'Cam gets destroyed instantly → 1 drink',
-    'Ult reveals 0 useful info → 2 drinks',
-    'Die and lose all util → 1 drink',
-  ],
-  killjoy: [
-    'Turret gets destroyed instantly → 1 drink',
-    'Alarmbot catches nothing → 1 drink',
-    'Lockdown gets destroyed → 2 drinks',
-    'Swarm grenades hit teammates → 1 drink',
-  ],
-  chamber: [
-    'TP and still die → 1 drink',
-    'Whiff with headhunter → 1 drink per whiff',
-    'Tour de Force whiff → 2 drinks',
-    'Trademark catches nothing → 2 drinks',
-  ],
-  deadlock: [
-    'Cocoon catches no one → 1 drink',
-    'Barrier mesh gets ignored → 1 drink',
-    'Ult catches teammate → 2 drinks',
-    'Sonic sensor reveals nothing → 1 drink',
-  ],
-  vyse: [
-    'Arc Rose catches nothing → 1 drink',
-    'Shear gets destroyed immediately → 1 drink',
-    'Steel Garden hits teammates → 1 drink',
-    'Die with all utility available → 1 drink',
-  ],
-};
+// Build agentRules lookup from lib/agents.ts
+const agentRules: Record<string, string[]> = {};
+agents.forEach(a => {
+  agentRules[a.id] = a.rules.map(r => `${r.rule} → ${r.drinks} drink${r.drinks > 1 ? 's' : ''}`);
+});
+
 
 export default function GamePage() {
   const params = useParams();
@@ -911,7 +740,7 @@ export default function GamePage() {
         padding: '32px',
         gap: '24px',
         overflowY: 'auto'
-      }} className="pt-20 lg:pt-8">
+      }} className="pt-20 pb-20 lg:pt-8 lg:pb-0">
         {/* Header - Responsive */}
         <header style={{
           display: 'flex',
@@ -1117,6 +946,26 @@ export default function GamePage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Controls */}
+      <MobileControls
+        round={game.round}
+        teamScore={game.teamScore}
+        enemyScore={game.enemyScore}
+        isHost={isHost}
+        hasStratRoulette={hasStratRoulette}
+        rerollsLeft={game.rerollsLeft}
+        isOvertime={isOvertime}
+        currentMultiplier={currentMultiplier}
+        onRoundWon={roundWon}
+        onRoundLost={roundLost}
+        onRollStrat={() => {
+          rollStrat();
+          setShowStratModal(true);
+        }}
+        onSwitchSides={switchSides}
+        onEndGame={endGame}
+      />
 
       {/* Strat Modal */}
       <AnimatePresence>
