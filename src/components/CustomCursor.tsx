@@ -105,7 +105,7 @@ export default function CustomCursor() {
           top: 0,
           left: 0,
           pointerEvents: 'none',
-          zIndex: 9999,
+          zIndex: 99999,
           x: cursorXSpring,
           y: cursorYSpring,
           // Center the cursor by offsetting by half its size
