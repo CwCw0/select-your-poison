@@ -7,7 +7,6 @@ import {
   Heart,
   Coffee,
   Github,
-  Twitter,
   Mail,
   Sparkles,
   Skull,
@@ -21,42 +20,36 @@ import {
 
 export default function AboutPage() {
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#0C0C0C' }}>
+    <main className="min-h-screen bg-[#0C0C0C]">
       {/* Header */}
-      <header style={{
-        height: '72px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 48px',
-        borderBottom: '1px solid #333333'
-      }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', backgroundColor: '#FF0000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Skull style={{ width: '24px', height: '24px', color: '#0C0C0C' }} />
+      <header className="h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-12 border-b border-[#333333]">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-[#FF0000] flex items-center justify-center">
+            <Skull className="w-6 h-6 text-[#0C0C0C]" />
           </div>
-          <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '3px', color: '#FFFFFF' }}>
-            SYP
-          </span>
+          <span className="text-sm font-bold tracking-[3px] text-white">SYP</span>
         </Link>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', border: '1px solid #333333', color: '#FFFFFF', fontSize: '11px', fontWeight: 600, letterSpacing: '2px', fontFamily: 'var(--font-space-mono), monospace' }}>
-          <ArrowLeft style={{ width: '16px', height: '16px' }} />
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-5 py-3 border border-[#333333] text-white text-[11px] font-semibold tracking-[2px] font-mono hover:border-[#FF0000] active:scale-[0.97] transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
           BACK
         </Link>
       </header>
 
       {/* Hero Section */}
-      <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="pt-16 sm:pt-24 pb-16 sm:pb-20">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+            className="flex flex-col gap-6"
           >
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '4px', color: '#FF0000', fontFamily: 'var(--font-space-mono), monospace' }}>
+            <span className="text-[11px] font-semibold tracking-[4px] text-[#FF0000] font-mono">
               THE STORY
             </span>
-            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-3px', lineHeight: 1 }}>
+            <h1 className="text-[clamp(3rem,8vw,5rem)] font-extrabold text-white tracking-tight leading-none">
               ABOUT SYP
             </h1>
           </motion.div>
@@ -64,40 +57,34 @@ export default function AboutPage() {
       </section>
 
       {/* Personal Message */}
-      <section style={{ padding: '0 0 100px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="pb-16 sm:pb-24">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            style={{
-              padding: '48px',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #333333'
-            }}
+            className="p-6 sm:p-10 lg:p-12 bg-[#1A1A1A] border border-[#333333]"
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <p style={{ fontSize: '20px', color: '#FFFFFF', lineHeight: 1.8 }}>
-                Hey there! 👋
-              </p>
-              <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.9 }}>
+            <div className="flex flex-col gap-6">
+              <p className="text-xl text-white leading-relaxed">Hey there!</p>
+              <p className="text-base text-[#999999] leading-[1.9]">
                 I&apos;m a developer and creator on a mission to build things that matter.
                 Select Your Poison is just one part of a bigger picture — a passion project
                 born from my love for gaming and bringing people together.
               </p>
-              <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.9 }}>
-                At its core, this app is about one thing: <span style={{ color: '#FFFFFF', fontWeight: 600 }}>having fun</span>.
+              <p className="text-base text-[#999999] leading-[1.9]">
+                At its core, this app is about one thing: <span className="text-white font-semibold">having fun</span>.
                 Whether you&apos;re running it back with the squad after a long day, or trying
                 to convince your Jett main friend that they&apos;re actually a liability when
                 they&apos;re three drinks deep — I just want people to enjoy themselves.
               </p>
-              <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.9 }}>
+              <p className="text-base text-[#999999] leading-[1.9]">
                 But SYP is just the beginning. I&apos;m actively building more projects, working
                 towards starting a company that creates products that genuinely help people.
                 Every bit of support helps me move closer to that dream.
               </p>
-              <p style={{ fontSize: '20px', color: '#FFFFFF', lineHeight: 1.8, marginTop: '8px' }}>
-                Thanks for being here. Now go queue up and get ready to drink. 🍻
+              <p className="text-xl text-white leading-relaxed mt-2">
+                Thanks for being here. Now go queue up and get ready to drink.
               </p>
             </div>
           </motion.div>
@@ -105,27 +92,26 @@ export default function AboutPage() {
       </section>
 
       {/* The Vision Section */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="py-16 sm:py-24 bg-[#0A0A0A]">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}
+            className="flex flex-col gap-8 sm:gap-10"
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <Rocket style={{ width: '28px', height: '28px', color: '#7C3AED' }} />
-              <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px' }}>
+            <div className="flex items-center gap-4">
+              <Rocket className="w-7 h-7 text-[#7C3AED]" />
+              <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight">
                 The Bigger Picture
               </h2>
             </div>
-            <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.8, maxWidth: '600px' }}>
+            <p className="text-base text-[#999999] leading-[1.8] max-w-[600px]">
               SYP is just one of many projects I&apos;m building. I love creating things
               that people actually enjoy using — whether it&apos;s apps, tools, or experiences.
               Every project teaches me something new and brings me closer to my goals.
             </p>
-
-            <p style={{ fontSize: '14px', color: '#999999', lineHeight: 1.8, fontStyle: 'italic' }}>
+            <p className="text-sm text-[#999999] leading-[1.8] italic">
               More projects are always in the works. Supporting me helps bring these ideas to life
               and lets me continue building things that people love.
             </p>
@@ -134,51 +120,40 @@ export default function AboutPage() {
       </section>
 
       {/* Nimbus - Portfolio & Services Section */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="py-16 sm:py-24">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}
+            className="flex flex-col gap-8 sm:gap-10"
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ width: '48px', height: '48px', backgroundColor: '#22D3EE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Zap style={{ width: '26px', height: '26px', color: '#0C0C0C' }} />
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#22D3EE] flex items-center justify-center">
+                <Zap className="w-[26px] h-[26px] text-[#0C0C0C]" />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px' }}>
+              <div className="flex flex-col gap-1">
+                <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight">
                   Nimbus
                 </h2>
-                <span style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '2px', color: '#22D3EE', fontFamily: 'var(--font-space-mono), monospace' }}>
+                <span className="text-xs font-semibold tracking-[2px] text-[#22D3EE] font-mono">
                   PORTFOLIO & SERVICES
                 </span>
               </div>
             </div>
 
-            <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.8, maxWidth: '600px' }}>
-              <span style={{ color: '#FFFFFF', fontWeight: 600 }}>Nimbus</span> is my personal portfolio
+            <p className="text-base text-[#999999] leading-[1.8] max-w-[600px]">
+              <span className="text-white font-semibold">Nimbus</span> is my personal portfolio
               and freelance service. I specialize in building SaaS products, web applications,
               and custom software solutions. If you need something built, let&apos;s talk.
             </p>
 
-            <div
-              style={{
-                padding: '40px',
-                backgroundColor: '#1A1A1A',
-                border: '2px solid #22D3EE',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '24px'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Code2 style={{ width: '24px', height: '24px', color: '#22D3EE' }} />
-                <span style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF' }}>
-                  What I Can Build For You
-                </span>
+            <div className="p-6 sm:p-10 bg-[#1A1A1A] border-2 border-[#22D3EE] flex flex-col gap-6">
+              <div className="flex items-center gap-3">
+                <Code2 className="w-6 h-6 text-[#22D3EE]" />
+                <span className="text-base font-bold text-white">What I Can Build For You</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: '16px' }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   'SaaS Products',
                   'Full-stack Web Apps',
@@ -187,176 +162,107 @@ export default function AboutPage() {
                   'API Design & Integration',
                   'Technical Consulting'
                 ].map((skill) => (
-                  <div key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '6px', height: '6px', backgroundColor: '#22D3EE' }} />
-                    <span style={{ fontSize: '14px', color: '#CCCCCC', fontFamily: 'var(--font-space-mono), monospace' }}>
-                      {skill}
-                    </span>
+                  <div key={skill} className="flex items-center gap-2.5">
+                    <div className="w-1.5 h-1.5 bg-[#22D3EE]" />
+                    <span className="text-sm text-[#CCCCCC] font-mono">{skill}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
+              <div className="flex flex-col gap-3 mt-2">
                 <a
                   href="mailto:hello@selectyourpoison.gg"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '12px',
-                    padding: '16px 32px',
-                    backgroundColor: '#22D3EE',
-                    color: '#0C0C0C',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    letterSpacing: '2px',
-                    textDecoration: 'none',
-                    alignSelf: 'flex-start',
-                    transition: 'background-color 0.2s ease'
-                  }}
+                  className="inline-flex items-center justify-center gap-3 py-4 px-8 bg-[#22D3EE] text-[#0C0C0C] text-sm font-bold tracking-[2px] no-underline self-start hover:bg-[#06B6D4] active:scale-[0.97] transition-all"
                 >
-                  <Briefcase style={{ width: '18px', height: '18px' }} />
+                  <Briefcase className="w-[18px] h-[18px]" />
                   WORK WITH ME
                 </a>
-                <span style={{ fontSize: '12px', color: '#999999', fontFamily: 'var(--font-space-mono), monospace' }}>
+                <span className="text-xs text-[#999999] font-mono">
                   Let&apos;s build something amazing together
                 </span>
               </div>
             </div>
 
             <a
-              href="#"
+              href="https://nimbus-studio-1.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '20px 28px',
-                border: '1px solid #333333',
-                color: '#FFFFFF',
-                fontSize: '14px',
-                fontWeight: 600,
-                letterSpacing: '1px',
-                fontFamily: 'var(--font-space-mono), monospace',
-                textDecoration: 'none',
-                transition: 'border-color 0.2s ease',
-                alignSelf: 'flex-start'
-              }}
+              className="flex items-center gap-3 py-5 px-7 border border-[#333333] text-white text-sm font-semibold tracking-[1px] font-mono no-underline self-start hover:border-[#7C3AED] active:scale-[0.97] transition-all"
             >
-              <Globe style={{ width: '20px', height: '20px', color: '#7C3AED' }} />
+              <Globe className="w-5 h-5 text-[#7C3AED]" />
               VIEW NIMBUS PORTFOLIO
-              <ExternalLink style={{ width: '16px', height: '16px', color: '#999999' }} />
+              <ExternalLink className="w-4 h-4 text-[#999999]" />
             </a>
           </motion.div>
         </div>
       </section>
 
       {/* Support Section */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="py-16 sm:py-24 bg-[#0A0A0A]">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}
+            className="flex flex-col gap-8 sm:gap-10"
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <Heart style={{ width: '28px', height: '28px', color: '#FF0000' }} />
-              <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px' }}>
+            <div className="flex items-center gap-4">
+              <Heart className="w-7 h-7 text-[#FF0000]" />
+              <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight">
                 Support My Journey
               </h2>
             </div>
-            <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.8, maxWidth: '600px' }}>
+            <p className="text-base text-[#999999] leading-[1.8] max-w-[600px]">
               If you enjoy using SYP or any of my projects, consider supporting the journey.
               Every contribution helps me dedicate more time to building useful tools,
               shipping more projects, and growing Nimbus into a company that creates
               products that genuinely help people.
             </p>
 
-            <div
-              style={{
-                padding: '24px',
-                backgroundColor: 'rgba(255, 0, 0, 0.06)',
-                border: '1px solid #FF0000',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px'
-              }}
-            >
-              <span style={{ fontSize: '13px', fontWeight: 600, color: '#FF0000', fontFamily: 'var(--font-space-mono), monospace' }}>
+            <div className="p-6 bg-[rgba(255,0,0,0.06)] border border-[#FF0000] flex flex-col gap-3">
+              <span className="text-[13px] font-semibold text-[#FF0000] font-mono">
                 YOUR SUPPORT ENABLES:
               </span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+              <div className="flex flex-wrap gap-4">
                 {[
                   'More free projects like SYP',
                   'Better features & updates',
                   'Growing Nimbus into a full company',
                   'Building products that help people'
                 ].map((item) => (
-                  <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '6px', height: '6px', backgroundColor: '#FF0000' }} />
-                    <span style={{ fontSize: '13px', color: '#CCCCCC', fontFamily: 'var(--font-space-mono), monospace' }}>
-                      {item}
-                    </span>
+                  <div key={item} className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#FF0000]" />
+                    <span className="text-[13px] text-[#CCCCCC] font-mono">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: '24px' }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <a
-                href="https://ko-fi.com"
+                href="https://ko-fi.com/heyitsnimbus"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  padding: '40px',
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #333333',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '20px',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F59E0B'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333333'}
+                className="p-8 sm:p-10 bg-[#1A1A1A] border border-[#333333] flex flex-col items-center gap-5 no-underline hover:border-[#F59E0B] active:scale-[0.98] transition-all"
               >
-                <Coffee style={{ width: '48px', height: '48px', color: '#F59E0B' }} />
-                <div style={{ textAlign: 'center' }}>
-                  <span style={{ display: 'block', fontSize: '18px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
-                    Buy Me a Coffee
-                  </span>
-                  <span style={{ fontSize: '13px', color: '#999999' }}>One-time support</span>
+                <Coffee className="w-12 h-12 text-[#F59E0B]" />
+                <div className="text-center">
+                  <span className="block text-lg font-bold text-white mb-2">Buy Me a Coffee</span>
+                  <span className="text-[13px] text-[#999999]">One-time support</span>
                 </div>
-                <ExternalLink style={{ width: '16px', height: '16px', color: '#999999' }} />
+                <ExternalLink className="w-4 h-4 text-[#999999]" />
               </a>
               <a
-                href="https://patreon.com"
+                href="https://ko-fi.com/heyitsnimbus"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  padding: '40px',
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #333333',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '20px',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#FF0000'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333333'}
+                className="p-8 sm:p-10 bg-[#1A1A1A] border border-[#333333] flex flex-col items-center gap-5 no-underline hover:border-[#FF0000] active:scale-[0.98] transition-all"
               >
-                <Sparkles style={{ width: '48px', height: '48px', color: '#FF0000' }} />
-                <div style={{ textAlign: 'center' }}>
-                  <span style={{ display: 'block', fontSize: '18px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
-                    Become a Patron
-                  </span>
-                  <span style={{ fontSize: '13px', color: '#999999' }}>Monthly support</span>
+                <Sparkles className="w-12 h-12 text-[#FF0000]" />
+                <div className="text-center">
+                  <span className="block text-lg font-bold text-white mb-2">Monthly Support</span>
+                  <span className="text-[13px] text-[#999999]">Recurring via Ko-fi</span>
                 </div>
-                <ExternalLink style={{ width: '16px', height: '16px', color: '#999999' }} />
+                <ExternalLink className="w-4 h-4 text-[#999999]" />
               </a>
             </div>
           </motion.div>
@@ -364,137 +270,57 @@ export default function AboutPage() {
       </section>
 
       {/* Spread the Word */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="py-16 sm:py-24">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}
+            className="flex flex-col gap-8"
           >
-            <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px' }}>
+            <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight">
               Spread the Word
             </h2>
-            <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.8, maxWidth: '600px' }}>
+            <p className="text-base text-[#999999] leading-[1.8] max-w-[600px]">
               Not in a position to donate? No worries! Sharing SYP with your
               friends and community helps just as much. The more people playing,
               the more fun we all have.
             </p>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <a
-                href="https://twitter.com/intent/tweet?text=Check%20out%20Select%20Your%20Poison%20-%20a%20Valorant%20drinking%20game%20tracker!&url=https://selectyourpoison.gg"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '14px 24px',
-                  border: '1px solid #333333',
-                  color: '#FFFFFF',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  letterSpacing: '1px',
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#1DA1F2'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333333'}
-              >
-                <Twitter style={{ width: '18px', height: '18px', color: '#1DA1F2' }} />
-                SHARE ON TWITTER
-              </a>
-            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px' }}>
+      <section className="py-16 sm:py-24 bg-[#0A0A0A]">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}
+            className="flex flex-col gap-8"
           >
-            <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px' }}>
+            <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight">
               Get in Touch
             </h2>
-            <p style={{ fontSize: '16px', color: '#999999', lineHeight: 1.8, maxWidth: '600px' }}>
+            <p className="text-base text-[#999999] leading-[1.8] max-w-[600px]">
               Have feedback, suggestions, or just want to say hi? I&apos;d love to hear from you.
             </p>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <div className="flex gap-4 flex-wrap">
               <a
                 href="mailto:hello@selectyourpoison.gg"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '14px 24px',
-                  border: '1px solid #333333',
-                  color: '#FFFFFF',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  letterSpacing: '1px',
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#FF0000'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333333'}
+                className="flex items-center gap-2.5 py-3.5 px-6 border border-[#333333] text-white text-[13px] font-semibold tracking-[1px] font-mono no-underline hover:border-[#FF0000] active:scale-[0.97] transition-all"
               >
-                <Mail style={{ width: '18px', height: '18px', color: '#FF0000' }} />
+                <Mail className="w-[18px] h-[18px] text-[#FF0000]" />
                 EMAIL ME
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/CwCw0"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '14px 24px',
-                  border: '1px solid #333333',
-                  color: '#FFFFFF',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  letterSpacing: '1px',
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#FFFFFF'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333333'}
+                className="flex items-center gap-2.5 py-3.5 px-6 border border-[#333333] text-white text-[13px] font-semibold tracking-[1px] font-mono no-underline hover:border-white active:scale-[0.97] transition-all"
               >
-                <Github style={{ width: '18px', height: '18px' }} />
+                <Github className="w-[18px] h-[18px]" />
                 GITHUB
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '14px 24px',
-                  border: '1px solid #333333',
-                  color: '#FFFFFF',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  letterSpacing: '1px',
-                  fontFamily: 'var(--font-space-mono), monospace',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#1DA1F2'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333333'}
-              >
-                <Twitter style={{ width: '18px', height: '18px', color: '#1DA1F2' }} />
-                TWITTER
               </a>
             </div>
           </motion.div>
@@ -502,13 +328,13 @@ export default function AboutPage() {
       </section>
 
       {/* Footer */}
-      <section style={{ padding: '80px 0', backgroundColor: '#0C0C0C', borderTop: '1px solid #333333' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
-          <p style={{ fontSize: '14px', color: '#999999', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            Made with <Heart style={{ width: '16px', height: '16px', color: '#FF0000' }} /> and way too many late nights
+      <section className="py-12 sm:py-20 border-t border-[#333333]">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-8 lg:px-12 text-center">
+          <p className="text-sm text-[#999999] flex items-center justify-center gap-2">
+            Made with <Heart className="w-4 h-4 text-[#FF0000]" /> and way too many late nights
           </p>
-          <p style={{ fontSize: '12px', color: '#999999', marginTop: '16px' }}>
-            © {new Date().getFullYear()} Select Your Poison. Not affiliated with Riot Games.
+          <p className="text-xs text-[#999999] mt-4">
+            &copy; {new Date().getFullYear()} Select Your Poison. Not affiliated with Riot Games.
           </p>
         </div>
       </section>

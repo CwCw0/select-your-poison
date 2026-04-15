@@ -200,7 +200,7 @@ export default function LoginPage() {
             </div>
 
             {/* Forgot Password */}
-            <Link href="#" style={{ fontSize: '13px', color: '#FF0000', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 500, textDecoration: 'none' }}>
+            <Link href="/forgot-password" style={{ fontSize: '13px', color: '#FF0000', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 500, textDecoration: 'none' }}>
               Forgot password?
             </Link>
 

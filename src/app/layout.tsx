@@ -20,13 +20,23 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: "SELECT YOUR POISON | Valorant Drinking Game",
-  description: "Valorant Drinking Game + Strat Roulette. Cold rules. Chaotic outcomes. No mercy.",
-  keywords: ["valorant", "drinking game", "strat roulette", "gaming", "party game"],
+  description: "Valorant Drinking Game + Strat Roulette. Cold rules. Chaotic outcomes. No mercy. Create a lobby, invite your squad, and track deaths and drinks in real-time.",
+  keywords: ["valorant", "drinking game", "strat roulette", "gaming", "party game", "valorant companion", "multiplayer"],
   authors: [{ name: "SELECT YOUR POISON" }],
   openGraph: {
     title: "SELECT YOUR POISON | Valorant Drinking Game",
-    description: "Cold rules. Chaotic outcomes. No mercy.",
+    description: "Cold rules. Chaotic outcomes. No mercy. Create a lobby, invite your squad, and track deaths and drinks in real-time.",
     type: "website",
+    siteName: "SELECT YOUR POISON",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SELECT YOUR POISON | Valorant Drinking Game",
+    description: "Cold rules. Chaotic outcomes. No mercy.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

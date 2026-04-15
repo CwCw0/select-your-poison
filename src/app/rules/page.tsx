@@ -79,31 +79,25 @@ export default function RulesPage() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#0C0C0C' }}>
       {/* Header */}
-      <header style={{
-        height: '72px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 48px',
-        borderBottom: '1px solid #333333'
-      }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', backgroundColor: '#FF0000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Skull style={{ width: '24px', height: '24px', color: '#0C0C0C' }} />
+      <header className="h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-12 border-b border-[#333333]">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-[#FF0000] flex items-center justify-center">
+            <Skull className="w-6 h-6 text-[#0C0C0C]" />
           </div>
-          <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '3px', color: '#FFFFFF' }}>
-            SYP
-          </span>
+          <span className="text-sm font-bold tracking-[3px] text-white">SYP</span>
         </Link>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', border: '1px solid #333333', color: '#FFFFFF', fontSize: '11px', fontWeight: 600, letterSpacing: '2px', fontFamily: 'var(--font-space-mono), monospace' }}>
-          <ArrowLeft style={{ width: '16px', height: '16px' }} />
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-5 py-3 border border-[#333333] text-white text-[11px] font-semibold tracking-[2px] font-mono hover:border-[#FF0000] active:scale-[0.97] transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
           BACK
         </Link>
       </header>
 
       {/* Hero Section */}
       <section style={{ padding: '100px 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -125,7 +119,7 @@ export default function RulesPage() {
 
       {/* Safety Warning */}
       <section style={{ padding: '0 0 80px', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <div style={{
             padding: '32px',
             backgroundColor: 'rgba(245, 158, 11, 0.1)',
@@ -147,7 +141,7 @@ export default function RulesPage() {
 
       {/* Getting Started */}
       <section style={{ padding: '80px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
             Getting Started
           </h2>
@@ -184,7 +178,7 @@ export default function RulesPage() {
 
       {/* Game Modes */}
       <section style={{ padding: '100px 0', backgroundColor: '#0C0C0C' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '48px' }}>
             Game Modes
           </h2>
@@ -238,7 +232,7 @@ export default function RulesPage() {
 
       {/* Intensity Levels */}
       <section style={{ padding: '100px 0', backgroundColor: '#0A0A0A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)' }}>
           <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-1px', marginBottom: '16px' }}>
             Intensity Levels
           </h2>
@@ -274,7 +268,7 @@ export default function RulesPage() {
 
       {/* CTA */}
       <section style={{ padding: '120px 0', backgroundColor: '#0C0C0C', borderTop: '1px solid #333333' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 48px)', textAlign: 'center' }}>
           <h2 style={{ fontSize: '40px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-2px', marginBottom: '40px' }}>
             Ready to Play?
           </h2>

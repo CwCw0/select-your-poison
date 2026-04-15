@@ -339,20 +339,24 @@ text-transform: uppercase;
 - [x] Landing page with game mode explanations
 - [x] Project structure (Next.js 16, Tailwind v4, Prisma, Zustand)
 - [x] Prisma schema for all game models
-- [ ] Fix build (Prisma generate, TypeScript errors)
-- [ ] Resolve auth conflict (consolidate to NextAuth v5 only)
-- [ ] Unify type definitions (single source of truth)
-- [ ] Fix known bugs (strat IDs, game store logic)
+- [x] Fix build (Prisma generate, TypeScript errors)
+- [x] Resolve auth conflict (consolidate to NextAuth v5 only)
+- [x] Unify type definitions (single source of truth)
+- [x] Fix known bugs (strat IDs, game store logic)
 
 ### Phase 2: UX + Working UI
-- [ ] Lobby creation wizard (step-by-step, not overwhelming)
-- [ ] Game page mobile-first redesign (controls always accessible)
-- [ ] UI quality pass on every page (spacing, hover states, animations)
+- [x] Lobby creation wizard (step-by-step, not overwhelming)
+- [x] Game page mobile-first redesign (controls always accessible)
+- [x] UI quality pass on every page (spacing, hover states, animations)
+- [x] Entrance animation + page transition system
 - [ ] All pages functional and responsive (375px → 1440px)
 
 ### Phase 3: Database + Auth Wiring
-- [ ] Neon PostgreSQL provisioned and connected
+- [x] Neon PostgreSQL provisioned and connected
 - [ ] Lobby persistence via Prisma (replace in-memory Maps)
+- [x] Email/password signup + login (NextAuth v5 Credentials)
+- [ ] Discord OAuth login (setup deferred — see TODO below)
+- [ ] Google OAuth login (setup deferred — see TODO below)
 - [ ] End-to-end auth flow (signup → login → session → lobby)
 
 ### Phase 4: Real-Time Multiplayer
@@ -402,6 +406,26 @@ Player C (browser) ─── PartySocket ───┘         │
                                                   ├── Broadcasts state to all
                                                   └── Persists to Neon via Prisma
 ```
+
+---
+
+## TODO (Deferred)
+
+### Discord OAuth Setup
+- [ ] Go to https://discord.com/developers/applications
+- [ ] Create app → OAuth2 → copy Client ID and Secret
+- [ ] Add redirect URI: `http://localhost:3000/api/auth/callback/discord` (dev)
+- [ ] Add redirect URI: `https://yourdomain.com/api/auth/callback/discord` (prod)
+- [ ] Set `AUTH_DISCORD_ID` and `AUTH_DISCORD_SECRET` in `.env`
+
+### Google OAuth Setup
+- [ ] Go to https://console.cloud.google.com/ → APIs & Services → Credentials
+- [ ] Create OAuth client ID (Web application)
+- [ ] Add redirect URI: `http://localhost:3000/api/auth/callback/google` (dev)
+- [ ] Add redirect URI: `https://yourdomain.com/api/auth/callback/google` (prod)
+- [ ] Set `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` in `.env`
+
+> **Note:** The code for Discord and Google login is already fully implemented in `src/lib/auth-config.ts`. Only the developer console setup + env vars are needed to activate them.
 
 ---
 

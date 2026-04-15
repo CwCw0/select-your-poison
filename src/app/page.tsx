@@ -570,9 +570,9 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-3 sm:gap-4 col-span-2 sm:col-span-1">
                   <span className="text-[10px] sm:text-[11px] font-semibold text-[#FF0000] font-mono tracking-[2px] mb-1">LEGAL</span>
-                  <Link href="#" className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono hover:text-[var(--text-primary)] transition-colors">Terms of Service</Link>
-                  <Link href="#" className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono hover:text-[var(--text-primary)] transition-colors">Privacy Policy</Link>
-                  <Link href="#" className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono hover:text-[var(--text-primary)] transition-colors">Drink Responsibly</Link>
+                  <Link href="/terms" className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono hover:text-[var(--text-primary)] transition-colors">Terms of Service</Link>
+                  <Link href="/privacy" className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono hover:text-[var(--text-primary)] transition-colors">Privacy Policy</Link>
+                  <Link href="/drink-responsibly" className="text-[13px] sm:text-[14px] text-[var(--text-muted)] font-mono hover:text-[var(--text-primary)] transition-colors">Drink Responsibly</Link>
                 </div>
               </div>
             </div>
@@ -580,7 +580,7 @@ export default function Home() {
             {/* footerBottom */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-5 pt-8 sm:pt-10 border-t border-[var(--border-default)]">
               <span className="text-[11px] sm:text-[12px] text-[var(--text-muted)] font-mono text-center sm:text-left">
-                © 2024 SELECT YOUR POISON. Not affiliated with Riot Games.
+                © {new Date().getFullYear()} SELECT YOUR POISON. Not affiliated with Riot Games.
               </span>
               <span className="text-[11px] sm:text-[12px] font-semibold text-[#FF0000] font-mono tracking-[1px]">
                 21+ ONLY. PLEASE DRINK RESPONSIBLY.
