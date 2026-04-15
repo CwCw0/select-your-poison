@@ -1,18 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { joinLobby } from '@/lib/lobby';
 import { auth } from '@/lib/auth-config';
+import { z } from 'zod';
+
+const joinSchema = z.object({
+  code: z.string().min(3).max(12).transform(v => v.trim().toUpperCase()),
+  playerName: z.string().min(2).max(16).transform(v => v.trim()),
+});
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, playerName } = body;
+    const parsed = joinSchema.safeParse(body);
 
-    if (!code || !playerName) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Lobby code and player name are required' },
+        { error: parsed.error.issues[0].message },
         { status: 400 }
       );
     }
+
+    const { code, playerName } = parsed.data;
 
     // Check for authenticated user via NextAuth
     const session = await auth();

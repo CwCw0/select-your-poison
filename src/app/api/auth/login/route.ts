@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signIn } from '@/lib/auth-config';
+import { loginSchema } from '@/lib/validations';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    const parsed = loginSchema.safeParse(body);
 
-    if (!email || !password) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: parsed.error.issues[0].message },
         { status: 400 }
       );
     }
+
+    const { email, password } = parsed.data;
 
     try {
       await signIn('credentials', {
