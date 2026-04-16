@@ -6,6 +6,7 @@ import { Zap, Skull, Target, Dices, User, Play, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLogoEasterEgg, VoicelineEffect } from '@/components/EasterEggs';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import AmbientEffects from '@/components/AmbientEffects';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -129,7 +130,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--bg-primary)]">
+    <main className="relative isolate min-h-screen bg-[var(--bg-primary)]">
+      {/* Ambient atmosphere — subtle grain, pulsing glows, vignette */}
+      <AmbientEffects />
+
       {/* Cinematic Intro */}
       <AnimatePresence>
         {showIntro && <IntroOverlay onComplete={handleIntroComplete} />}

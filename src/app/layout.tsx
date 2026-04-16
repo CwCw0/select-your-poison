@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
-import CustomCursor from "@/components/CustomCursor";
 import Notifications from "@/components/Notifications";
 import "./globals.css";
 
@@ -49,7 +48,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${spaceMono.variable} antialiased`}>
         <Providers>
-          <CustomCursor />
           <Notifications />
           {children}
         </Providers>
