@@ -40,7 +40,7 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section className="pt-24 sm:pt-36 pb-20 sm:pb-28">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export default function AboutPage() {
 
       {/* Personal Message */}
       <section className="pb-24 sm:pb-32">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@ export default function AboutPage() {
 
       {/* The Vision Section */}
       <section className="py-24 sm:py-32 bg-[#0A0A0A]">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -106,7 +106,7 @@ export default function AboutPage() {
                 The Bigger Picture
               </h2>
             </div>
-            <p className="text-[15px] sm:text-base text-[#999999] leading-[2] max-w-[640px]">
+            <p className="text-[15px] sm:text-base text-[#999999] leading-[2]">
               SYP is just one of many projects I&apos;m building. I love creating things
               that people actually enjoy using — whether it&apos;s apps, tools, or experiences.
               Every project teaches me something new and brings me closer to my goals.
@@ -121,7 +121,7 @@ export default function AboutPage() {
 
       {/* Nimbus - Portfolio & Services Section */}
       <section className="py-24 sm:py-32">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,7 +142,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <p className="text-[15px] sm:text-base text-[#999999] leading-[2] max-w-[640px]">
+            <p className="text-[15px] sm:text-base text-[#999999] leading-[2]">
               <span className="text-white font-semibold">Nimbus</span> is my personal portfolio
               and freelance service. I specialize in building SaaS products, web applications,
               and custom software solutions. If you need something built, let&apos;s talk.
@@ -198,7 +198,7 @@ export default function AboutPage() {
 
       {/* Support Section */}
       <section className="py-24 sm:py-32 bg-[#0A0A0A]">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -211,7 +211,7 @@ export default function AboutPage() {
                 Support My Journey
               </h2>
             </div>
-            <p className="text-[15px] sm:text-base text-[#999999] leading-[2] max-w-[640px]">
+            <p className="text-[15px] sm:text-base text-[#999999] leading-[2]">
               If you enjoy using SYP or any of my projects, consider supporting the journey.
               Every contribution helps me dedicate more time to building useful tools,
               shipping more projects, and growing Nimbus into a company that creates
@@ -271,7 +271,7 @@ export default function AboutPage() {
 
       {/* Spread the Word */}
       <section className="py-24 sm:py-32">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -281,7 +281,7 @@ export default function AboutPage() {
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Spread the Word
             </h2>
-            <p className="text-[15px] sm:text-base text-[#999999] leading-[2] max-w-[640px]">
+            <p className="text-[15px] sm:text-base text-[#999999] leading-[2]">
               Not in a position to donate? No worries! Sharing SYP with your
               friends and community helps just as much. The more people playing,
               the more fun we all have.
@@ -292,7 +292,7 @@ export default function AboutPage() {
 
       {/* Contact Section */}
       <section className="py-24 sm:py-32 bg-[#0A0A0A]">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -302,7 +302,7 @@ export default function AboutPage() {
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Get in Touch
             </h2>
-            <p className="text-[15px] sm:text-base text-[#999999] leading-[2] max-w-[640px]">
+            <p className="text-[15px] sm:text-base text-[#999999] leading-[2]">
               Have feedback, suggestions, or just want to say hi? I&apos;d love to hear from you.
             </p>
             <div className="flex gap-5 flex-wrap">
@@ -329,7 +329,7 @@ export default function AboutPage() {
 
       {/* Footer */}
       <section className="py-16 sm:py-24 border-t border-[#222222]">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-10 lg:px-12 text-center">
+        <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-12 text-center">
           <p className="text-sm text-[#777777] flex items-center justify-center gap-2.5">
             Made with <Heart className="w-4 h-4 text-[#FF0000]" /> and way too many late nights
           </p>
