@@ -55,3 +55,17 @@ next-env.d.ts
 
 # prisma generated
 /src/generated/prisma
+
+# Internal tooling
+.claude/
+.mcp.json
+CLAUDE.md
+AGENTS.md
+_bmad/
+_bmad-output/
+design-artifacts/
+
+# Project management (internal)
+PROJECT_TRACKER.md
+PRODUCT.md
+DESIGN.md
