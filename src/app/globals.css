@@ -73,13 +73,17 @@
   color-scheme: light;
 }
 
-/* Base Styles */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Base Styles — scoped to @layer base so Tailwind utilities (mx-auto, etc.)
+   can still override margin/padding. Without @layer base, this unnamed
+   layer runs after Tailwind's utilities layer and breaks mx-auto centering. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
